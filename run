@@ -1,0 +1,83 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+
+function cp_env {
+  if [ -f .env ]; then
+      echo ".env already exists, overwriting..."
+  else
+      echo "Creating .env file from .env.example"
+  fi
+  cp -f .env.example .env
+  chmod 777 .env
+  chown 1000:1000 .env
+}
+
+function setup {
+  echo "▶️  Removendo containers, volumes, imagens..."
+  remove_all || echo "⚠️  Falha ao remover recursos (remove_all), continuando..."
+
+
+  echo "📄 Copiando .env..."
+  cp_env || echo "⚠️  Falha ao copiar .env (cp_env), continuando..."
+
+
+  echo "⬆️  Subindo containers..."
+  up || echo "⚠️  Falha ao subir containers (up), continuando..."
+
+  echo "📦 Instalando dependências do Composer..."
+  composer || echo "⚠️  Falha ao instalar dependências do Composer (composer), continuando..."
+
+  echo "🔐 Gerando chave da aplicação..."
+  generate_key || echo "⚠️  Falha ao gerar chave (generate_key), continuando..."
+}
+
+
+function ps {
+  source .env
+  docker compose ps
+}
+
+function up {
+  source .env
+  docker compose up "${@}" -d
+}
+
+function down {
+  source .env
+  docker compose down "${@}"
+}
+
+function generate_key {
+  source .env
+  php artisan key:generate
+}
+
+function migrate {
+  source .env
+  php artisan migrate
+}
+
+function composer {
+  source .env
+  docker compose exec app composer install --no-interaction --optimize-autoloader
+}
+function remove_all {
+  rm -rf vendor
+  docker rm -f $(docker ps -aq)
+  docker rmi -f $(docker images -aq)
+  docker volume rm -f $(docker volume ls -q)
+}
+
+function all-tests {
+  ./run test
+  ./run test:browser
+  ./run phpcs
+  ./run phpcbf
+  ./run phpstan
+}
+
+TIMEFORMAT=$'\nTask completed in %3lR'
+time ${@}
+
