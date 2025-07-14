@@ -1,14 +1,14 @@
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
-    env_file:
-      - .env
+        context: .
+        dockerfile: Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www/
     volumes:
       - ./:/var/www
     networks:
-      - market-core-api_network 
+      - market-core-api_network
 
   web: 
     image: nginx:stable-alpine3.20-perl

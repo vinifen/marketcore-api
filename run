@@ -3,14 +3,14 @@
 set -o errexit
 set -o pipefail
 
-function cp_env {
+function env {
   if [ -f .env ]; then
       echo ".env already exists, overwriting..."
   else
       echo "Creating .env file from .env.example"
   fi
   cp -f .env.example .env
-  chmod 777 .env
+  chmod 664 .env
   chown 1000:1000 .env
 }
 
@@ -20,7 +20,7 @@ function setup {
 
 
   echo "📄 Copiando .env..."
-  cp_env || echo "⚠️  Falha ao copiar .env (cp_env), continuando..."
+  env || echo "⚠️  Falha ao copiar .env (env), continuando..."
 
 
   echo "⬆️  Subindo containers..."
