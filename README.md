@@ -60,4 +60,18 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
+## Basic commands:
+
+sudo ./run
+
+sudo ./run setup
+
+sudo ./run remove-all
+
+sudo docker exec -it marketcore-api-app-1 php artisan composer install
+
 sudo docker exec -it marketcore-api-app-1 php artisan key:generate
+
+sudo docker exec -it marketcore-api-app-1 php artisan migrate
+
+sudo docker rm -f $(sudo docker ps -aq) && sudo docker rmi -f $(sudo docker images -aq) && sudo docker volume rm -f $(sudo docker volume ls -q)
