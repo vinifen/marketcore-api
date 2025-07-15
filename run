@@ -47,7 +47,7 @@ function down {
 function generate_key {
   source .env
   echo ">> Generating application key..."
-  php artisan key:generate
+  docker compose exec app php artisan key:generate
 }
 
 function migrate {

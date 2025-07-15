@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath gd sockets
+RUN docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath gd sockets dom
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
