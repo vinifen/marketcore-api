@@ -6,9 +6,9 @@ set -o pipefail
 function env {
   echo ">> Copying environment file..."
   if [ -f .env ]; then
-      echo ".env already exists, overwriting..."
+    echo ".env already exists, overwriting..."
   else
-      echo "Creating .env file from .env.example"
+    echo "Creating .env file from .env.example"
   fi
   cp -f .env.example .env
   chmod 664 .env
@@ -16,7 +16,7 @@ function env {
 }
 
 function setup {
-  remove_all || echo "[warn] Could not complete cleanup (remove_all); continuing..."
+  rm-all || echo "[warn] Could not complete cleanup (rm-all); continuing..."
 
   env || echo "[warn] Failed to copy .env (env); continuing..."
 
@@ -24,7 +24,7 @@ function setup {
 
   composer || echo "[warn] Composer install failed (composer); continuing..."
 
-  generate_key || echo "[warn] Key generation failed (generate_key); continuing..."
+  gen_key || echo "[warn] Key generation failed (gen_key); continuing..."
 
   migrate || echo "[warn] Migrations failed (migrate); continuing..."
 }
@@ -44,7 +44,7 @@ function down {
   docker compose down "${@}"
 }
 
-function generate_key {
+function gen_key {
   source .env
   echo ">> Generating application key..."
   docker compose exec app php artisan key:generate
@@ -62,7 +62,7 @@ function composer {
   docker compose exec app composer install --no-interaction --optimize-autoloader
 }
 
-function remove_all {
+function rm-all {
   echo ">> Cleaning up .env, vendor, containers, images, and volumes..."
   rm -rf vendor || echo "vendor directory not found, skipping removal"
   rm -f .env || echo ".env not found, skipping removal"
@@ -74,6 +74,31 @@ function remove_all {
   docker volume ls --format "{{.Name}}" | grep "marketcore-api" | xargs -r docker volume rm -f
 }
 
+function exec {
+  source .env
+  if [ $# -eq 0 ]; then
+    echo ">> Missing command to run inside app container"
+    exit 1
+  fi
+
+  echo ">> Executing in app container: $*"
+  sudo docker exec -it marketcore-api-app-1 "$@"
+}
+
+function help {
+  echo "Usage: run [command]"
+  echo "Available commands:"
+  echo "  env          - Copy environment file"
+  echo "  setup        - Setup environment (env, up, composer, gen_key, migrate)"
+  echo "  ps           - Show container status"
+  echo "  up           - Start containers"
+  echo "  down         - Stop containers"
+  echo "  gen_key      - Generate application key"
+  echo "  migrate      - Run database migrations"
+  echo "  composer     - Install Composer dependencies"
+  echo "  rm-all       - Clean up environment (remove .env, vendor, containers, images, volumes)"
+  echo "  exec <cmd>   - Execute command inside app container"
+}
+
 TIMEFORMAT=$'\nTask completed in %3lR'
 time ${@}
-
