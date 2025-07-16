@@ -1,0 +1,79 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "MarketCore API Documentation",
+        "description": "API documentation for MarketCore",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "paths": {
+        "/api/test": {
+            "get": {
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Returns a test message",
+                "operationId": "51ba8e78b3abcf576990e4b564682218",
+                "responses": {
+                    "200": {
+                        "description": "Success message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "API working correctly!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/test-second": {
+            "post": {
+                "tags": [
+                    "TestSecond"
+                ],
+                "summary": "Outro endpoint para testes",
+                "operationId": "125240c902a6574c757102fee8b067b0",
+                "responses": {
+                    "200": {
+                        "description": "POST success messageasfdsadfasfdasdfasdf",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "POST working!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Test",
+            "description": "Test"
+        },
+        {
+            "name": "TestSecond",
+            "description": "TestSecond"
+        }
+    ]
+}
