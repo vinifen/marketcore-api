@@ -47,7 +47,7 @@
                 "operationId": "125240c902a6574c757102fee8b067b0",
                 "responses": {
                     "200": {
-                        "description": "POST success message",
+                        "description": "POST success messageasfdsadfasfdasdfasdf",
                         "content": {
                             "application/json": {
                                 "schema": {

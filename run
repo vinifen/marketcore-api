@@ -16,7 +16,7 @@ function env {
 }
 
 function setup {
-  remove_all || echo "[warn] Could not complete cleanup (remove_all); continuing..."
+  rm-all || echo "[warn] Could not complete cleanup (rm-all); continuing..."
 
   env || echo "[warn] Failed to copy .env (env); continuing..."
 
@@ -24,7 +24,7 @@ function setup {
 
   composer || echo "[warn] Composer install failed (composer); continuing..."
 
-  generate_key || echo "[warn] Key generation failed (generate_key); continuing..."
+  gen_key || echo "[warn] Key generation failed (gen_key); continuing..."
 
   migrate || echo "[warn] Migrations failed (migrate); continuing..."
 }
@@ -44,7 +44,7 @@ function down {
   docker compose down "${@}"
 }
 
-function generate_key {
+function gen_key {
   source .env
   echo ">> Generating application key..."
   docker compose exec app php artisan key:generate
@@ -62,7 +62,7 @@ function composer {
   docker compose exec app composer install --no-interaction --optimize-autoloader
 }
 
-function remove_all {
+function rm-all {
   echo ">> Cleaning up .env, vendor, containers, images, and volumes..."
   rm -rf vendor || echo "vendor directory not found, skipping removal"
   rm -f .env || echo ".env not found, skipping removal"
@@ -89,17 +89,16 @@ function help {
   echo "Usage: run [command]"
   echo "Available commands:"
   echo "  env          - Copy environment file"
-  echo "  setup        - Setup environment (env, up, composer, generate_key, migrate)"
+  echo "  setup        - Setup environment (env, up, composer, gen_key, migrate)"
   echo "  ps           - Show container status"
   echo "  up           - Start containers"
   echo "  down         - Stop containers"
-  echo "  generate_key - Generate application key"
+  echo "  gen_key      - Generate application key"
   echo "  migrate      - Run database migrations"
   echo "  composer     - Install Composer dependencies"
-  echo "  remove_all   - Clean up environment (remove .env, vendor, containers, images, volumes)"
+  echo "  rm-all       - Clean up environment (remove .env, vendor, containers, images, volumes)"
   echo "  exec <cmd>   - Execute command inside app container"
 }
-
 
 TIMEFORMAT=$'\nTask completed in %3lR'
 time ${@}

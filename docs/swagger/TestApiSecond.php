@@ -13,7 +13,7 @@ class TestApiSecond
      *     tags={"TestSecond"},
      *     @OA\Response(
      *         response=200,
-     *         description="POST success message",
+     *         description="POST success messageasfdsadfasfdasdfasdf",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="message", type="string", example="POST working!")
