@@ -6,20 +6,18 @@ use Illuminate\Http\JsonResponse;
 
 trait ApiResponse
 {
-    protected function success($data = null, $message = null, $status = 200): JsonResponse
+    protected function success($data = null, $status = 200): JsonResponse
     {
         return response()->json([
             'success' => true,
-            'message' => $message,
             'data' => $data,
         ], $status);
     }
 
-    protected function error($message = 'Unexpected error', $status = 400, $errors = null): JsonResponse
+    protected function error($errors = null, $status = 400): JsonResponse
     {
         return response()->json([
             'success' => false,
-            'message' => $message,
             'errors' => $errors,
         ], $status);
     }
