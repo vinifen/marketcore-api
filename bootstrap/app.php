@@ -1,8 +1,10 @@
 <?php
 
+use App\Exceptions\ApiException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Responses\ApiResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         //
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
+    ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (ApiException $e) {
+            return ApiResponse::response_error(
+                $e->toArray(),
+                $e->getExpectionMessage(),
+                $e->getStatusCode()
+            );
+        }, ApiException::class);
     })->create();

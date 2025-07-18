@@ -6,21 +6,21 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use App\Exceptions\AuthException;
 
 class AuthService
 {
     public function register(array $data): array
     {
-      $user = User::create([
-          'name' => $data['name'],
-          'email' => $data['email'],
-          'password' => bcrypt($data['password']),
-      ]);
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
 
-      $token = $user->createToken('UserToken')->plainTextToken;
+        $token = $user->createToken('UserToken')->plainTextToken;
 
-      return ['user' => $user, 'token' => $token];
+        return ['user' => $user, 'token' => $token];
     }
 
     public function login(array $credentials): array
@@ -28,9 +28,7 @@ class AuthService
         $user = User::where('email', $credentials['email'])->first();
 
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+            throw new AuthException(["auth" => ['Invalid credentials provided.']], 422);
         }
 
         $token = $user->createToken('UserToken')->plainTextToken;
