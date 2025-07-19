@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Exceptions\AuthException;
+use App\Exceptions\ValidationException;
 
 class StoreUserRequest extends FormRequest
 {
@@ -27,7 +27,7 @@ class StoreUserRequest extends FormRequest
     
     protected function failedValidation(Validator $validator)
     {
-        throw new AuthException( $validator->errors()->toArray(), 'Validation failed', 422);
+        throw new ValidationException( $validator->errors()->toArray() );
     }
 
 }

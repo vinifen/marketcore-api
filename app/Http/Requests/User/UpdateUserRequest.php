@@ -4,6 +4,8 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Exceptions\ValidationException;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -15,17 +17,33 @@ class UpdateUserRequest extends FormRequest
     /**
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|email|unique:users,email,' . $this->user->id,
-            'password' => 'sometimes|required|string|min:8|confirmed',
+            'name' => 'sometimes|string|max:255',
+            'email' => [
+                'sometimes',
+                'email',
+                Rule::unique('users')->ignore($this->user()->id),
+            ],
+            'new_password' => 'sometimes|string|min:8|confirmed',
+            'current_password' => [
+                Rule::requiredIf(function () {
+                    return $this->filled('email') || $this->filled('new_password');
+                }),
+                'string',
+                function ($attribute, $value, $fail) {
+                    if ($this->filled('new_password') && $value === $this->input('new_password')) {
+                        $fail('The current password cannot be the same as the new password.');
+                    }
+                },
+            ],
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        return $this->response_error($validator->errors(), 422);
+        throw new ValidationException( $validator->errors()->toArray() );
     }
 }

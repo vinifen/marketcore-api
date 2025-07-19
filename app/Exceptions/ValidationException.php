@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Exceptions;
+
+class ValidationException extends ApiException
+{
+    public function getExceptionMessage(): string
+    {
+        return $this->message ?: 'Validation error occurred.';
+    }
+
+    public function getStatusCode(): int
+    {
+        return 422;
+    }
+}

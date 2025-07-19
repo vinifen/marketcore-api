@@ -28,11 +28,19 @@ class AuthService
         $user = User::where('email', $credentials['email'])->first();
 
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-            throw new AuthException(["auth" => ['Invalid credentials provided.']], 422);
+            throw new AuthException(["auth" => ['Invalid credentials provided.']], null, 401);
         }
 
         $token = $user->createToken('UserToken')->plainTextToken;
 
         return ['user' => $user, 'token' => $token];
     }
+
+    public static function validatePassword(User $user, string $password): void
+    {
+        if(! Hash::check($password, $user->password)) {
+            throw new AuthException(["auth" => ['Password is incorrect.']], null, 403);
+        }
+    }
+
 }

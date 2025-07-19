@@ -4,13 +4,8 @@ namespace App\Exceptions;
 
 class AuthException extends ApiException
 {
-    public function getStatusCode(): int
+    public function getExceptionMessage(): string
     {
-        return 422;
-    }
-
-    public function getExpectionMessage(): string
-    {
-        return 'Authentication error occurred.';
+        return $this->message ?: 'Authentication error occurred.';
     }
 }

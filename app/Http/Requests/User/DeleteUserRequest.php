@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Exceptions\ValidationException;
 
-class LoginUserRequest extends FormRequest
+class DeleteUserRequest extends FormRequest
 {
 
     public function authorize(): bool
@@ -20,7 +20,6 @@ class LoginUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
             'password' => 'required|string|min:8',
         ];
     }
