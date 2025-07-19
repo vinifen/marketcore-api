@@ -53,3 +53,5 @@ Check if everthing is like you would like (default config is working)
 
 ```bash
 ./run help
+
+test
