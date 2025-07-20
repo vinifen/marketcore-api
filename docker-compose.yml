@@ -36,6 +36,19 @@ services:
     networks:
       - market-core-api_network 
 
+  pgweb:
+    image: sosedoff/pgweb:latest
+    container_name: marketcore-api-pgweb
+    restart: always
+    ports:
+      - "8011:8081"
+    environment:
+      - PGWEB_DATABASE_URL=postgres://${DB_USERNAME}:${DB_PASSWORD}@db:5432/${DB_DATABASE}?sslmode=disable
+    depends_on:
+      - db
+    networks:
+      - market-core-api_network
+
 networks:
   market-core-api_network:
     driver: bridge
