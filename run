@@ -29,6 +29,11 @@ function setup {
   migrate || echo "[warn] Migrations failed (migrate); continuing..."
 }
 
+function phpstan {
+  TEST_PATH="${@:-}"
+  docker compose run --rm app ./vendor/bin/phpstan analyse --memory-limit 1G ${TEST_PATH}
+}
+
 function ps {
   docker compose ps
 }

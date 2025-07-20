@@ -1,0 +1,22 @@
+includes:
+  - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+  level: 5
+  paths:
+    - app
+    - tests
+
+  excludePaths:
+    - bootstrap/*
+    - storage/*
+    - vendor/*
+    - database/migrations/*
+    - public/*
+
+  # Essas opções são válidas somente com versões recentes do PHPStan.
+  # Remova se estiver usando versão < 1.8 ou Larastan não estiver carregado:
+
+  checkUninitializedProperties: true
+
+ 
