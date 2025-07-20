@@ -7,71 +7,47 @@ use App\Http\Requests\Test\UpdateTestRequest;
 use App\Models\Test;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use App\Exceptions\AuthException;
+use App\Http\Responses\ApiResponse;
+use App\Models\User;
 
 class TestController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(User $user): JsonResponse
     {
-        $tests = Test::where('user_id', Auth::id())->get();
+        $this->authorize('index', $user);
 
-        return response()->json([
-            'success' => true,
-            'data' => $tests,
-        ]);
+        $tests = $user->tests()->get();
+        return ApiResponse::success($tests);
     }
 
     public function store(StoreTestRequest $request): JsonResponse
     {
+        $this->authorize('create', Test::class);
+        
         $test = Test::create([
             ...$request->validated(),
             'user_id' => Auth::id(),
         ]);
-
-        return response()->json([
-            'success' => true,
-            'data' => $test,
-        ], 201);
+        return ApiResponse::success($test, 201);
     }
 
     public function show(Test $test): JsonResponse
     {
-        $this->authorize('view', $test);
-
-        return response()->json([
-            'success' => true,
-            'data' => $test,
-        ]);
+        $this->authorize('show', $test);
+        return ApiResponse::success($test);
     }
 
     public function update(UpdateTestRequest $request, Test $test): JsonResponse
     {
-        if (!Gate::allows('update', $test)) {
-            throw new AuthException(
-                ["auth" => ['You do not have permission to update this resource.']],
-                null,
-                403
-            );
-        }
-
+        $this->authorize('update', $test);
         $test->update($request->validated());
-
-        return response()->json([
-            'success' => true,
-            'data' => $test,
-        ]);
+        return ApiResponse::success($test);
     }
 
     public function destroy(Test $test): JsonResponse
     {
         $this->authorize('delete', $test);
-
         $test->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Resource deleted successfully.',
-        ]);
+        return ApiResponse::success(['message' => 'Test deleted successfully.']);
     }
 }

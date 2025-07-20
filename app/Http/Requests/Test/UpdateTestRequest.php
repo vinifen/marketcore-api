@@ -4,6 +4,7 @@ namespace App\Http\Requests\Test;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 
 class UpdateTestRequest extends FormRequest
 {
@@ -23,8 +24,8 @@ class UpdateTestRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): void
     {
-        return $this->response_error($validator->errors(), 422);
+        throw new ValidationException( $validator->errors()->toArray(), "Test validation failed.");
     }
 }

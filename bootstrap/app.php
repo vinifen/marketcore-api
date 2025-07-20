@@ -5,7 +5,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Responses\ApiResponse;
-use App\Http\Middleware\EnsureUserIsSelf;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,9 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias([
-            'ensure.self' => EnsureUserIsSelf::class,
-        ]);
+        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (ApiException $e) {

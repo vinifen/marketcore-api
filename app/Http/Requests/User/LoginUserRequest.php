@@ -25,7 +25,7 @@ class LoginUserRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): void
     {
         throw new ValidationException( $validator->errors()->toArray());
     }

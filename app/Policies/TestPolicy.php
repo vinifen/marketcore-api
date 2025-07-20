@@ -4,46 +4,32 @@ namespace App\Policies;
 
 use App\Models\Test;
 use App\Models\User;
+use App\Policies\Concerns\HandleOwnership;
 
 class TestPolicy
 {
-    /**
-     * Determine whether the user can create models.
-     */
+    use HandleOwnership;
+
+    public function show(User $user, Test $test): bool
+    {
+        $this->checkOwner($user->id, $test->user_id, 'view');
+        return true;
+    }
+
     public function create(User $user): bool
     {
         return true;
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Test $test): bool
     {
-        return $user->id === $test->user_id;
+        $this->checkOwner($user->id, $test->user_id, 'update');
+        return true;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Test $test): bool
     {
-        return $user->id === $test->user_id;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Test $test): bool
-    {
-        return $user->id === $test->user_id;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Test $test): bool
-    {
-        return $user->id === $test->user_id;
+        $this->checkOwner($user->id, $test->user_id, 'delete');
+        return true;
     }
 }

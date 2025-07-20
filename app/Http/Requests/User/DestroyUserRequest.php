@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Exceptions\ValidationException;
 
-class DeleteUserRequest extends FormRequest
+class DestroyUserRequest extends FormRequest
 {
 
     public function authorize(): bool
@@ -24,7 +24,7 @@ class DeleteUserRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): void
     {
         throw new ValidationException( $validator->errors()->toArray());
     }
