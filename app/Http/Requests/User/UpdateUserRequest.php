@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Requests\User;
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use App\Exceptions\ValidationException;
+use Illuminate\Validation\Rule;
+
+class UpdateUserRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+
+    public function rules(): array
+    {
+        return [
+            'name' => 'sometimes|string|max:255',
+            'email' => [
+                'sometimes',
+                'email',
+                Rule::unique('users')->ignore($this->user()->id),
+            ],
+            'new_password' => 'sometimes|string|min:8|confirmed',
+            'current_password' => [
+                Rule::requiredIf(function () {
+                    return $this->filled('email') || $this->filled('new_password');
+                }),
+                'string',
+                function ($attribute, $value, $fail) {
+                    if ($this->filled('new_password') && $value === $this->input('new_password')) {
+                        $fail('The current password cannot be the same as the new password.');
+                    }
+                },
+            ],
+        ];
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new ValidationException( $validator->errors()->toArray() );
+    }
+}

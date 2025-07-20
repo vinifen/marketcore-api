@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Responses\ApiResponse;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Requests\User\DestroyUserRequest;
+use App\Models\User;
+use App\Services\AuthService;
+use App\Actions\UpdateUserAction;
+use Illuminate\Http\JsonResponse;
+
+class UserController extends Controller
+{
+    public function index(): JsonResponse
+    {
+        return ApiResponse::success(User::all());
+    }
+
+    public function show(User $user): JsonResponse
+    {
+        $this->authorize('show', $user);
+        return ApiResponse::success($user);
+    }
+
+    public function update(
+        UpdateUserRequest $request,
+        User $user,
+        UpdateUserAction $updateUserAction
+    ): JsonResponse
+    {
+        $this->authorize('update', $user);
+        $result = $updateUserAction->execute($user, $request->validated());
+        return ApiResponse::success($result);
+    }
+
+    public function destroy(DestroyUserRequest $request, User $user): JsonResponse
+    {
+        $this->authorize('delete', $user);
+        AuthService::validatePassword($user, $request->input('password'));
+        $user->delete();
+        return ApiResponse::success(['message' => 'User deleted successfully.']);
+    }
+}
