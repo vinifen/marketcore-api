@@ -48,6 +48,7 @@ Check if everthing is like you would like (default config is working)
 
 - API: http://localhost:8010/api
 - Docs: http://localhost:8010/api/documentation
+- Pgweb: http://localhost:8011
 
 ### Run `help` to see all available commands
 

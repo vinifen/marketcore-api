@@ -64,15 +64,19 @@ function composer {
 
 function rm-all {
   echo ">> Cleaning up .env, vendor, containers, images, and volumes..."
-  rm -rf vendor || echo "vendor directory not found, skipping removal"
-  rm -f .env || echo ".env not found, skipping removal"
-  
-  docker ps -a --filter "name=marketcore-api-" -q | xargs -r docker rm -f
+
+  rm -rf vendor 2>/dev/null || echo "vendor directory not found, skipping removal"
+  rm -f .env 2>/dev/null || echo ".env not found, skipping removal"
+
+  docker ps -a --filter "name=marketcore-api" -q | xargs -r docker rm -f
 
   docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | grep "marketcore-api" | awk '{print $2}' | xargs -r docker rmi -f
 
   docker volume ls --format "{{.Name}}" | grep "marketcore-api" | xargs -r docker volume rm -f
+
+  echo ">> Cleanup completed!"
 }
+
 
 function exec {
   source .env
