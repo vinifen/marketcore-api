@@ -6,7 +6,9 @@ class ValidationException extends ApiException
 {
     public function getExceptionMessage(): string
     {
-        return $this->message ?: 'Validation error occurred.';
+        return is_string ($this->message)
+            ? $this->message :
+            'Validation error occurred.';
     }
 
     public function getStatusCode(): int

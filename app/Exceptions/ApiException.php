@@ -4,26 +4,40 @@ namespace App\Exceptions;
 
 use Exception;
 
+
 abstract class ApiException extends Exception
 {
+    /**
+     * @var array<string, string>
+     */
     protected array $errors;
 
+    /**
+     * @param array<string, string> $errors
+     * @param string|null $message
+     * @param int $code
+     */
     public function __construct(array $errors = [], ?string $message = null, int $code = 400)
     {
-        parent::__construct($message, $code);
+        parent::__construct($message ?? 'Unexpected API error', $code);
         $this->errors = $errors;
     }
 
     public function getStatusCode(): int
     {
-        return $this->code;
+        return is_int($this->code) ? $this->code : 400;
     }
 
     public function getExceptionMessage(): string
     {
-        return 'Unexpected error occurred: ' . $this->message;
+        $message = is_string($this->message) ? $this->message : 'Unknown error';
+        return 'Unexpected error occurred: ' . $message;
     }
+    
 
+    /**
+     * @return array<string, string>
+     */
     public function toArray(): array
     {
         return $this->errors;

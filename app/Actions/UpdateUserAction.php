@@ -7,6 +7,16 @@ use App\Services\AuthService;
 
 class UpdateUserAction
 {
+    /**
+     * @param User $user
+     * @param array{
+     *     name?: string,
+     *     email?: string,
+     *     new_password?: string,
+     *     current_password?: string
+     * } $data
+     * @return User
+     */
     public function execute(User $user, array $data): User
     {
         if(isset($data['email']) || isset($data['new_password'])) {
@@ -17,8 +27,10 @@ class UpdateUserAction
                 unset($data['new_password']);
             }
         }
+        unset($data['current_password']);
 
         $user->update($data);
+
         return $user;
     }
 }

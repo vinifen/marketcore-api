@@ -6,6 +6,8 @@ class AuthException extends ApiException
 {
     public function getExceptionMessage(): string
     {
-        return $this->message ?: 'Authentication error occurred.';
+        return is_string($this->message)
+            ? $this->message
+            : 'Authentication error occurred.';
     }
 }
