@@ -22,7 +22,7 @@ class Test extends Model
         'description',
         'user_id'
     ];
-    
+
     /**
      * @return BelongsTo<User, Test>
      */

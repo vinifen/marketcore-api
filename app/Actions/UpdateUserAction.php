@@ -10,8 +10,8 @@ class UpdateUserAction
     /**
      * @param User $user
      * @param array{
-     *     name?: mixed,
-     *     email?: mixed,
+     *     name?: string,
+     *     email?: string,
      *     new_password?: string,
      *     current_password?: string
      * } $data
