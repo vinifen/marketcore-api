@@ -8,14 +8,12 @@ use Exception;
 abstract class ApiException extends Exception
 {
     /**
-     * @var array<string, string>
+     * @var array<string, array<int, string>>
      */
     protected array $errors;
 
     /**
-     * @param array<string, string> $errors
-     * @param string|null $message
-     * @param int $code
+     * @param array<string, array<int, string>> $errors
      */
     public function __construct(array $errors = [], ?string $message = null, int $code = 400)
     {
@@ -36,7 +34,7 @@ abstract class ApiException extends Exception
     
 
     /**
-     * @return array<string, string>
+     * @return array<string, array<int, string>>
      */
     public function toArray(): array
     {

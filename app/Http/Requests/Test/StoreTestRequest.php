@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Test;
 
+use App\Exceptions\ValidationException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\ValidationException;
 
 class StoreTestRequest extends FormRequest
 {

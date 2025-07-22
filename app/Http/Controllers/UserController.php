@@ -37,7 +37,8 @@ class UserController extends Controller
     public function destroy(DestroyUserRequest $request, User $user): JsonResponse
     {
         $this->authorize('delete', $user);
-        AuthService::validatePassword($user, $request->input('password'));
+        $password = (string) $request->input('password');
+        AuthService::validatePassword($user, $password);
         $user->delete();
         return ApiResponse::success(['message' => 'User deleted successfully.']);
     }

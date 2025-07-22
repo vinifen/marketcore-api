@@ -10,6 +10,10 @@ use App\Exceptions\AuthException;
 
 class AuthService
 {
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
     public function register(array $data): array
     {
         $user = User::create([
@@ -23,6 +27,10 @@ class AuthService
         return ['user' => $user, 'token' => $token];
     }
 
+    /**
+     * @param array<string, mixed> $credentials
+     * @return array<string, mixed>
+     */
     public function login(array $credentials): array
     {
         $user = User::where('email', $credentials['email'])->first();
