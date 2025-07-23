@@ -44,9 +44,9 @@ class AuthService
         return ['user' => $user, 'token' => $token];
     }
 
-    public function validatePassword(User $user, string $password): void
+    public function validatePassword(string $user_password, string $password): void
     {
-        if(! Hash::check($password, $user->password)) {
+        if(! Hash::check($password, $user_password)) {
             throw new AuthException(["auth" => ['Password is incorrect.']], null, 403);
         }
     }

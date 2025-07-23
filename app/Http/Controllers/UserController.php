@@ -25,13 +25,13 @@ class UserController extends Controller
 
     public function update(
         UpdateUserRequest $request,
-        AuthService $authService,
         User $user,
         UpdateUserAction $updateUserAction
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $this->authorize('update', $user);
-        $result = $updateUserAction->execute($user, $authService, $request->validated());
+    
+        $result = $updateUserAction->execute($user, $request->validated());
+    
         return ApiResponse::success($result);
     }
 
