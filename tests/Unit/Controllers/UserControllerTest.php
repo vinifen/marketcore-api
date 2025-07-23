@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 
-class UpdateUserActionTest extends TestCase
+class UserControllerTest extends TestCase
 {
     /**
      * A basic unit test example.

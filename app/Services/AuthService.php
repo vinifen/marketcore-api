@@ -10,7 +10,7 @@ use App\Exceptions\AuthException;
 
 class AuthService
 {
-    /**
+    /** 
      * @param array<string, mixed> $data
      * @return array<string, mixed>
      */
@@ -44,7 +44,7 @@ class AuthService
         return ['user' => $user, 'token' => $token];
     }
 
-    public static function validatePassword(User $user, string $password): void
+    public function validatePassword(User $user, string $password): void
     {
         if(! Hash::check($password, $user->password)) {
             throw new AuthException(["auth" => ['Password is incorrect.']], null, 403);

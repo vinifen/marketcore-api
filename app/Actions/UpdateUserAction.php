@@ -17,10 +17,14 @@ class UpdateUserAction
      * } $data
      * @return User
      */
-    public function execute(User $user, array $data): User
+    public function execute(
+        User $user,
+        AuthService $authService,
+        array $data
+    ): User
     {
         if(isset($data['email']) || isset($data['new_password'])) {
-            AuthService::validatePassword($user, $data['current_password']);
+            $authService->validatePassword($user, $data['current_password']);
 
             if (isset($data['new_password'])) {
                 $data['password'] = bcrypt($data['new_password']);
