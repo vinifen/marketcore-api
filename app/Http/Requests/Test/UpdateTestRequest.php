@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Test;
 
-use App\Exceptions\ValidationException;
+use App\Exceptions\ApiException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -26,6 +26,6 @@ class UpdateTestRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        throw new ValidationException( $validator->errors()->toArray(), "Test validation failed.");
+        throw new ApiException('Update test request error.', $validator->errors()->toArray(), 422);
     }
 }

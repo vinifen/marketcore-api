@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Exceptions\ValidationException;
+use App\Exceptions\ApiException;
 use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
@@ -44,6 +44,6 @@ class UpdateUserRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        throw new ValidationException( $validator->errors()->toArray() );
+        throw new ApiException( 'Update request error.', $validator->errors()->toArray(), 422);
     }
 }

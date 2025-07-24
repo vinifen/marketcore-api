@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Test;
 
-use App\Exceptions\ValidationException;
+use App\Exceptions\ApiException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
@@ -26,6 +26,6 @@ class StoreTestRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        throw new ValidationException( $validator->errors()->toArray(), "Test validation failed.");
+        throw new ApiException('Create test request error.', $validator->errors()->toArray(), 422);
     }
 }

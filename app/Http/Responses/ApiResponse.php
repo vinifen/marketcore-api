@@ -23,12 +23,27 @@ class ApiResponse
      * @param string|null $message
      * @param int $status
      */
-    public static function error(mixed $errors = null, ?string $message = null, int $status = 400): JsonResponse
+    public static function error(
+        ?string $message = null,
+        mixed $errors = null,
+        int $status = 400,
+    ): JsonResponse
     {
+        $errorArray = [];
+    
+        if (is_array($errors)) {
+            $errorArray = $errors;
+        } elseif (!is_null($errors)) {
+            $errorArray = ['detail' => $errors];
+        }
+    
         return response()->json([
             'success' => false,
-            'message' => $message ?? 'Unexpected error occurred.',
-            'errors' => $errors,
+            'errors' => array_merge(
+                ['message' => $message ?? 'Unexpected error occurred.'],
+                $errorArray
+            ),
         ], $status);
     }
+    
 }

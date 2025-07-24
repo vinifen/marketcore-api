@@ -3,7 +3,7 @@
 namespace App\Policies\Concerns;
 
 use App\Models\User;
-use App\Exceptions\AuthException;
+use App\Exceptions\ApiException;
 
 trait HandleOwnership
 {
@@ -13,7 +13,7 @@ trait HandleOwnership
             $actionText = $action !== null ? $action : "handle";
             $defaultMessage = "You are not authorized to {$actionText} this resource.";
             $message = $customMessage ?? $defaultMessage;
-            throw new AuthException(
+            throw new ApiException(
                 ['auth' => [$message]],
                 'Policy error',
                 403
