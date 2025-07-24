@@ -14,8 +14,8 @@ trait HandleOwnership
             $defaultMessage = "You are not authorized to {$actionText} this resource.";
             $message = $customMessage ?? $defaultMessage;
             throw new ApiException(
-                ['auth' => [$message]],
-                'Policy error',
+                $message,
+                null,
                 403
             );
         }

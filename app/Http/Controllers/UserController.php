@@ -27,7 +27,8 @@ class UserController extends Controller
         UpdateUserRequest $request,
         User $user,
         UpdateUserAction $updateUserAction
-    ): JsonResponse {
+    ): JsonResponse 
+    {
         $this->authorize('update', $user);
     
         $result = $updateUserAction->execute($user, $request->validated());

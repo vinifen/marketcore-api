@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Exceptions\AuthException;
+use App\Exceptions\ApiException;
 
 class AuthService
 {
@@ -36,7 +36,7 @@ class AuthService
         $user = User::where('email', $credentials['email'])->first();
 
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-            throw new AuthException(["auth" => ['Invalid credentials provided.']], null, 401);
+            throw new ApiException('Invalid credentials provided.', null, 401);
         }
 
         $token = $user->createToken('UserToken')->plainTextToken;
@@ -47,8 +47,7 @@ class AuthService
     public function validatePassword(string $user_password, string $password): void
     {
         if(! Hash::check($password, $user_password)) {
-            throw new AuthException(["auth" => ['Password is incorrect.']], null, 403);
+            throw new ApiException('Password is incorrect.', null, 403);
         }
     }
-
 }

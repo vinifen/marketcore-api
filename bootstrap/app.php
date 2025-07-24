@@ -48,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (QueryException $e) {
             return ApiResponse::error(
                 $e->getMessage(),
+                null,
                 500
             );
         });
@@ -67,6 +68,5 @@ return Application::configure(basePath: dirname(__DIR__))
                 500
             );
         });
-
     })
     ->create();
