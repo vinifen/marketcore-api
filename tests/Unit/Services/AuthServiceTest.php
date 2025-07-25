@@ -109,7 +109,7 @@ class AuthServiceTest extends TestCase
         $authService = app(AuthService::class);
 
         $this->expectException(ApiException::class);
-        $this->expectExceptionMessage('Password is incorrect.');
+        $this->expectExceptionMessage('The current password is incorrect.');
 
         $authService->validatePassword($hashedPassword, $this->wrongPassword);
     }

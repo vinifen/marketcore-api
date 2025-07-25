@@ -47,7 +47,7 @@ class AuthService
     public function validatePassword(string $user_password, string $password): void
     {
         if(! Hash::check($password, $user_password)) {
-            throw new ApiException('Password is incorrect.', null, 403);
+            throw new ApiException('The current password is incorrect.', null, 403);
         }
     }
 }

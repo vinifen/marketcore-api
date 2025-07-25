@@ -79,7 +79,7 @@ class UpdateUserActionTest extends TestCase
         $updateUserAction = app(UpdateUserAction::class);
 
         $this->expectException(ApiException::class);
-        $this->expectExceptionMessage('Password is incorrect.');
+        $this->expectExceptionMessage('The current password is incorrect.');
 
         $updateUserAction->execute($user, [
             'email' => $this->newEmail,
@@ -93,7 +93,7 @@ class UpdateUserActionTest extends TestCase
         $updateUserAction = app(UpdateUserAction::class);
 
         $this->expectException(ApiException::class);
-        $this->expectExceptionMessage('Password is incorrect.');
+        $this->expectExceptionMessage('The current password is incorrect.');
 
         $updateUserAction->execute($user, [
             'new_password' => $this->newPassword,
@@ -108,7 +108,7 @@ class UpdateUserActionTest extends TestCase
         $updateUserAction = app(UpdateUserAction::class);
 
         $this->expectException(ApiException::class);
-        $this->expectExceptionMessage('Password is incorrect.');
+        $this->expectExceptionMessage('The current password is incorrect.');
 
         $updateUserAction->execute($user, [
             'email' => $this->newEmail,

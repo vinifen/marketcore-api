@@ -30,15 +30,15 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (AuthenticationException $e) {
-            throw new ApiException(
+            return ApiResponse::error(
                 $e->getMessage(),
                 null,
-                401,
+                401
             );
         });
 
         $exceptions->render(function (AuthorizationException $e) {
-            throw new ApiException(
+            return ApiResponse::error(
                 $e->getMessage(),
                 null,
                 403
