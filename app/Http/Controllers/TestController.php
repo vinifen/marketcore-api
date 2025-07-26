@@ -23,7 +23,7 @@ class TestController extends Controller
     public function store(StoreTestRequest $request): JsonResponse
     {
         $this->authorize('create', Test::class);
-        
+
         $test = Test::create([
             ...$request->validated(),
             'user_id' => Auth::id(),

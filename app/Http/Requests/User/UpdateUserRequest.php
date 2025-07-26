@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Exceptions\ValidationException;
+use App\Exceptions\ApiException;
 use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
@@ -21,11 +21,11 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
+            'name' => 'sometimes|string|min:2|max:255',
             'email' => [
                 'sometimes',
                 'email',
-                Rule::unique('users')->ignore($this->user()->id),
+                Rule::unique('users')->ignore(optional($this->user())->id),
             ],
             'new_password' => 'sometimes|string|min:8|confirmed',
             'current_password' => [
@@ -44,6 +44,6 @@ class UpdateUserRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        throw new ValidationException( $validator->errors()->toArray() );
+        throw new ApiException('Update request error.', $validator->errors()->toArray(), 422);
     }
 }
