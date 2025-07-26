@@ -24,10 +24,9 @@ class StoreUserRequest extends FormRequest
             'password' => 'required|string|min:8|confirmed',
         ];
     }
-    
+
     protected function failedValidation(Validator $validator): void
     {
         throw new ApiException('Create user request error.', $validator->errors()->toArray(), 422);
     }
-
 }

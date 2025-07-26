@@ -34,6 +34,23 @@ function phpstan {
   docker compose run --rm app ./vendor/bin/phpstan analyse --memory-limit 1G ${TEST_PATH}
 }
 
+function phpcs {
+  if [ $# -eq 0 ]; then
+    docker compose run --rm app ./vendor/bin/phpcs app routes tests
+  else
+    docker compose run --rm app ./vendor/bin/phpcs "$@"
+  fi
+}
+
+function phpcbf {
+  if [ $# -eq 0 ]; then
+    docker compose run --rm app ./vendor/bin/phpcbf app routes tests
+  else
+    docker compose run --rm app ./vendor/bin/phpcbf "$@"
+  fi
+}
+
+
 function ps {
   docker compose ps
 }

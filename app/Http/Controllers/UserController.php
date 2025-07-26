@@ -27,12 +27,11 @@ class UserController extends Controller
         UpdateUserRequest $request,
         User $user,
         UpdateUserAction $updateUserAction
-    ): JsonResponse 
-    {
+    ): JsonResponse {
         $this->authorize('update', $user);
-    
+
         $result = $updateUserAction->execute($user, $request->validated());
-    
+
         return ApiResponse::success($result);
     }
 
@@ -40,8 +39,7 @@ class UserController extends Controller
         DestroyUserRequest $request,
         User $user,
         AuthService $authService
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $this->authorize('delete', $user);
         $password = (string) $request->input('password');
         $authService->validatePassword($user->password, $password);

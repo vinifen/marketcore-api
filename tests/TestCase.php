@@ -16,7 +16,7 @@ abstract class TestCase extends BaseTestCase
     protected string $newPassword = 'new-password123';
 
     protected string $wrongPassword = 'wrong-password';
-    
+
     /**
      * @param array<string, mixed> $override
      */

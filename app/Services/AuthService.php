@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services;
-
 namespace App\Services;
 
 use App\Models\User;
@@ -10,7 +9,7 @@ use App\Exceptions\ApiException;
 
 class AuthService
 {
-    /** 
+    /**
      * @param array<string, mixed> $data
      * @return array<string, mixed>
      */
@@ -46,7 +45,7 @@ class AuthService
 
     public function validatePassword(string $user_password, string $password): void
     {
-        if(! Hash::check($password, $user_password)) {
+        if (! Hash::check($password, $user_password)) {
             throw new ApiException('The current password is incorrect.', null, 403);
         }
     }

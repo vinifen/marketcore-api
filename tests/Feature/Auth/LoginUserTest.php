@@ -54,5 +54,4 @@ class LoginUserTest extends TestCase
                 'password' => ['The password field must be at least 8 characters.'],
             ]));
     }
-
 }

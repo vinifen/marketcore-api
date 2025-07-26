@@ -8,7 +8,6 @@ use App\Exceptions\ApiException;
 
 class DestroyUserRequest extends FormRequest
 {
-
     public function authorize(): bool
     {
         return true;

@@ -13,7 +13,7 @@ class UpdateUserTest extends TestCase
     public function test_should_update_user_name_email_and_password(): void
     {
         $user = $this->createTestUser();
-        
+
         $response = $this->actingAs($user)->putJson("api/users/{$user->id}", [
             'name' => $this->newName,
             'email' => $this->newEmail,
@@ -56,7 +56,7 @@ class UpdateUserTest extends TestCase
     public function test_should_fail_update_user_not_authenticated(): void
     {
         $user = $this->createTestUser();
-        
+
         $response = $this->putJson("api/users/{$user->id}", [
             'name' => $this->newName,
             'email' => $this->newEmail,
@@ -69,7 +69,7 @@ class UpdateUserTest extends TestCase
     public function test_should_fail_update_user_password_with_incorrect_data(): void
     {
         $user = $this->createTestUser();
-        
+
         $response = $this->actingAs($user)->putJson("api/users/{$user->id}", [
             'name' => '1',
             'email' => 'sdasd',

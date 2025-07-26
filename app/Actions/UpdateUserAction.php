@@ -9,7 +9,8 @@ class UpdateUserAction
 {
     public function __construct(
         protected AuthService $authService
-    ) {}
+    ) {
+    }
 
     /**
      * @param User $user

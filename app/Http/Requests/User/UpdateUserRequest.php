@@ -44,6 +44,6 @@ class UpdateUserRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        throw new ApiException( 'Update request error.', $validator->errors()->toArray(), 422);
+        throw new ApiException('Update request error.', $validator->errors()->toArray(), 422);
     }
 }

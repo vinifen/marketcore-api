@@ -27,16 +27,15 @@ class ApiResponse
         ?string $message = null,
         mixed $errors = null,
         int $status = 400,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $errorArray = [];
-    
+
         if (is_array($errors)) {
             $errorArray = $errors;
         } elseif (!is_null($errors)) {
             $errorArray = ['detail' => $errors];
         }
-    
+
         return response()->json([
             'success' => false,
             'errors' => array_merge(
@@ -45,5 +44,4 @@ class ApiResponse
             ),
         ], $status);
     }
-    
 }
