@@ -11,7 +11,12 @@ class UserPolicy
 
     public function index(User $authUser, User $targetUser): bool
     {
-        $this->checkOwner($authUser->id, $targetUser->id, null, "You do not have permission to access this resource.");
+        $this->checkOwner(
+            $authUser->id,
+            $targetUser->id,
+            null,
+            "You do not have permission to access this resource."
+        );
         return true;
     }
 

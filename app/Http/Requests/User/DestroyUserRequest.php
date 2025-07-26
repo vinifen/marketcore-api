@@ -4,11 +4,10 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Exceptions\ValidationException;
+use App\Exceptions\ApiException;
 
 class DestroyUserRequest extends FormRequest
 {
-
     public function authorize(): bool
     {
         return true;
@@ -26,6 +25,6 @@ class DestroyUserRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        throw new ValidationException( $validator->errors()->toArray());
+        throw new ApiException('Destroy request error.', $validator->errors()->toArray(), 422);
     }
 }
