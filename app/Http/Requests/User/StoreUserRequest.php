@@ -27,7 +27,7 @@ class StoreUserRequest extends FormRequest
     
     protected function failedValidation(Validator $validator): void
     {
-        throw new ApiException('Create request error.', $validator->errors()->toArray(), 422);
+        throw new ApiException('Create user request error.', $validator->errors()->toArray(), 422);
     }
 
 }

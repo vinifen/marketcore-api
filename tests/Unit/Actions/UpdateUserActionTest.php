@@ -13,23 +13,6 @@ class UpdateUserActionTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected string $originalName = 'Old Name';
-    protected string $originalEmail = 'user@example.com';
-    protected string $originalPassword = 'password123';
-
-    protected string $newName = 'New Name';
-    protected string $newEmail = 'new@example.com';
-    protected string $newPassword = 'new-password123';
-
-    private function createTestUser(): User
-    {
-        return User::factory()->create([
-            'name' => $this->originalName,
-            'email' => $this->originalEmail,
-            'password' => bcrypt($this->originalPassword),
-        ]);
-    }
-
     public function test_should_update_only_user_name(): void
     {
         $user = $this->createTestUser();

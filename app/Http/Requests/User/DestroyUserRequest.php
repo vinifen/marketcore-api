@@ -26,6 +26,6 @@ class DestroyUserRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        throw new ApiException('Destroy request error.', $validator->errors()->toArray());
+        throw new ApiException('Destroy request error.', $validator->errors()->toArray(), 422);
     }
 }

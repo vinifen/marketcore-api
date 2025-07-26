@@ -13,29 +13,14 @@ class AuthServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected string $name = 'Test User';
-    protected string $email = 'test@example.com';
-    protected string $password = 'password123';
-
-    protected string $wrongPassword = 'wrong-password';
-
-    private function createTestUser(): User
-    {
-        return User::factory()->create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => bcrypt($this->password),
-        ]);
-    }
-
     public function test_should_register_user_and_return_token(): void
     {
         $authService = app(AuthService::class);
 
         $result = $authService->register([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => $this->password,
+            'name' => $this->originalName,
+            'email' => $this->originalEmail,
+            'password' => $this->originalPassword,
         ]);
 
         $this->assertArrayHasKey('user', $result);
@@ -43,9 +28,9 @@ class AuthServiceTest extends TestCase
 
         $user = $result['user'];
 
-        $this->assertEquals($this->name, $user->name);
-        $this->assertEquals($this->email, $user->email);
-        $this->assertTrue(Hash::check($this->password, $user->password));
+        $this->assertEquals($this->originalName, $user->name);
+        $this->assertEquals($this->originalEmail, $user->email);
+        $this->assertTrue(Hash::check($this->originalPassword, $user->password));
     }
 
     public function test_should_login_user_with_correct_credentials(): void
@@ -55,14 +40,14 @@ class AuthServiceTest extends TestCase
         $authService = app(AuthService::class);
 
         $result = $authService->login([
-            'email' => $this->email,
-            'password' => $this->password,
+            'email' => $this->originalEmail,
+            'password' => $this->originalPassword,
         ]);
 
         $this->assertArrayHasKey('user', $result);
         $this->assertArrayHasKey('token', $result);
 
-        $this->assertEquals($this->email, $result['user']->email);
+        $this->assertEquals($this->originalEmail, $result['user']->email);
     }
 
     public function test_should_throw_exception_when_logging_in_with_invalid_email(): void
@@ -74,7 +59,7 @@ class AuthServiceTest extends TestCase
 
         $authService->login([
             'email' => 'invalid@example.com',
-            'password' => $this->password,
+            'password' => $this->originalPassword,
         ]);
     }
 
@@ -88,7 +73,7 @@ class AuthServiceTest extends TestCase
         $this->expectExceptionMessage('Invalid credentials provided.');
 
         $authService->login([
-            'email' => $this->email,
+            'email' => $this->originalEmail,
             'password' => $this->wrongPassword,
         ]);
     }
@@ -97,15 +82,15 @@ class AuthServiceTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
 
-        $hashedPassword = bcrypt($this->password);
+        $hashedPassword = bcrypt($this->originalPassword);
         $authService = app(AuthService::class);
 
-        $authService->validatePassword($hashedPassword, $this->password);
+        $authService->validatePassword($hashedPassword, $this->originalPassword);
     }
 
     public function test_should_throw_exception_when_password_is_incorrect(): void
     {
-        $hashedPassword = bcrypt($this->password);
+        $hashedPassword = bcrypt($this->originalPassword);
         $authService = app(AuthService::class);
 
         $this->expectException(ApiException::class);

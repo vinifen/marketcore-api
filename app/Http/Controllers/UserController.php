@@ -44,7 +44,7 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
         $password = (string) $request->input('password');
-        $authService->validatePassword($user, $password);
+        $authService->validatePassword($user->password, $password);
         $user->delete();
         return ApiResponse::success(['message' => 'User deleted successfully.']);
     }
