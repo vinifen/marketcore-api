@@ -7,7 +7,10 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -25,7 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResponse::error(
                 $e->getMessage(),
                 null,
-                404
+                $e->getStatusCode()
             );
         });
 
@@ -33,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResponse::error(
                 $e->getMessage(),
                 null,
-                401
+                $e->getCode() ?: 401
             );
         });
 
@@ -41,7 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResponse::error(
                 $e->getMessage(),
                 null,
-                403
+                $e->getCode() ?: 403
             );
         });
 
@@ -49,7 +52,31 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResponse::error(
                 $e->getMessage(),
                 null,
-                500
+                $e->getCode() ?: 500
+            );
+        });
+
+        $exceptions->render(function (MethodNotAllowedHttpException $e) {
+            return ApiResponse::error(
+                $e->getMessage(),
+                null,
+                $e->getStatusCode()
+            );
+        });
+
+        $exceptions->render(function (ModelNotFoundException $e) {
+            return ApiResponse::error(
+                $e->getMessage(),
+                null,
+                $e->getCode() ?: 404
+            );
+        });
+
+        $exceptions->render(function (AccessDeniedHttpException $e) {
+            return ApiResponse::error(
+                $e->getMessage(),
+                null,
+                $e->getCode() ?: 403
             );
         });
 
