@@ -77,7 +77,7 @@ class UpdateUserTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJson($this->defaultErrorResponse('Update request error.', [
+            ->assertJson($this->defaultErrorResponse('User update request failed due to invalid data.', [
                 'name' => ['The name field must be at least 2 characters.'],
                 'email' => ['The email field must be a valid email address.'],
                 'current_password' => ['The current password field is required.'],
@@ -122,7 +122,7 @@ class UpdateUserTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJson($this->defaultErrorResponse('Update request error.', [
+            ->assertJson($this->defaultErrorResponse('User update request failed due to invalid data.', [
                 'email' => ['The email has already been taken.'],
             ]));
 
