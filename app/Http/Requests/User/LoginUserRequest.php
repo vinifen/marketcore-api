@@ -26,6 +26,6 @@ class LoginUserRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        throw new ApiException('Login request error.', $validator->errors()->toArray(), 422);
+        throw new ApiException('Login request failed due to invalid credentials.', $validator->errors()->toArray(), 422);
     }
 }
