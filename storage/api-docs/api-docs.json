@@ -11,56 +11,122 @@
         }
     ],
     "paths": {
-        "/api/test": {
-            "get": {
+        "/api/auth/login": {
+            "post": {
                 "tags": [
-                    "Test"
+                    "Auth"
                 ],
-                "summary": "Returns a test message",
-                "operationId": "51ba8e78b3abcf576990e4b564682218",
+                "summary": "Realiza login do usuário",
+                "operationId": "a724284b6f150a08e7e6fc14bdf38105",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Success message",
+                        "description": "Login realizado com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "API working correctly!"
+                                            "example": "Login realizado com sucesso"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIs..."
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
                     }
                 }
             }
         },
-        "/api/test-second": {
-            "post": {
+        "/api/users": {
+            "get": {
                 "tags": [
-                    "TestSecond"
+                    "Users"
                 ],
-                "summary": "Outro endpoint para testes",
-                "operationId": "125240c902a6574c757102fee8b067b0",
+                "summary": "Lista todos os usuários",
+                "operationId": "ec34af5b12e1875953b94dfa56d0e0c8",
                 "responses": {
                     "200": {
-                        "description": "POST success messageasfdsadfasfdasdfasdf",
+                        "description": "Lista de usuários retornada com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "POST working!"
+                                            "example": "Usuários encontrados com sucesso"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Vinicius Ferreira"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "vinicius@example.com"
+                                                    },
+                                                    "role": {
+                                                        "type": "string",
+                                                        "example": "ADMIN"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    },
+                    "403": {
+                        "description": "Sem permissão para listar usuários"
                     }
                 }
             }
@@ -68,12 +134,12 @@
     },
     "tags": [
         {
-            "name": "Test",
-            "description": "Test"
+            "name": "Auth",
+            "description": "Auth"
         },
         {
-            "name": "TestSecond",
-            "description": "TestSecond"
+            "name": "Users",
+            "description": "Users"
         }
     ]
 }
