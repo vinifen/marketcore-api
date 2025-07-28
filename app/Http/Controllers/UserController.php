@@ -18,7 +18,7 @@ class UserController extends Controller
         return ApiResponse::success(User::all());
     }
 
-    public function show($id)
+    public function show(int $id): JsonResponse
     {
         $user = User::find($id);
 
