@@ -88,7 +88,7 @@ class UserDoc
      *             @OA\Property(property="email", type="string", format="email", example="new@email.com"),
      *             @OA\Property(property="new_password", type="string", format="password", example="newPassword123"),
      *             @OA\Property(property="new_password_confirmation", type="string", format="password", example="newPassword123"),
-     *             @OA\Property(property="current_password", type="string", format="password", example="myCurrentPassword")
+     *             @OA\Property(property="current_password", type="string", format="password", example="secret123")
      *         )
      *     ),
      *     @OA\Response(

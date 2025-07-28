@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "MarketCore API Documentation",
-        "description": "API documentation for MarketCore",
+        "description": "MarketCore API is an api made to serve a digital market.",
         "version": "1.0.0"
     },
     "servers": [
@@ -530,7 +530,7 @@
                                     "current_password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "myCurrentPassword"
+                                        "example": "secret123"
                                     }
                                 },
                                 "type": "object"
