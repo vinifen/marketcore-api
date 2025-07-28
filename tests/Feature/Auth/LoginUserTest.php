@@ -49,7 +49,7 @@ class LoginUserTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJson($this->defaultErrorResponse('Login request error.', [
+            ->assertJson($this->defaultErrorResponse('Login request failed due to invalid credentials.', [
                 'email' => ['The email field must be a valid email address.'],
                 'password' => ['The password field must be at least 8 characters.'],
             ]));

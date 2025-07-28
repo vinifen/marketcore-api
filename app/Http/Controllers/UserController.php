@@ -8,6 +8,7 @@ use App\Http\Requests\User\DestroyUserRequest;
 use App\Models\User;
 use App\Services\AuthService;
 use App\Actions\UpdateUserAction;
+use App\Exceptions\ApiException;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
@@ -17,8 +18,14 @@ class UserController extends Controller
         return ApiResponse::success(User::all());
     }
 
-    public function show(User $user): JsonResponse
+    public function show($id)
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            throw new ApiException('User not found.', null, 404);
+        }
+
         $this->authorize('show', $user);
         return ApiResponse::success($user);
     }

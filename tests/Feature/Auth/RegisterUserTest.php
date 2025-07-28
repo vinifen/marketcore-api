@@ -45,7 +45,7 @@ class RegisterUserTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-                ->assertJson($this->defaultErrorResponse('Create user request error.', [
+                ->assertJson($this->defaultErrorResponse('User creation request failed due to invalid data.', [
                     'email' => ['The email has already been taken.'],
                 ]));
     }
@@ -59,7 +59,7 @@ class RegisterUserTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-                ->assertJson($this->defaultErrorResponse('Create user request error.', [
+                ->assertJson($this->defaultErrorResponse('User creation request failed due to invalid data.', [
                     'password' => ['The password field confirmation does not match.'],
                 ]));
     }
