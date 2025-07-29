@@ -20,7 +20,7 @@ class AuthController extends Controller
     public function login(LoginUserRequest $request, AuthService $authService): JsonResponse
     {
         $response = $authService->login($request->validated());
-        return ApiResponse::success($response, 200);
+        return ApiResponse::success($response);
     }
 
     public function logout(Request $request): JsonResponse

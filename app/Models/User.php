@@ -15,11 +15,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $name
  * @property string $email
  * @property string $password
- * @property string $role
+ * @property UserRole $role
  */
 class User extends Authenticatable
 {
-    
     use HasApiTokens;
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
@@ -61,5 +60,23 @@ class User extends Authenticatable
     public function tests(): HasMany
     {
         return $this->hasMany(Test::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::ADMIN;
+    }
+
+    public function isModerator(): bool
+    {
+        return $this->role === UserRole::MODERATOR;
+    }
+
+    public function isStaff(): bool
+    {
+        return in_array($this->role, [
+            UserRole::ADMIN,
+            UserRole::MODERATOR,
+        ], true);
     }
 }

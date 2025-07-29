@@ -3,38 +3,56 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Policies\Concerns\HandleOwnership;
+use App\Policies\Concerns\AuthorizesActions;
 
 class UserPolicy
 {
-    use HandleOwnership;
+    use AuthorizesActions;
 
-    public function index(User $authUser, User $targetUser): bool
+    public function index(User $authUser, User $targetUser): true
     {
-        $this->checkOwner(
-            $authUser->id,
-            $targetUser->id,
+        $this->authorizeUnlessPrivileged(
+            $authUser->id === $targetUser->id,
+            $authUser->isStaff(),
             null,
             "You do not have permission to access this resource."
         );
         return true;
     }
 
-    public function show(User $authUser, User $targetUser): bool
+    public function create(User $authUser): true
     {
-        $this->checkOwner($authUser->id, $targetUser->id, 'show');
+        $this->authorizeUnlessPrivileged(false, $authUser->isAdmin(), "create");
         return true;
     }
 
-    public function update(User $authUser, User $targetUser): bool
+    public function show(User $authUser, User $targetUser): true
     {
-        $this->checkOwner($authUser->id, $targetUser->id, 'update');
+        $this->authorizeUnlessPrivileged(
+            $authUser->id === $targetUser->id,
+            $authUser->isStaff(),
+            'show'
+        );
         return true;
     }
 
-    public function delete(User $authUser, User $targetUser): bool
+    public function update(User $authUser, User $targetUser): true
     {
-        $this->checkOwner($authUser->id, $targetUser->id, 'delete');
+        $this->authorizeUnlessPrivileged(
+            $authUser->id === $targetUser->id,
+            $authUser->isStaff(),
+            'update'
+        );
+        return true;
+    }
+
+    public function delete(User $authUser, User $targetUser): true
+    {
+        $this->authorizeUnlessPrivileged(
+            $authUser->id === $targetUser->id,
+            $authUser->isStaff(),
+            'delete'
+        );
         return true;
     }
 }

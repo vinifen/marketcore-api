@@ -50,6 +50,15 @@ function phpcbf {
   fi
 }
 
+function test {
+  docker compose exec app php artisan test
+}
+
+function all-tests {
+  ./run test
+  ./run phpcs
+  ./run phpstan
+}
 
 function ps {
   docker compose ps
@@ -98,7 +107,6 @@ function rm-all {
 
   echo ">> Cleanup completed!"
 }
-
 
 function exec {
   source .env
