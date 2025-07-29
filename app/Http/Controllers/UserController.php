@@ -8,7 +8,10 @@ use App\Http\Requests\User\DestroyUserRequest;
 use App\Models\User;
 use App\Services\AuthService;
 use App\Actions\UpdateUserAction;
+use App\Services\UserService;
 use App\Exceptions\ApiException;
+use App\Http\Requests\User\StoreUserRequest;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
@@ -18,39 +21,49 @@ class UserController extends Controller
         return ApiResponse::success(User::all());
     }
 
+    public function store(StoreUserRequest $request, UserService $userService): JsonResponse
+    {
+        $this->authorize('create', User::class);
+        $result = $userService->store($request->validated());
+        return ApiResponse::success($result);
+    }
+
     public function show(int $id): JsonResponse
     {
-        $user = User::find($id);
-
-        if (!$user) {
-            throw new ApiException('User not found.', null, 404);
-        }
+        $user = $this->findModelOrFail(User::class, $id);
 
         $this->authorize('show', $user);
+
         return ApiResponse::success($user);
     }
 
     public function update(
         UpdateUserRequest $request,
-        User $user,
-        UpdateUserAction $updateUserAction
+        int $id,
+        UserService $userService,
     ): JsonResponse {
+        /** @var \App\Models\User $user */
+        $user = $this->findModelOrFail(User::class, $id);
         $this->authorize('update', $user);
 
-        $result = $updateUserAction->execute($user, $request->validated());
+        $result = $userService->update($user, $request->validated(), app(AuthService::class));
 
         return ApiResponse::success($result);
     }
 
     public function destroy(
         DestroyUserRequest $request,
-        User $user,
+        int $id,
         AuthService $authService
     ): JsonResponse {
+        /** @var \App\Models\User $user */
+        $user = $this->findModelOrFail(User::class, $id);
         $this->authorize('delete', $user);
+
         $password = (string) $request->input('password');
         $authService->validatePassword($user->password, $password);
         $user->delete();
+
         return ApiResponse::success(['message' => 'User deleted successfully.']);
     }
 }

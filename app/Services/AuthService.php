@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Services;
-namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Exceptions\ApiException;
+use App\Services\UserService;
+use App\Enums\UserRole;
 
 class AuthService
 {
@@ -13,13 +14,24 @@ class AuthService
      * @param array<string, mixed> $data
      * @return array<string, mixed>
      */
-    public function register(array $data): array
+    public function registerClient(array $data, UserService $userService): array
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        $data = array_merge($data, ['role' => UserRole::CLIENT]);
+        $user = $userService->store($data);
+
+        $token = $user->createToken('UserToken')->plainTextToken;
+
+        return ['user' => $user, 'token' => $token];
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    public function registerMod(array $data, UserService $userService): array
+    {
+        $data = array_merge($data, ['role' => UserRole::CLIENT]);
+        $user = $userService->store($data);
 
         $token = $user->createToken('UserToken')->plainTextToken;
 

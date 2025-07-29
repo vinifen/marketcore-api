@@ -3,9 +3,9 @@
 namespace Tests\Unit\Services;
 
 use Tests\TestCase;
-use App\Models\User;
 use App\Services\AuthService;
 use App\Exceptions\ApiException;
+use App\Services\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,11 +17,11 @@ class AuthServiceTest extends TestCase
     {
         $authService = app(AuthService::class);
 
-        $result = $authService->register([
+        $result = $authService->registerClient([
             'name' => $this->originalName,
             'email' => $this->originalEmail,
             'password' => $this->originalPassword,
-        ]);
+        ], app(UserService::class));
 
         $this->assertArrayHasKey('user', $result);
         $this->assertArrayHasKey('token', $result);

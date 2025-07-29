@@ -39,7 +39,7 @@ class UserPolicy
     public function update(User $authUser, User $targetUser): true
     {
         $this->authorizeUnlessPrivileged(
-            $authUser->id === $targetUser->id,
+            $authUser->id === $targetUser->id || $targetUser->isStaff(),
             $authUser->isStaff(),
             'update'
         );
@@ -50,7 +50,7 @@ class UserPolicy
     {
         $this->authorizeUnlessPrivileged(
             $authUser->id === $targetUser->id,
-            $authUser->isStaff(),
+            $authUser->isAdmin(),
             'delete'
         );
         return true;
