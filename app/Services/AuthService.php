@@ -30,7 +30,7 @@ class AuthService
      */
     public function registerMod(array $data, UserService $userService): array
     {
-        $data = array_merge($data, ['role' => UserRole::CLIENT]);
+        $data = array_merge($data, ['role' => UserRole::MODERATOR]);
         $user = $userService->store($data);
 
         $token = $user->createToken('UserToken')->plainTextToken;

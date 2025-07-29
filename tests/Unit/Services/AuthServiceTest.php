@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services;
 
+use App\Enums\UserRole;
 use Tests\TestCase;
 use App\Services\AuthService;
 use App\Exceptions\ApiException;
@@ -98,4 +99,26 @@ class AuthServiceTest extends TestCase
 
         $authService->validatePassword($hashedPassword, $this->wrongPassword);
     }
+
+    public function test_should_register_moderator_and_return_token(): void
+    {
+        $authService = app(AuthService::class);
+
+        $result = $authService->registerMod([
+            'name' => 'Mod User',
+            'email' => 'mod@example.com',
+            'password' => 'modpassword',
+        ], app(UserService::class));
+
+        $this->assertArrayHasKey('user', $result);
+        $this->assertArrayHasKey('token', $result);
+
+        $user = $result['user'];
+
+        $this->assertEquals('Mod User', $user->name);
+        $this->assertEquals('mod@example.com', $user->email);
+        $this->assertEquals(UserRole::MODERATOR, $user->role);
+        $this->assertTrue(Hash::check('modpassword', $user->password));
+    }
+
 }
