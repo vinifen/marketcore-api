@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use App\Enums\UserRole;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -26,6 +27,7 @@ abstract class TestCase extends BaseTestCase
             'name' => $this->originalName,
             'email' => $this->originalEmail,
             'password' => bcrypt($this->originalPassword),
+            'role' => UserRole::CLIENT,
         ], $override));
     }
 

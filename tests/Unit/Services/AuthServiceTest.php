@@ -2,10 +2,11 @@
 
 namespace Tests\Unit\Services;
 
+use App\Enums\UserRole;
 use Tests\TestCase;
-use App\Models\User;
 use App\Services\AuthService;
 use App\Exceptions\ApiException;
+use App\Services\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,11 +18,15 @@ class AuthServiceTest extends TestCase
     {
         $authService = app(AuthService::class);
 
-        $result = $authService->register([
-            'name' => $this->originalName,
-            'email' => $this->originalEmail,
-            'password' => $this->originalPassword,
-        ]);
+        $result = $authService->register(
+            [
+                'name' => $this->originalName,
+                'email' => $this->originalEmail,
+                'password' => $this->originalPassword,
+            ],
+            UserRole::CLIENT,
+            app(UserService::class)
+        );
 
         $this->assertArrayHasKey('user', $result);
         $this->assertArrayHasKey('token', $result);
@@ -97,5 +102,30 @@ class AuthServiceTest extends TestCase
         $this->expectExceptionMessage('The current password is incorrect.');
 
         $authService->validatePassword($hashedPassword, $this->wrongPassword);
+    }
+
+    public function test_should_register_moderator_and_return_token(): void
+    {
+        $authService = app(AuthService::class);
+
+        $result = $authService->register(
+            [
+                'name' => 'Mod User',
+                'email' => 'mod@example.com',
+                'password' => 'modpassword',
+            ],
+            UserRole::MODERATOR,
+            app(UserService::class)
+        );
+
+        $this->assertArrayHasKey('user', $result);
+        $this->assertArrayHasKey('token', $result);
+
+        $user = $result['user'];
+
+        $this->assertEquals('Mod User', $user->name);
+        $this->assertEquals('mod@example.com', $user->email);
+        $this->assertEquals(UserRole::MODERATOR, $user->role);
+        $this->assertTrue(Hash::check('modpassword', $user->password));
     }
 }

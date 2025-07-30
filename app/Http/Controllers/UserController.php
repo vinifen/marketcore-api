@@ -7,50 +7,65 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Requests\User\DestroyUserRequest;
 use App\Models\User;
 use App\Services\AuthService;
-use App\Actions\UpdateUserAction;
-use App\Exceptions\ApiException;
+use App\Services\UserService;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
     public function index(): JsonResponse
     {
-        return ApiResponse::success(User::all());
+        $this->authorize('index', User::class);
+
+        $users = User::all();
+
+        return ApiResponse::success(UserResource::collection($users));
     }
 
-    public function show($id)
+    public function store(StoreUserRequest $request, UserService $userService): JsonResponse
     {
-        $user = User::find($id);
+        $this->authorize('create', User::class);
+        $result = $userService->store($request->validated());
+        return ApiResponse::success($result, 201);
+    }
 
-        if (!$user) {
-            throw new ApiException('User not found.', null, 404);
-        }
+    public function show(int $id): JsonResponse
+    {
+        $user = $this->findModelOrFail(User::class, $id);
 
         $this->authorize('show', $user);
+
         return ApiResponse::success($user);
     }
 
     public function update(
         UpdateUserRequest $request,
-        User $user,
-        UpdateUserAction $updateUserAction
+        int $id,
+        UserService $userService,
     ): JsonResponse {
+        /** @var \App\Models\User $user */
+        $user = $this->findModelOrFail(User::class, $id);
         $this->authorize('update', $user);
 
-        $result = $updateUserAction->execute($user, $request->validated());
+        $result = $userService->update($user, $request->validated(), app(AuthService::class));
 
         return ApiResponse::success($result);
     }
 
     public function destroy(
         DestroyUserRequest $request,
-        User $user,
+        int $id,
         AuthService $authService
     ): JsonResponse {
+        /** @var \App\Models\User $user */
+        $user = $this->findModelOrFail(User::class, $id);
         $this->authorize('delete', $user);
+
         $password = (string) $request->input('password');
         $authService->validatePassword($user->password, $password);
         $user->delete();
+
         return ApiResponse::success(['message' => 'User deleted successfully.']);
     }
 }
