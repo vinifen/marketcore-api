@@ -87,7 +87,7 @@ class RegisterUserTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'email' => 'moderator@example.com',
-            'role' => UserRole::MODERATOR->value,
+            'role' => UserRole::MODERATOR,
         ]);
     }
 
@@ -100,7 +100,8 @@ class RegisterUserTest extends TestCase
             'password_confirmation' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(401);
+        $response->assertStatus(401)
+                ->assertJson($this->defaultErrorResponse('Unauthenticated.'));
     }
 
     public function test_should_fail_if_client_tries_to_register_moderator(): void

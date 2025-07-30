@@ -9,20 +9,25 @@ use App\Models\User;
 use App\Services\AuthService;
 use App\Services\UserService;
 use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
     public function index(): JsonResponse
     {
-        return ApiResponse::success(User::all());
+        $this->authorize('index', User::class);
+
+        $users = User::all();
+
+        return ApiResponse::success(UserResource::collection($users));
     }
 
     public function store(StoreUserRequest $request, UserService $userService): JsonResponse
     {
         $this->authorize('create', User::class);
         $result = $userService->store($request->validated());
-        return ApiResponse::success($result);
+        return ApiResponse::success($result, 201);
     }
 
     public function show(int $id): JsonResponse

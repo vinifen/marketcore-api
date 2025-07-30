@@ -9,10 +9,10 @@ class UserPolicy
 {
     use AuthorizesActions;
 
-    public function index(User $authUser, User $targetUser): true
+    public function index(User $authUser): true
     {
         $this->authorizeUnlessPrivileged(
-            $authUser->id === $targetUser->id,
+            false,
             $authUser->isStaff(),
             null,
             "You do not have permission to access this resource."
@@ -39,8 +39,8 @@ class UserPolicy
     public function update(User $authUser, User $targetUser): true
     {
         $this->authorizeUnlessPrivileged(
-            $authUser->id === $targetUser->id || $targetUser->isStaff(),
-            $authUser->isStaff(),
+            $authUser->id === $targetUser->id,
+            $authUser->isAdmin(),
             'update'
         );
         return true;

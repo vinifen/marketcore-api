@@ -19,7 +19,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod']);
-    Route::apiResource('users', UserController::class)->except(['store', 'index']);
+    Route::apiResource('users', UserController::class);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::apiResource('tests', TestController::class);
