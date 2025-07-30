@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AddressController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Responses\ApiResponse;
@@ -25,7 +24,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('addresses', AddressController::class);
 
     Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::apiResource('tests', TestController::class);
-    Route::get('/users/{user}/tests', [TestController::class, 'index']);
 });

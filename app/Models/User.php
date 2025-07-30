@@ -54,14 +54,6 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * @return HasMany<Test, static>
-     */
-    public function tests(): HasMany
-    {
-        return $this->hasMany(Test::class);
-    }
-
     public function isAdmin(): bool
     {
         return $this->role === UserRole::ADMIN;
