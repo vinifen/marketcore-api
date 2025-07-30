@@ -15,33 +15,20 @@ class UserServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    private string $name;
-    private string $email;
-    private string $password;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->name = 'Test User';
-        $this->email = 'test@example.com';
-        $this->password = 'secret123';
-    }
-
     public function test_should_store_user_with_valid_data(): void
     {
         $userService = app(UserService::class);
 
         $user = $userService->store([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => $this->password,
+            'name' => $this->originalName,
+            'email' => $this->originalEmail,
+            'password' => $this->originalPassword,
         ]);
 
         $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals($this->name, $user->name);
-        $this->assertEquals($this->email, $user->email);
-        $this->assertTrue(Hash::check($this->password, $user->password));
+        $this->assertEquals($this->originalName, $user->name);
+        $this->assertEquals($this->originalEmail, $user->email);
+        $this->assertTrue(Hash::check($this->originalPassword, $user->password));
     }
 
     public function test_should_not_allow_admin_role_creation(): void

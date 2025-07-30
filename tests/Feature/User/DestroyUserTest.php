@@ -125,6 +125,4 @@ class DestroyUserTest extends TestCase
 
         $this->assertDatabaseHas('users', ['id' => $client->id]);
     }
-
-
 }

@@ -7,11 +7,8 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Requests\User\DestroyUserRequest;
 use App\Models\User;
 use App\Services\AuthService;
-use App\Actions\UpdateUserAction;
 use App\Services\UserService;
-use App\Exceptions\ApiException;
 use App\Http\Requests\User\StoreUserRequest;
-use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller

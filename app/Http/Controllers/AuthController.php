@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Services\AuthService;
@@ -15,17 +16,24 @@ class AuthController extends Controller
 {
     public function registerClient(StoreUserRequest $request, AuthService $authService): JsonResponse
     {
-        $response = $authService->registerClient($request->validated(), app(UserService::class));
+        $response = $authService->register(
+            $request->validated(),
+            UserRole::CLIENT,
+            app(UserService::class)
+        );
         return ApiResponse::success($response, 201);
     }
 
     public function registerMod(StoreUserRequest $request, AuthService $authService): JsonResponse
     {
         $this->authorize('create', User::class);
-        $response = $authService->registerMod($request->validated(), app(UserService::class));
+        $response = $authService->register(
+            $request->validated(),
+            UserRole::MODERATOR,
+            app(UserService::class)
+        );
         return ApiResponse::success($response, 201);
     }
-
 
     public function login(LoginUserRequest $request, AuthService $authService): JsonResponse
     {

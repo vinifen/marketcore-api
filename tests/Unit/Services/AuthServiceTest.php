@@ -18,11 +18,15 @@ class AuthServiceTest extends TestCase
     {
         $authService = app(AuthService::class);
 
-        $result = $authService->registerClient([
-            'name' => $this->originalName,
-            'email' => $this->originalEmail,
-            'password' => $this->originalPassword,
-        ], app(UserService::class));
+        $result = $authService->register(
+            [
+                'name' => $this->originalName,
+                'email' => $this->originalEmail,
+                'password' => $this->originalPassword,
+            ],
+            UserRole::CLIENT,
+            app(UserService::class)
+        );
 
         $this->assertArrayHasKey('user', $result);
         $this->assertArrayHasKey('token', $result);
@@ -104,11 +108,15 @@ class AuthServiceTest extends TestCase
     {
         $authService = app(AuthService::class);
 
-        $result = $authService->registerMod([
-            'name' => 'Mod User',
-            'email' => 'mod@example.com',
-            'password' => 'modpassword',
-        ], app(UserService::class));
+        $result = $authService->register(
+            [
+                'name' => 'Mod User',
+                'email' => 'mod@example.com',
+                'password' => 'modpassword',
+            ],
+            UserRole::MODERATOR,
+            app(UserService::class)
+        );
 
         $this->assertArrayHasKey('user', $result);
         $this->assertArrayHasKey('token', $result);
@@ -120,5 +128,4 @@ class AuthServiceTest extends TestCase
         $this->assertEquals(UserRole::MODERATOR, $user->role);
         $this->assertTrue(Hash::check('modpassword', $user->password));
     }
-
 }

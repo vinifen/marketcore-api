@@ -14,23 +14,9 @@ class AuthService
      * @param array<string, mixed> $data
      * @return array<string, mixed>
      */
-    public function registerClient(array $data, UserService $userService): array
+    public function register(array $data, UserRole $role, UserService $userService): array
     {
-        $data = array_merge($data, ['role' => UserRole::CLIENT]);
-        $user = $userService->store($data);
-
-        $token = $user->createToken('UserToken')->plainTextToken;
-
-        return ['user' => $user, 'token' => $token];
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     * @return array<string, mixed>
-     */
-    public function registerMod(array $data, UserService $userService): array
-    {
-        $data = array_merge($data, ['role' => UserRole::MODERATOR]);
+        $data = array_merge($data, ['role' => $role->value]);
         $user = $userService->store($data);
 
         $token = $user->createToken('UserToken')->plainTextToken;
