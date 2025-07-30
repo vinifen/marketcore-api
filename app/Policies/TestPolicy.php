@@ -10,7 +10,7 @@ class TestPolicy
 {
     use AuthorizesActions;
 
-    public function show(User $authUser, Test $test): true
+    public function view(User $authUser, Test $test): true
     {
         $this->authorizeUnlessPrivileged(
             $authUser->id === $test->user_id,
@@ -35,7 +35,7 @@ class TestPolicy
         return true;
     }
 
-    public function delete(User $authUser, Test $test): true
+    public function forceDelete(User $authUser, Test $test): true
     {
         $this->authorizeUnlessPrivileged(
             $authUser->id === $test->user_id,

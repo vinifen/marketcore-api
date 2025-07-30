@@ -9,7 +9,7 @@ class UserPolicy
 {
     use AuthorizesActions;
 
-    public function index(User $authUser): true
+    public function viewAny(User $authUser): true
     {
         $this->authorizeUnlessPrivileged(
             false,
@@ -26,7 +26,7 @@ class UserPolicy
         return true;
     }
 
-    public function show(User $authUser, User $targetUser): true
+    public function view(User $authUser, User $targetUser): true
     {
         $this->authorizeUnlessPrivileged(
             $authUser->id === $targetUser->id,
@@ -46,7 +46,7 @@ class UserPolicy
         return true;
     }
 
-    public function delete(User $authUser, User $targetUser): true
+    public function forceDelete(User $authUser, User $targetUser): true
     {
         $this->authorizeUnlessPrivileged(
             $authUser->id === $targetUser->id,

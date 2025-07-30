@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\AuthController;
@@ -19,7 +20,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod']);
+
     Route::apiResource('users', UserController::class);
+    Route::apiResource('addresses', AddressController::class);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::apiResource('tests', TestController::class);

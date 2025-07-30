@@ -14,7 +14,7 @@ class TestController extends Controller
 {
     public function index(User $user): JsonResponse
     {
-        $this->authorize('index', $user);
+        $this->authorize('viewAny', $user);
 
         $tests = $user->tests()->get();
         return ApiResponse::success($tests);
@@ -33,7 +33,7 @@ class TestController extends Controller
 
     public function show(Test $test): JsonResponse
     {
-        $this->authorize('show', $test);
+        $this->authorize('view', $test);
         return ApiResponse::success($test);
     }
 
