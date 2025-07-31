@@ -14,7 +14,7 @@ class AddressController extends Controller
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', Address::class);
-        $addresses = Address::all();
+        $addresses = Address::with('user')->get();
         return ApiResponse::success(AddressResource::collection($addresses));
     }
 
@@ -22,6 +22,7 @@ class AddressController extends Controller
     {
         $this->authorize('create', Address::class);
         $address = Address::create($request->validated());
+        $address->load('user');
         return ApiResponse::success(new AddressResource($address), 201);
     }
 
@@ -29,6 +30,7 @@ class AddressController extends Controller
     {
         $address = $this->findModelOrFail(Address::class, $id);
         $this->authorize('view', $address);
+        $address->load('user');
         return ApiResponse::success(new AddressResource($address));
     }
 
@@ -37,6 +39,7 @@ class AddressController extends Controller
         $address = $this->findModelOrFail(Address::class, $id);
         $this->authorize('update', $address);
         $address->update($request->validated());
+        $address->load('user');
         return ApiResponse::success(new AddressResource($address));
     }
 

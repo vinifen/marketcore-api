@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Category;
+use App\Models\Discount;
 use App\Models\User;
 use App\Policies\Concerns\AuthorizesActions;
 
-class CategoryPolicy
+class DiscountPolicy
 {
     use AuthorizesActions;
 
@@ -15,7 +15,7 @@ class CategoryPolicy
         return true;
     }
 
-    public function view(User $authUser = null, Category $category): true
+    public function view(User $authUser = null, Discount $discount): true
     {
         return true;
     }
@@ -26,12 +26,12 @@ class CategoryPolicy
             false,
             $authUser->isAdmin(),
             'create',
-            'You do not have permission to create a category.'
+            'You do not have permission to create a discount.'
         );
         return true;
     }
 
-    public function update(User $authUser, Category $category): true
+    public function update(User $authUser, Discount $discount): true
     {
         $this->authorizeUnlessPrivileged(
             false,
@@ -41,7 +41,7 @@ class CategoryPolicy
         return true;
     }
 
-    public function forceDelete(User $authUser, Category $category): true
+    public function forceDelete(User $authUser, Discount $discount): true
     {
         $this->authorizeUnlessPrivileged(
             false,
@@ -51,12 +51,12 @@ class CategoryPolicy
         return true;
     }
 
-    // public function delete(User $authUser, Category $category): true
+    // public function delete(User $authUser, Discount $discount): true
     // {
     //     return true;
     // }
 
-    // public function restore(User $authUser, Category $category): true
+    // public function restore(User $authUser, Discount $discount): true
     // {
     //     return true;
     // }
