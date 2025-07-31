@@ -10,24 +10,13 @@ class CategoryPolicy
 {
     use AuthorizesActions;
 
-    public function viewAny(User $authUser): true
+    public function viewAny(User $authUser = null): true
     {
-        $this->authorizeUnlessPrivileged(
-            false,
-            $authUser->isStaff(),
-            null,
-            "You do not have permission to access this resource."
-        );
         return true;
     }
 
-    public function view(User $authUser, Category $category): true
+    public function view(User $authUser = null, Category $category): true
     {
-        $this->authorizeUnlessPrivileged(
-            false,
-            $authUser->isStaff(),
-            'show'
-        );
         return true;
     }
 

@@ -10,24 +10,13 @@ class DiscountPolicy
 {
     use AuthorizesActions;
 
-    public function viewAny(User $authUser): true
+    public function viewAny(User $authUser = null): true
     {
-        $this->authorizeUnlessPrivileged(
-            false,
-            $authUser->isAdmin(),
-            null,
-            "You do not have permission to access this resource."
-        );
         return true;
     }
 
-    public function view(User $authUser, Discount $discount): true
+    public function view(User $authUser = null, Discount $discount): true
     {
-        $this->authorizeUnlessPrivileged(
-            false,
-            $authUser->isAdmin(),
-            'show'
-        );
         return true;
     }
 

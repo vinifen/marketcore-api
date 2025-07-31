@@ -124,12 +124,11 @@ class CategoryControllerTest extends TestCase
             ]);
     }
 
-    public function test_staff_can_list_categories(): void
+    public function test_guest_can_list_categories(): void
     {
-        $moderator = $this->createTestUser(['role' => UserRole::MODERATOR]);
         Category::factory()->count(2)->create();
 
-        $response = $this->actingAs($moderator)->getJson('/api/categories');
+        $response = $this->getJson('/api/categories');
 
         $response->assertStatus(200)
             ->assertJsonFragment([
@@ -141,22 +140,47 @@ class CategoryControllerTest extends TestCase
             ]);
     }
 
-    public function test_non_staff_cannot_list_categories(): void
+    public function test_guest_can_view_category(): void
+    {
+        $category = Category::factory()->create(['name' => 'TestCat']);
+
+        $response = $this->getJson("/api/categories/{$category->id}");
+
+        $response->assertStatus(200)
+            ->assertJsonFragment([
+                'success' => true,
+                'name' => 'TestCat',
+            ]);
+    }
+
+    public function test_client_can_list_categories(): void
     {
         $client = $this->createTestUser(['role' => UserRole::CLIENT]);
+        Category::factory()->count(2)->create();
 
         $response = $this->actingAs($client)->getJson('/api/categories');
 
-        $response->assertStatus(403);
+        $response->assertStatus(200)
+            ->assertJsonFragment([
+                'success' => true,
+            ])
+            ->assertJsonStructure([
+                'success',
+                'data' => [['id', 'name']],
+            ]);
     }
 
-    public function test_guest_cannot_list_categories(): void
+    public function test_client_can_view_category(): void
     {
-        $response = $this->getJson('/api/categories');
+        $client = $this->createTestUser(['role' => UserRole::CLIENT]);
+        $category = Category::factory()->create(['name' => 'TestCat']);
 
-        $response->assertStatus(401)
+        $response = $this->actingAs($client)->getJson("/api/categories/{$category->id}");
+
+        $response->assertStatus(200)
             ->assertJsonFragment([
-                'success' => false,
+                'success' => true,
+                'name' => 'TestCat',
             ]);
     }
 }

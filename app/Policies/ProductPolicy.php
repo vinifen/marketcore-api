@@ -10,24 +10,13 @@ class ProductPolicy
 {
     use AuthorizesActions;
 
-    public function viewAny(User $authUser): true
+    public function viewAny(User $authUser = null): true
     {
-        $this->authorizeUnlessPrivileged(
-            false,
-            $authUser->isStaff(),
-            null,
-            "You do not have permission to access this resource."
-        );
         return true;
     }
 
-    public function view(User $authUser, Product $product): true
+    public function view(User $authUser = null, Product $product): true
     {
-        $this->authorizeUnlessPrivileged(
-            false,
-            $authUser->isStaff(),
-            'show'
-        );
         return true;
     }
 

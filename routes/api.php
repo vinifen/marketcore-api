@@ -20,14 +20,20 @@ Route::get('/', function () {
 Route::post('/register', [AuthController::class, 'registerClient']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{category}', [CategoryController::class, 'show']);
+
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{product}', [ProductController::class, 'show']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod']);
 
     Route::apiResource('users', UserController::class);
     Route::apiResource('addresses', AddressController::class);
-    Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('products', ProductController::class);
-    Route::apiResource('discounts', DiscountController::class);
+    Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
+    Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+    Route::apiResource('discounts', DiscountController::class)->except(['index', 'show']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });

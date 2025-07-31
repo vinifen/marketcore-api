@@ -8,6 +8,7 @@ use Tests\TestCase;
 class DiscountControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     public function test_example(): void
     {
         $response = $this->get('/');
