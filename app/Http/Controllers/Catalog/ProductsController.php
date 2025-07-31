@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreProductsRequest;
-use App\Http\Requests\UpdateProductsRequest;
+use App\Http\Requests\Product\StoreProductsRequest;
+use App\Http\Requests\Product\UpdateProductsRequest;
 use App\Models\Products;
 
 class ProductsController extends Controller
