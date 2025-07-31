@@ -2,13 +2,15 @@
 
 namespace App\Http\Requests\Discount;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Exceptions\ApiException;
 
 class UpdateDiscountRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -17,7 +19,16 @@ class UpdateDiscountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'product_id' => 'sometimes|exists:products,id',
+            'description' => 'sometimes|required|string|max:255',
+            'startDate' => 'sometimes|required|date',
+            'endDate' => 'sometimes|required|date|after_or_equal:startDate',
+            'discountPercentage' => 'sometimes|required|numeric|min:0.01|max:100',
         ];
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new ApiException('Discount update request failed due to invalid data.', $validator->errors()->toArray(), 422);
     }
 }

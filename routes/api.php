@@ -26,6 +26,9 @@ Route::get('/categories/{category}', [CategoryController::class, 'show']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{product}', [ProductController::class, 'show']);
 
+Route::get('/discounts', [DiscountController::class, 'index']);
+Route::get('/discounts/{discount}', [DiscountController::class, 'show']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod']);
 

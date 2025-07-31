@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $product_id
- * @property string $description
+ * @property string|null $description
  * @property string $startDate
  * @property string $endDate
  * @property float $discountPercentage

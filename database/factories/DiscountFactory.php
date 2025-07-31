@@ -11,7 +11,7 @@ class DiscountFactory extends Factory
     {
         return [
             'product_id' => Product::factory(),
-            'description' => $this->faker->sentence(3),
+            'description' => $this->faker->optional()->sentence(3),
             'startDate' => $this->faker->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
             'endDate' => $this->faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
             'discountPercentage' => $this->faker->randomFloat(2, 1, 50),
