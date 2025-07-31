@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function index(): JsonResponse
     {
-        $this->authorize('index', User::class);
+        $this->authorize('viewAny', User::class);
 
         $users = User::all();
 
@@ -34,7 +34,7 @@ class UserController extends Controller
     {
         $user = $this->findModelOrFail(User::class, $id);
 
-        $this->authorize('show', $user);
+        $this->authorize('view', $user);
 
         return ApiResponse::success($user);
     }
@@ -60,7 +60,7 @@ class UserController extends Controller
     ): JsonResponse {
         /** @var \App\Models\User $user */
         $user = $this->findModelOrFail(User::class, $id);
-        $this->authorize('delete', $user);
+        $this->authorize('forceDelete', $user);
 
         $password = (string) $request->input('password');
         $authService->validatePassword($user->password, $password);
