@@ -18,10 +18,7 @@ class DestroyUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(200)
-                ->assertJson($this->defaultSuccessResponse([
-                    'message' => 'User deleted successfully.',
-                ]));
+        $response->assertStatus(204);
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
@@ -62,10 +59,7 @@ class DestroyUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(200)
-                ->assertJson($this->defaultSuccessResponse([
-                    'message' => 'User deleted successfully.',
-                ]));
+        $response->assertStatus(204);
 
         $this->assertDatabaseMissing('users', ['id' => $moderator->id]);
     }
@@ -79,10 +73,7 @@ class DestroyUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(200)
-                ->assertJson($this->defaultSuccessResponse([
-                    'message' => 'User deleted successfully.',
-                ]));
+        $response->assertStatus(204);
 
         $this->assertDatabaseMissing('users', ['id' => $client->id]);
     }
