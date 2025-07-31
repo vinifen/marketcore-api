@@ -27,7 +27,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
         $result = $userService->store($request->validated());
-        return ApiResponse::success($result, 201);
+        return ApiResponse::success(new UserResource($result), 201);
     }
 
     public function show(int $id): JsonResponse
@@ -36,7 +36,7 @@ class UserController extends Controller
 
         $this->authorize('view', $user);
 
-        return ApiResponse::success($user);
+        return ApiResponse::success(new UserResource($user));
     }
 
     public function update(
@@ -50,7 +50,7 @@ class UserController extends Controller
 
         $result = $userService->update($user, $request->validated(), app(AuthService::class));
 
-        return ApiResponse::success($result);
+        return ApiResponse::success(new UserResource($result));
     }
 
     public function destroy(

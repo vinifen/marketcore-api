@@ -12,15 +12,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $complement
  * @property string $city
  * @property string $state
- * @property int $postal_code
+ * @property string $postal_code
  * @property string $country
- * @property string $email
  */
 class Address extends Model
 {
     /** @use HasFactory<\Database\Factories\AddressFactory> */
     use HasFactory;
 
+    /**
+     * @var list<string>
+     */
     protected $fillable = [
         'user_id',
         'street',
@@ -30,6 +32,20 @@ class Address extends Model
         'country',
         'number',
         'complement',
+    ];
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'user_id' => 'integer',
+        'street' => 'string',
+        'city' => 'string',
+        'state' => 'string',
+        'postal_code' => 'string',
+        'country' => 'string',
+        'number' => 'integer',
+        'complement' => 'string',
     ];
 
     /**

@@ -17,7 +17,7 @@ class AddressFactory extends Factory
         return [
             'user_id' => $this->faker->numberBetween(1, 10),
             'street' => $this->faker->streetName(),
-            'number' => $this->faker->buildingNumber(),
+            'number' => $this->faker->numberBetween(1, 99999),
             'complement' => $this->faker->secondaryAddress(),
             'city' => $this->faker->city(),
             'state' => $this->faker->stateAbbr(),
