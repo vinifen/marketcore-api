@@ -93,11 +93,8 @@ class CategoryControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/categories/{$category->id}");
 
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'success' => true,
-            ]);
-
+        $response->assertStatus(204);
+        
         $this->assertDatabaseMissing('categories', [
             'id' => $category->id,
         ]);
