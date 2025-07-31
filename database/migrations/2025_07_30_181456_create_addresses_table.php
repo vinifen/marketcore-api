@@ -16,7 +16,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->string('street', 255);
-            $table->string('number', 50);
+            $table->integer('number');
             $table->string('complement', 100)->nullable();
             $table->string('city', 100);
             $table->string('state', 100);
