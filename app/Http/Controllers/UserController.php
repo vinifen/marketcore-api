@@ -66,6 +66,6 @@ class UserController extends Controller
         $authService->validatePassword($user->password, $password);
         $user->delete();
 
-        return ApiResponse::success(['message' => 'User deleted successfully.']);
+        return ApiResponse::success(null, 204);
     }
 }
