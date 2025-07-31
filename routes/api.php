@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddressController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Catalog\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Responses\ApiResponse;
 
@@ -22,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('users', UserController::class);
     Route::apiResource('addresses', AddressController::class);
+    Route::apiResource('categories', CategoryController::class);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });

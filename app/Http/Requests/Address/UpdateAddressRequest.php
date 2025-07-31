@@ -20,7 +20,7 @@ class UpdateAddressRequest extends FormRequest
     {
         return [
             'street' => 'sometimes|string|max:255',
-            'number' => 'sometimes|string|max:50',
+            'number' => 'sometimes|integer',
             'complement' => 'nullable|string|max:100',
             'city' => 'sometimes|string|max:100',
             'state' => 'sometimes|string|max:100',

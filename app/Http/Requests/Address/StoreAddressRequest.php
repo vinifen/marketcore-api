@@ -21,7 +21,7 @@ class StoreAddressRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'street' => 'required|string|max:255',
-            'number' => 'required|string|max:50',
+            'number' => 'required|integer',
             'complement' => 'nullable|string|max:100',
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',
