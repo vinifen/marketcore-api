@@ -2,18 +2,18 @@
 
 namespace App\Policies;
 
-use App\Models\Products;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class ProductsPolicy
+class ProductPolicy
 {
     public function viewAny(User $user): bool
     {
         return false;
     }
 
-    public function view(User $user, Products $products): bool
+    public function view(User $user, Product $product): bool
     {
         return false;
     }
@@ -23,22 +23,22 @@ class ProductsPolicy
         return false;
     }
 
-    public function update(User $user, Products $products): bool
+    public function update(User $user, Product $product): bool
     {
         return false;
     }
 
-    public function forceDelete(User $user, Products $products): bool
+    public function forceDelete(User $user, Product $product): bool
     {
         return false;
     }
 
-    // public function delete(User $user, Products $products): bool
+    // public function delete(User $user, Product $product): bool
     // {
     //     return false;
     // }
 
-    // public function restore(User $user, Products $products): bool
+    // public function restore(User $user, Product $product): bool
     // {
     //     return false;
     // }
