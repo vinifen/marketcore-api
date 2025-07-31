@@ -45,6 +45,6 @@ class AddressController extends Controller
         $address = $this->findModelOrFail(Address::class, $id);
         $this->authorize('forceDelete', $address);
         $address->delete();
-        return ApiResponse::success(['message' => 'Address deleted successfully.']);
+        return response()->noContent();
     }
 }
