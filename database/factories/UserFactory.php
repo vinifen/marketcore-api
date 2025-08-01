@@ -35,10 +35,4 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function configure()
-    {
-        return $this->afterCreating(function ($user) {
-            Cart::factory()->create(['user_id' => $user->id]);
-        });
-    }
 }

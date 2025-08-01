@@ -31,9 +31,6 @@ class Cart extends Model
         'user_id' => 'integer',
     ];
 
-    /**
-     * Get the user that owns the cart.
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
