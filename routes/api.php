@@ -3,6 +3,8 @@
 use App\Http\Controllers\AddressController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\Catalog\CategoryController;
 use App\Http\Controllers\Catalog\ProductController;
 use App\Http\Controllers\Catalog\DiscountController;
@@ -34,9 +36,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('users', UserController::class);
     Route::apiResource('addresses', AddressController::class);
+
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
     Route::apiResource('discounts', DiscountController::class)->except(['index', 'show']);
+
+    Route::apiResource('cart', CartController::class)->only(['index', 'show']);
+    Route::apiResource('cart/items', CartItemController::class);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });

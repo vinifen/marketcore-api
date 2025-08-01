@@ -2,64 +2,76 @@
 
 namespace App\Policies;
 
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\User;
+use App\Policies\Concerns\AuthorizesActions;
 
 class CartItemPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    use AuthorizesActions;
+
+    public function viewAny(User $authUser): true
     {
-        return false;
+        $this->authorizeUnlessPrivileged(
+            false, 
+            $authUser->isStaff(),
+            null,
+            'You are not authorized to view any cart items.'
+        );
+        return true;
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, CartItem $cartItem): bool
+    public function view(User $authUser, CartItem $cartItem): true
     {
-        return false;
+        $this->authorizeUnlessPrivileged(
+            $cartItem->cart && $cartItem->cart->user_id === $authUser->id,
+            $authUser->isStaff(),
+            'view',
+        );
+        return true;
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(User $authUser): bool
     {
-        return false;
+        $cartId = request()->input('cart_id');
+        $cart = Cart::find($cartId);
+
+        $this->authorizeUnlessPrivileged(
+            $cart && $cart->user_id === $authUser->id,
+            $authUser->isAdmin(),
+            'create',
+        );
+        return true;
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, CartItem $cartItem): bool
+    public function update(User $authUser, CartItem $cartItem): true
     {
-        return false;
+        $this->authorizeUnlessPrivileged(
+            $cartItem->cart && $cartItem->cart->user_id === $authUser->id,
+            $authUser->isAdmin(),
+            'update',
+        );
+        return true;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, CartItem $cartItem): bool
+    public function forceDelete(User $authUser, CartItem $cartItem): true
     {
-        return false;
+        $this->authorizeUnlessPrivileged(
+            $cartItem->cart && $cartItem->cart->user_id === $authUser->id,
+            $authUser->isAdmin(),
+            'delete',
+        );
+        return true;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, CartItem $cartItem): bool
-    {
-        return false;
-    }
+    // public function delete(User $authUser, CartItem $cartItem): bool
+    // {
+    //     return false;
+    // }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, CartItem $cartItem): bool
-    {
-        return false;
-    }
+    // public function restore(User $authUser, CartItem $cartItem): bool
+    // {
+    //     return false;
+    // }
 }
