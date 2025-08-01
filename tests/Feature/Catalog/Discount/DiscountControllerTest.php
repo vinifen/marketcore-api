@@ -22,9 +22,9 @@ class DiscountControllerTest extends TestCase
         $payload = [
             'product_id' => $product->id,
             'description' => 'Special promotion',
-            'startDate' => now()->toDateString(),
-            'endDate' => now()->addDays(10)->toDateString(),
-            'discountPercentage' => 15.5,
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(10)->toDateString(),
+            'discount_percentage' => 15.5,
         ];
 
         $response = $this->actingAs($admin)->postJson('/api/discounts', $payload);
@@ -34,7 +34,7 @@ class DiscountControllerTest extends TestCase
                 'success' => true,
                 'product_id' => $product->id,
                 'description' => 'Special promotion',
-                'discountPercentage' => 15.5,
+                'discount_percentage' => 15.5,
             ]);
 
         $this->assertDatabaseHas('discounts', [
@@ -52,9 +52,9 @@ class DiscountControllerTest extends TestCase
         $payload = [
             'product_id' => $product->id,
             'description' => 'Special promotion',
-            'startDate' => now()->toDateString(),
-            'endDate' => now()->addDays(10)->toDateString(),
-            'discountPercentage' => 10,
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(10)->toDateString(),
+            'discount_percentage' => 10,
         ];
 
         $response = $this->actingAs($moderator)->postJson('/api/discounts', $payload);
@@ -70,9 +70,9 @@ class DiscountControllerTest extends TestCase
         $payload = [
             'product_id' => $product->id,
             'description' => 'Special promotion',
-            'startDate' => now()->toDateString(),
-            'endDate' => now()->addDays(10)->toDateString(),
-            'discountPercentage' => 10,
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(10)->toDateString(),
+            'discount_percentage' => 10,
         ];
 
         $response = $this->postJson('/api/discounts', $payload);
@@ -91,7 +91,7 @@ class DiscountControllerTest extends TestCase
 
         $payload = [
             'description' => 'New description',
-            'discountPercentage' => 25,
+            'discount_percentage' => 25,
         ];
 
         $response = $this->actingAs($admin)->putJson("/api/discounts/{$discount->id}", $payload);
@@ -100,13 +100,13 @@ class DiscountControllerTest extends TestCase
             ->assertJsonFragment([
                 'success' => true,
                 'description' => 'New description',
-                'discountPercentage' => 25,
+                'discount_percentage' => 25,
             ]);
 
         $this->assertDatabaseHas('discounts', [
             'id' => $discount->id,
             'description' => 'New description',
-            'discountPercentage' => 25,
+            'discount_percentage' => 25,
         ]);
     }
 
@@ -169,7 +169,7 @@ class DiscountControllerTest extends TestCase
             ->assertJsonFragment(['success' => true])
             ->assertJsonStructure([
                 'success',
-                'data' => [['id', 'product_id', 'description', 'startDate', 'endDate', 'discountPercentage']],
+                'data' => [['id', 'product_id', 'description', 'start_date', 'end_date', 'discount_percentage']],
             ]);
     }
 
@@ -202,7 +202,7 @@ class DiscountControllerTest extends TestCase
             ->assertJsonFragment(['success' => true])
             ->assertJsonStructure([
                 'success',
-                'data' => [['id', 'product_id', 'description', 'startDate', 'endDate', 'discountPercentage']],
+                'data' => [['id', 'product_id', 'description', 'start_date', 'end_date', 'discount_percentage']],
             ]);
     }
 

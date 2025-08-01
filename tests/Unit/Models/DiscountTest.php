@@ -21,16 +21,16 @@ class DiscountTest extends TestCase
         $discount = Discount::factory()->create([
             'product_id' => $product->id,
             'description' => 'Desconto Teste',
-            'startDate' => now()->toDateString(),
-            'endDate' => now()->addDays(5)->toDateString(),
-            'discountPercentage' => 20.5,
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(5)->toDateString(),
+            'discount_percentage' => 20.5,
         ]);
 
         $this->assertDatabaseHas('discounts', [
             'id' => $discount->id,
             'product_id' => $product->id,
             'description' => 'Desconto Teste',
-            'discountPercentage' => 20.5,
+            'discount_percentage' => 20.5,
         ]);
     }
 
@@ -41,14 +41,14 @@ class DiscountTest extends TestCase
         /** @var \App\Models\Discount $discount */
         $discount = Discount::factory()->create([
             'product_id' => $product->id,
-            'discountPercentage' => '15.75',
-            'startDate' => '2025-01-01',
-            'endDate' => '2025-01-10',
+            'discount_percentage' => '15.75',
+            'start_date' => '2025-01-01',
+            'end_date' => '2025-01-10',
         ]);
 
-        $this->assertSame(15.75, $discount->discountPercentage);
-        $this->assertEquals('2025-01-01', Carbon::parse($discount->startDate)->format('Y-m-d'));
-        $this->assertEquals('2025-01-10', Carbon::parse($discount->endDate)->format('Y-m-d'));
+        $this->assertSame(15.75, $discount->discount_percentage);
+        $this->assertEquals('2025-01-01', Carbon::parse($discount->start_date)->format('Y-m-d'));
+        $this->assertEquals('2025-01-10', Carbon::parse($discount->end_date)->format('Y-m-d'));
     }
 
     public function test_it_belongs_to_product(): void
@@ -69,9 +69,9 @@ class DiscountTest extends TestCase
         $this->assertEquals([
             'product_id',
             'description',
-            'startDate',
-            'endDate',
-            'discountPercentage',
+            'start_date',
+            'end_date',
+            'discount_percentage',
         ], $discount->getFillable());
     }
 }

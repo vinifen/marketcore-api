@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $product_id
  * @property string|null $description
- * @property string $startDate
- * @property string $endDate
- * @property float $discountPercentage
+ * @property string $start_date
+ * @property string $end_date
+ * @property float $discount_percentage
  */
 class Discount extends Model
 {
@@ -24,9 +24,9 @@ class Discount extends Model
     protected $fillable = [
         'product_id',
         'description',
-        'startDate',
-        'endDate',
-        'discountPercentage',
+        'start_date',
+        'end_date',
+        'discount_percentage',
     ];
 
     /**
@@ -36,9 +36,9 @@ class Discount extends Model
         'id' => 'integer',
         'product_id' => 'integer',
         'description' => 'string',
-        'startDate' => 'date',
-        'endDate' => 'date',
-        'discountPercentage' => 'float',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'discount_percentage' => 'float',
     ];
 
     /**
