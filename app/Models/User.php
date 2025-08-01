@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
+ * @property int $id
  * @property string $name
  * @property string $email
  * @property string $password
@@ -41,6 +42,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    protected function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
     /**
      * @return array<string, string>
      */
@@ -69,5 +80,12 @@ class User extends Authenticatable
             UserRole::ADMIN,
             UserRole::MODERATOR,
         ], true);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            Cart::create(['user_id' => $user->id]);
+        });
     }
 }
