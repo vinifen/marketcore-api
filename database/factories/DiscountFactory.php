@@ -10,11 +10,11 @@ class DiscountFactory extends Factory
     public function definition(): array
     {
         return [
-            'product_id' => Product::factory(),
+            'product_id' => $this->faker->numberBetween(1, 10),
             'description' => $this->faker->optional()->sentence(3),
-            'startDate' => $this->faker->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
-            'endDate' => $this->faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
-            'discountPercentage' => $this->faker->randomFloat(2, 1, 50),
+            'start_date' => $this->faker->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
+            'end_date' => $this->faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
+            'discount_percentage' => $this->faker->randomFloat(2, 1, 50),
         ];
     }
 }

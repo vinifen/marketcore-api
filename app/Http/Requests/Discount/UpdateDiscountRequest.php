@@ -21,9 +21,9 @@ class UpdateDiscountRequest extends FormRequest
         return [
             'product_id' => 'sometimes|exists:products,id',
             'description' => 'sometimes|required|string|max:255',
-            'startDate' => 'sometimes|required|date',
-            'endDate' => 'sometimes|required|date|after_or_equal:startDate',
-            'discountPercentage' => 'sometimes|required|numeric|min:0.01|max:100',
+            'start_date' => 'sometimes|required|date',
+            'end_date' => 'sometimes|required|date|after_or_equal:start_date',
+            'discount_percentage' => 'sometimes|required|numeric|min:0.01|max:100',
         ];
     }
 
