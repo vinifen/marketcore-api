@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Cart;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -33,4 +34,5 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
 }
