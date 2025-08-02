@@ -9,7 +9,7 @@ use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize(): true
     {
         return true;
     }

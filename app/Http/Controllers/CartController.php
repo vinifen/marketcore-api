@@ -2,34 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Cart\StoreCartRequest;
-use App\Http\Requests\Cart\UpdateCartRequest;
+use App\Http\Resources\CartResource;
+use App\Http\Responses\ApiResponse;
 use App\Models\Cart;
+use Illuminate\Http\JsonResponse;
 
 class CartController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $this->authorize('viewAny', Cart::class);
+        $carts = Cart::with('user')->get();
+        return ApiResponse::success(CartResource::collection($carts));
     }
 
-    public function store(StoreCartRequest $request)
+    public function show(int $id): JsonResponse
     {
-        //
+        $cart = $this->findModelOrFail(Cart::class, $id);
+        $this->authorize('view', $cart);
+        $cart->load('user');
+        return ApiResponse::success(new CartResource($cart));
     }
 
-    public function show(Cart $cart)
-    {
-        //
-    }
+    // public function store(StoreCartRequest $request)
+    // {
+    //     //
+    // }
 
-    public function update(UpdateCartRequest $request, Cart $cart)
-    {
-        //
-    }
+    // public function update(UpdateCartRequest $request, Cart $cart)
+    // {
+    //     //
+    // }
 
-    public function destroy(Cart $cart)
-    {
-        //
-    }
+    // public function destroy(Cart $cart)
+    // {
+    //     //
+    // }
 }
