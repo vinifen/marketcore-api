@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAddressRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize(): true
     {
         return true;
     }

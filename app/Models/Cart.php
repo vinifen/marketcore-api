@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
  * @property int $user_id
- *
  * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CartItem> $cartItems
  */
 class Cart extends Model
 {
@@ -17,7 +19,7 @@ class Cart extends Model
     use HasFactory;
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'user_id',
@@ -31,8 +33,19 @@ class Cart extends Model
         'user_id' => 'integer',
     ];
 
-    public function user()
+    /**
+     * @return BelongsTo<User, Cart>
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasMany<CartItem, Cart>
+     */
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
     }
 }
