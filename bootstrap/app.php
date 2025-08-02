@@ -52,7 +52,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResponse::error(
                 $e->getMessage(),
                 null,
-                $e->getCode() ?: 500
+                500
             );
         });
 

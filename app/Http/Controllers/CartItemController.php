@@ -2,65 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCartItemRequest;
-use App\Http\Requests\UpdateCartItemRequest;
+use App\Http\Requests\CartItem\StoreCartItemRequest;
+use App\Http\Requests\CartItem\UpdateCartItemRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\CartItem;
+use App\Http\Resources\CartItemResource;
+use App\Services\CartItemService;
+use App\Services\ProductService;
+use Illuminate\Http\JsonResponse;
 
 class CartItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $this->authorize('viewAny', CartItem::class);
+
+        $cartItems = CartItem::all();
+        $cartItems->load('cart.user');
+        return ApiResponse::success(CartItemResource::collection($cartItems));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreCartItemRequest $request, CartItemService $cartItemService): JsonResponse
     {
-        //
+        $this->authorize('create', CartItem::class);
+        $cartItem = $cartItemService->store($request->validated(), app(ProductService::class));
+        $cartItem->load('cart.user');
+        return ApiResponse::success(new CartItemResource($cartItem), 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCartItemRequest $request)
+    public function show(int $id): JsonResponse
     {
-        //
+        $cartItem = $this->findModelOrFail(CartItem::class, $id);
+        $this->authorize('view', $cartItem);
+        $cartItem->load('cart.user');
+        return ApiResponse::success(new CartItemResource($cartItem));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CartItem $cartItem)
-    {
-        //
+    public function update(
+        UpdateCartItemRequest $request,
+        int $id,
+        CartItemService $cartItemService
+    ): JsonResponse {
+        /** @var \App\Models\CartItem $cartItem */
+        $cartItem = $this->findModelOrFail(CartItem::class, $id);
+        $this->authorize('update', $cartItem);
+
+        $updated = $cartItemService->updateQuantity(
+            $cartItem,
+            $request->validated('quantity'),
+            app(ProductService::class)
+        );
+        $updated->load('cart.user');
+        return ApiResponse::success(new CartItemResource($updated));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CartItem $cartItem)
+    public function destroy(int $id): JsonResponse
     {
-        //
-    }
+        $cartItem = $this->findModelOrFail(CartItem::class, $id);
+        $this->authorize('forceDelete', $cartItem);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCartItemRequest $request, CartItem $cartItem)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CartItem $cartItem)
-    {
-        //
+        $cartItem->delete();
+        return ApiResponse::success(null, 204);
     }
 }

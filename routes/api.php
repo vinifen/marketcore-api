@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('discounts', DiscountController::class)->except(['index', 'show']);
 
     Route::apiResource('cart', CartController::class)->only(['index', 'show']);
-    Route::apiResource('cart/items', CartItemController::class);
+    Route::apiResource('cart-items', CartItemController::class);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });

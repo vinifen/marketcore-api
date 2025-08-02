@@ -14,7 +14,7 @@ class CartItemPolicy
     public function viewAny(User $authUser): true
     {
         $this->authorizeUnlessPrivileged(
-            false, 
+            false,
             $authUser->isStaff(),
             null,
             'You are not authorized to view any cart items.'
@@ -37,8 +37,10 @@ class CartItemPolicy
         $cartId = request()->input('cart_id');
         $cart = Cart::find($cartId);
 
+        $isOwner = $cart instanceof Cart && $cart->user_id === $authUser->id;
+
         $this->authorizeUnlessPrivileged(
-            $cart && $cart->user_id === $authUser->id,
+            $isOwner,
             $authUser->isAdmin(),
             'create',
         );

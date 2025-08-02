@@ -9,6 +9,7 @@ use App\Policies\Concerns\AuthorizesActions;
 class CartPolicy
 {
     use AuthorizesActions;
+
     public function viewAny(User $authUser): true
     {
         $this->authorizeUnlessPrivileged(false, $authUser->isStaff(), 'view any cart');
@@ -17,7 +18,11 @@ class CartPolicy
 
     public function view(User $authUser, Cart $cart): true
     {
-        $this->authorizeUnlessPrivileged(false, $authUser->isStaff(), 'view cart');
+        $this->authorizeUnlessPrivileged(
+            $cart->user_id === $authUser->id,
+            $authUser->isStaff(),
+            'view cart'
+        );
         return true;
     }
 

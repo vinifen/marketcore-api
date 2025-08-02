@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -35,6 +37,7 @@ class User extends Authenticatable
     ];
 
     /**
+     *
      * @var list<string>
      */
     protected $hidden = [
@@ -42,12 +45,18 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected function addresses()
+    /**
+     * @return HasMany<Address, User>
+     */
+    protected function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
 
-    protected function cart()
+    /**
+     * @return HasOne<Cart, User>
+     */
+    protected function cart(): HasOne
     {
         return $this->hasOne(Cart::class);
     }

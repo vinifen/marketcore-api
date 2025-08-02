@@ -8,7 +8,7 @@ use App\Exceptions\ApiException;
 
 class UpdateDiscountRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize(): true
     {
         return true;
     }
