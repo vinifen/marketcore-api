@@ -15,7 +15,7 @@ class CouponPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isStaff(),
-            'viewAny',
+            null,
             'You do not have permission to view coupons.'
         );
         return true;
@@ -26,8 +26,7 @@ class CouponPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isStaff(),
-            'view',
-            'You do not have permission to view this coupon.'
+            'view'
         );
         return true;
     }
@@ -37,8 +36,7 @@ class CouponPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isAdmin(),
-            'create',
-            'You do not have permission to create coupons.'
+            'create'
         );
         return true;
     }
@@ -48,8 +46,7 @@ class CouponPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isAdmin(),
-            'update',
-            'You do not have permission to update coupons.'
+            'update'
         );
         return true;
     }
@@ -59,8 +56,7 @@ class CouponPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isAdmin(),
-            'delete',
-            'You do not have permission to delete coupons.'
+            'delete'
         );
         return true;
     }

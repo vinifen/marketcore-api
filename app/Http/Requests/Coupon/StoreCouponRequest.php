@@ -2,27 +2,32 @@
 
 namespace App\Http\Requests\Coupon;
 
+use App\Exceptions\ApiException;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCouponRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
         return [
-            //
+            'code' => 'required|string|max:255|unique:coupons,code',
+            'start_date' => 'nullable|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'discount_percentage' => 'required|numeric|min:0.01|max:99.99',
         ];
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new ApiException('Coupon creation failed due to invalid data.', $validator->errors()->toArray(), 422);
     }
 }
