@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\Coupon\StoreCouponRequest;
+use App\Http\Requests\Coupon\UpdateCouponRequest;
+use App\Http\Resources\CouponResource;
+use App\Http\Responses\ApiResponse;
+use App\Models\Coupon;
+use Illuminate\Http\JsonResponse;
+
+class CouponController extends Controller
+{
+    public function index(): JsonResponse
+    {
+        $this->authorize('viewAny', Coupon::class);
+        $coupons = Coupon::all();
+        return ApiResponse::success(CouponResource::collection($coupons));
+    }
+
+    public function store(StoreCouponRequest $request): JsonResponse
+    {
+        $this->authorize('create', Coupon::class);
+
+        $data = $request->validated();
+        if (empty($data['start_date'])) {
+            $data['start_date'] = now()->toDateString();
+        }
+
+        $coupon = Coupon::create($data);
+        return ApiResponse::success(new CouponResource($coupon), 201);
+    }
+
+    public function show(int $id): JsonResponse
+    {
+        $coupon = $this->findModelOrFail(Coupon::class, $id);
+        $this->authorize('view', $coupon);
+        return ApiResponse::success(new CouponResource($coupon));
+    }
+
+    public function update(UpdateCouponRequest $request, int $id): JsonResponse
+    {
+        $coupon = $this->findModelOrFail(Coupon::class, $id);
+        $this->authorize('update', $coupon);
+
+        $coupon->update($request->validated());
+        return ApiResponse::success(new CouponResource($coupon));
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $coupon = $this->findModelOrFail(Coupon::class, $id);
+        $this->authorize('forceDelete', $coupon);
+
+        $coupon->delete();
+        return ApiResponse::success(null, 204);
+    }
+}
