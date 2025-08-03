@@ -7,32 +7,30 @@ use App\Models\Product;
 
 class ProductService
 {
-    private ?Product $product = null;
 
-    /**
-     * @param int $productId
-     * @return void
-     */
-    public function setProductById(int $productId): void
+    public function ensureProductHasStock(Product $product, int $quantity): void
     {
-        $this->product = Product::findOrFail($productId);
-    }
-
-    public function checkProductStock(int $quantity): void
-    {
-        if ($this->product === null) {
-            throw new ApiException('Product not found.', null, 404);
-        }
-        if ($this->product->stock < $quantity) {
+        if ($product->stock < $quantity) {
             throw new ApiException('Insufficient stock.', null, 422);
         }
     }
 
-    public function getProductPrice(): float
+    public function decreaseStock(Product $product, int $quantity): void
     {
-        if ($this->product === null) {
-            throw new ApiException('Product not set.', null, 400);
+        if ($product->stock < $quantity) {
+            throw new ApiException(
+                "Cannot decrease stock by {$quantity}. Only {$product->stock} units available for product '{$product->name}'.",
+                null,
+                422
+            );
         }
-        return $this->product->price;
+        $product->stock -= $quantity;
+        $product->save();
+    }
+
+    public function increaseStock(Product $product, int $quantity): void
+    {
+        $product->stock += $quantity;
+        $product->save();
     }
 }
