@@ -9,6 +9,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use App\Http\Responses\ApiResponse;
+use App\Services\ProductService;
 
 class ProductController extends Controller
 {
@@ -48,12 +49,12 @@ class ProductController extends Controller
         return ApiResponse::success(new ProductResource($product));
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id, ProductService $productService): JsonResponse
     {
         $product = $this->findModelOrFail(Product::class, $id);
         $this->authorize('forceDelete', $product);
 
-        $product->delete();
+        $productService->forceDelete($product);
         return ApiResponse::success(null, 204);
     }
 }

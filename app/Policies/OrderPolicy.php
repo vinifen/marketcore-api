@@ -4,40 +4,70 @@ namespace App\Policies;
 
 use App\Models\Order;
 use App\Models\User;
+use App\Policies\Concerns\AuthorizesActions;
 
 class OrderPolicy
 {
-    public function viewAny(User $user): bool
+    use AuthorizesActions;
+
+    public function viewAny(User $authUser): true
     {
-        return false;
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isStaff(),
+            null,
+            'You do not have permission to view any orders.'
+        );
+        return true;
     }
 
-    public function view(User $user, Order $order): bool
+    public function view(User $authUser, Order $order): true
     {
-        return false;
+        $this->authorizeUnlessPrivileged(
+            $order->user_id === $authUser->id,
+            $authUser->isStaff(),
+            'view'
+        );
+        return true;
     }
 
-    public function create(User $user): bool
+    public function create(User $authUser): true
     {
-        return false;
+        $requestedUserId = request()->input('user_id');
+        $this->authorizeUnlessPrivileged(
+            $authUser->id === $requestedUserId,
+            $authUser->isAdmin(),
+            'create'
+        );
+        return true;
     }
 
-    public function update(User $user, Order $order): bool
+    public function update(User $authUser, Order $order): true
     {
-        return false;
+        $this->authorizeUnlessPrivileged(
+            $order->user_id === $authUser->id,
+            $authUser->isAdmin(),
+            'update'
+        );
+        return true;
     }
 
-    public function forceDelete(User $user, Order $order): bool
+    public function forceDelete(User $authUser, Order $order): true
     {
-        return false;
+        $this->authorizeUnlessPrivileged(
+            $order->user_id === $authUser->id,
+            $authUser->isAdmin(),
+            'delete'
+        );
+        return true;
     }
 
-    // public function delete(User $user, Order $order): bool
+    // public function delete(User $authUser, Order $order): bool
     // {
     //     return false;
     // }
 
-    // public function restore(User $user, Order $order): bool
+    // public function restore(User $authUser, Order $order): bool
     // {
     //     return false;
     // }

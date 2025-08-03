@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int|null $user_id
+ * @property string|null $user_email
  * @property int|null $address_id
  * @property int|null $coupon_id
  * @property string $order_date
@@ -23,6 +24,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'user_email',
         'address_id',
         'coupon_id',
         'order_date',
@@ -33,6 +35,7 @@ class Order extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
+        'user_email' => 'string',
         'address_id' => 'integer',
         'coupon_id' => 'integer',
         'order_date' => 'datetime',
