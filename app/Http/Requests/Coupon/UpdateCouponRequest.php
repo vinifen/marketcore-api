@@ -20,7 +20,7 @@ class UpdateCouponRequest extends FormRequest
     {
         return [
             'code' => 'sometimes|string|max:255|unique:coupons,code,' . $this->route('coupon'),
-            'start_date' => 'nullable|date',
+            'start_date' => 'sometimes|date',
             'end_date' => 'sometimes|required|date|after_or_equal:start_date',
             'discount_percentage' => 'sometimes|numeric|min:0.01|max:99.99',
         ];
