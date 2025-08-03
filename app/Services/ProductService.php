@@ -18,7 +18,11 @@ class ProductService
     public function decreaseStock(Product $product, int $quantity): void
     {
         if ($product->stock < $quantity) {
-            throw new ApiException('Insufficient stock.', null, 422);
+            throw new ApiException(
+                "Cannot decrease stock by {$quantity}. Only {$product->stock} units available for product '{$product->name}'.",
+                null,
+                422
+            );
         }
         $product->stock -= $quantity;
         $product->save();
