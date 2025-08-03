@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Coupon;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,6 +18,7 @@ class DatabaseSeeder extends Seeder
             DiscountSeeder::class,
             CartSeeder::class,
             CartItemSeeder::class,
+            CouponSeeder::class,
         ]);
     }
 }
