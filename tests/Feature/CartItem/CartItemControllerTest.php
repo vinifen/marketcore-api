@@ -366,4 +366,144 @@ class CartItemControllerTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonFragment(['success' => false]);
     }
+
+    public function test_client_can_remove_one_cart_item(): void
+    {
+        $user = $this->createTestUser();
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['stock' => 10, 'price' => 99.99, 'category_id' => $category->id]);
+        $cartItem = CartItem::factory()->create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 2,
+            'unit_price' => 99.99,
+        ]);
+
+        $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseHas('cart_items', [
+            'id' => $cartItem->id,
+            'quantity' => 1,
+        ]);
+    }
+
+    public function test_remove_one_decrements_quantity_and_returns_204(): void
+    {
+        $user = $this->createTestUser();
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $cartItem = CartItem::factory()->create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 3,
+            'unit_price' => 50,
+        ]);
+
+        $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
+        $response->assertStatus(204);
+
+        $this->assertDatabaseHas('cart_items', [
+            'id' => $cartItem->id,
+            'quantity' => 2,
+        ]);
+    }
+
+    public function test_remove_one_deletes_cart_item_when_quantity_is_one(): void
+    {
+        $user = $this->createTestUser();
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $cartItem = CartItem::factory()->create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 1,
+            'unit_price' => 50,
+        ]);
+
+        $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('cart_items', [
+            'id' => $cartItem->id,
+        ]);
+    }
+
+    public function test_delete_cart_item_removes_from_database_and_returns_204(): void
+    {
+        $user = $this->createTestUser();
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $cartItem = CartItem::factory()->create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 2,
+            'unit_price' => 50,
+        ]);
+
+        $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}");
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('cart_items', [
+            'id' => $cartItem->id,
+        ]);
+    }
+
+    public function test_update_cart_item_quantity_success(): void
+    {
+        $user = $this->createTestUser();
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $cartItem = CartItem::factory()->create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 2,
+            'unit_price' => 50,
+        ]);
+
+        $payload = ['quantity' => 5];
+
+        $response = $this->actingAs($user)->putJson("/api/cart-items/{$cartItem->id}", $payload);
+        $response->assertStatus(200)
+            ->assertJsonFragment([
+                'quantity' => 5,
+                'unit_price' => 50,
+            ]);
+
+        $this->assertDatabaseHas('cart_items', [
+            'id' => $cartItem->id,
+            'quantity' => 5,
+        ]);
+    }
+
+    public function test_update_cart_item_quantity_invalid_returns_422(): void
+    {
+        $user = $this->createTestUser();
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $cartItem = CartItem::factory()->create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 2,
+            'unit_price' => 50,
+        ]);
+
+        $payload = ['quantity' => 0];
+
+        $response = $this->actingAs($user)->putJson("/api/cart-items/{$cartItem->id}", $payload);
+        $response->assertStatus(422)
+            ->assertJsonFragment(['success' => false]);
+
+        $this->assertDatabaseHas('cart_items', [
+            'id' => $cartItem->id,
+            'quantity' => 2,
+        ]);
+    }
 }
