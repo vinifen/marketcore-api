@@ -7,7 +7,6 @@ use App\Models\Product;
 
 class ProductService
 {
-
     public function ensureProductHasStock(Product $product, int $quantity): void
     {
         if ($product->stock < $quantity) {

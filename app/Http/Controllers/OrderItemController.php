@@ -2,34 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\OrderItem\StoreOrderItemRequest;
-use App\Http\Requests\OrderItem\UpdateOrderItemRequest;
+use App\Http\Resources\OrderItemResource;
+use App\Http\Responses\ApiResponse;
 use App\Models\OrderItem;
+use Illuminate\Http\JsonResponse;
 
 class OrderItemController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $this->authorize('viewAny', OrderItem::class);
+        $orderItems = OrderItem::with(['order', 'product'])->get();
+        return ApiResponse::success(OrderItemResource::collection($orderItems));
     }
 
-    public function store(StoreOrderItemRequest $request)
+    public function show(int $id): JsonResponse
     {
-        //
-    }
-
-    public function show(OrderItem $orderItem)
-    {
-        //
-    }
-
-    public function update(UpdateOrderItemRequest $request, OrderItem $orderItem)
-    {
-        //
-    }
-
-    public function destroy(OrderItem $orderItem)
-    {
-        //
+        $orderItem = $this->findModelOrFail(OrderItem::class, $id);
+        $this->authorize('view', $orderItem);
+        $orderItem->load(['order', 'product']);
+        return ApiResponse::success(new OrderItemResource($orderItem));
     }
 }
