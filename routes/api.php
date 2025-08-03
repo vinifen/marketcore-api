@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('cart', CartController::class)->only(['index', 'show']);
     Route::apiResource('cart-items', CartItemController::class);
+    Route::delete('cart-items/{cartItem}/remove-one', [CartItemController::class, 'removeOne']);
 
     Route::apiResource('coupons', CouponController::class);
 

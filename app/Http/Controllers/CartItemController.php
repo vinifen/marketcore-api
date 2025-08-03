@@ -56,12 +56,21 @@ class CartItemController extends Controller
         return ApiResponse::success(new CartItemResource($updated));
     }
 
-    public function destroy(int $id): JsonResponse
+    public function removeOne(int $id, CartItemService $cartItemService): JsonResponse
+    {
+        $cartItem = $this->findModelOrFail(CartItem::class, $id);
+        $this->authorize('removeOne', $cartItem);
+
+        $cartItemService->removeOne($cartItem);
+        return ApiResponse::success(null, 204);
+    }
+
+    public function destroy(int $id, CartItemService $cartItemService): JsonResponse
     {
         $cartItem = $this->findModelOrFail(CartItem::class, $id);
         $this->authorize('forceDelete', $cartItem);
 
-        $cartItem->delete();
+        $cartItemService->delete($cartItem);
         return ApiResponse::success(null, 204);
     }
 }

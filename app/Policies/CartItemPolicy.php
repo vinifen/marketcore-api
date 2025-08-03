@@ -34,8 +34,8 @@ class CartItemPolicy
 
     public function create(User $authUser): bool
     {
-        $cartId = request()->input('cart_id');
-        $cart = Cart::find($cartId);
+        $requestedCartId = request()->input('cart_id');
+        $cart = Cart::find($requestedCartId);
 
         $isOwner = $cart instanceof Cart && $cart->user_id === $authUser->id;
 
@@ -53,6 +53,16 @@ class CartItemPolicy
             $cartItem->cart && $cartItem->cart->user_id === $authUser->id,
             $authUser->isAdmin(),
             'update',
+        );
+        return true;
+    }
+
+    public function removeOne(User $authUser, CartItem $cartItem): true
+    {
+        $this->authorizeUnlessPrivileged(
+            $cartItem->cart && $cartItem->cart->user_id === $authUser->id,
+            $authUser->isAdmin(),
+            'delete',
         );
         return true;
     }
