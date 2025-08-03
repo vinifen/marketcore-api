@@ -4,63 +4,55 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Coupon\StoreCouponRequest;
 use App\Http\Requests\Coupon\UpdateCouponRequest;
+use App\Http\Resources\CouponResource;
+use App\Http\Responses\ApiResponse;
 use App\Models\Coupon;
+use Illuminate\Http\JsonResponse;
 
 class CouponController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $this->authorize('viewAny', Coupon::class);
+        $coupons = Coupon::all();
+        return ApiResponse::success(CouponResource::collection($coupons));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreCouponRequest $request): JsonResponse
     {
-        //
+        $this->authorize('create', Coupon::class);
+
+        $data = $request->validated();
+        if (empty($data['start_date'])) {
+            $data['start_date'] = now()->toDateString();
+        }
+
+        $coupon = Coupon::create($data);
+        return ApiResponse::success(new CouponResource($coupon), 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCouponRequest $request)
+    public function show(int $id): JsonResponse
     {
-        //
+        $coupon = $this->findModelOrFail(Coupon::class, $id);
+        $this->authorize('view', $coupon);
+        return ApiResponse::success(new CouponResource($coupon));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Coupon $coupon)
+    public function update(UpdateCouponRequest $request, int $id): JsonResponse
     {
-        //
+        $coupon = $this->findModelOrFail(Coupon::class, $id);
+        $this->authorize('update', $coupon);
+
+        $coupon->update($request->validated());
+        return ApiResponse::success(new CouponResource($coupon));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Coupon $coupon)
+    public function destroy(int $id): JsonResponse
     {
-        //
-    }
+        $coupon = $this->findModelOrFail(Coupon::class, $id);
+        $this->authorize('forceDelete', $coupon);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCouponRequest $request, Coupon $coupon)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Coupon $coupon)
-    {
-        //
+        $coupon->delete();
+        return ApiResponse::success(null, 204);
     }
 }
