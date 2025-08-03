@@ -17,7 +17,7 @@ class CartResource extends JsonResource
             'user_id' => optional($this->resource->user)->id,
             'user_email' => optional($this->resource->user)->email,
             'user_name' => optional($this->resource->user)->name,
-            'items' => $this->resource->cartItems->map(function ($item) {
+            'items' => $this->resource->items->map(function ($item) {
                 return [
                     'product_id' => $item->product_id,
                     'product_name' => optional($item->product)->name,

@@ -11,6 +11,7 @@ use App\Http\Controllers\Catalog\DiscountController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\UserController;
 use App\Http\Responses\ApiResponse;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     return ApiResponse::success([
@@ -43,10 +44,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('discounts', DiscountController::class)->except(['index', 'show']);
 
     Route::apiResource('cart', CartController::class)->only(['index', 'show']);
+    Route::delete('cart/{cart}/clear', [CartController::class, 'clear']);
+
     Route::apiResource('cart-items', CartItemController::class);
     Route::delete('cart-items/{cartItem}/remove-one', [CartItemController::class, 'removeOne']);
 
     Route::apiResource('coupons', CouponController::class);
+
+
+    Route::apiResource('order', OrderController::class)->only(['index', 'show', 'store']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
