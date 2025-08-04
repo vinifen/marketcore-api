@@ -13,7 +13,6 @@ return new class extends Migration
             $table->unsignedBigInteger('cart_id');
             $table->unsignedBigInteger('product_id');
             $table->integer('quantity')->default(1);
-            $table->decimal('unit_price', 10, 2);
             $table->timestamps();
 
             $table->foreign('cart_id')

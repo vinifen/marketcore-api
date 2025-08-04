@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $cart_id
  * @property int $product_id
  * @property int $quantity
- * @property float $unit_price
  */
 class CartItem extends Model
 {
@@ -24,7 +23,6 @@ class CartItem extends Model
         'cart_id',
         'product_id',
         'quantity',
-        'unit_price',
     ];
 
     /**
@@ -35,7 +33,6 @@ class CartItem extends Model
         'cart_id' => 'integer',
         'product_id' => 'integer',
         'quantity' => 'integer',
-        'unit_price' => 'float',
     ];
 
     /**

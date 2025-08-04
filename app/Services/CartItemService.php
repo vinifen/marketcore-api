@@ -25,7 +25,6 @@ class CartItemService
         }
 
         $data['quantity'] = $quantity;
-        $data['unit_price'] = $product->price;
 
         return $this->createCartItem($data);
     }
@@ -78,7 +77,6 @@ class CartItemService
     ): CartItem {
         $productService->ensureProductHasStock($cartItem->product, $quantity);
         $cartItem->quantity = $quantity;
-        $cartItem->unit_price = $cartItem->product->price;
         if (!$cartItem->save()) {
             throw new ApiException('Failed to update cart item.', null, 500);
         }

@@ -52,15 +52,7 @@ class Product extends Model
         return $this->hasMany(Discount::class);
     }
 
-    public function getDiscountAvailable(): Discount|null
-    {
-        return $this->discount()
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
-            ->first();
-    }
-
-    public function getActiveDiscounts(): Collection
+    protected function getActiveDiscounts(): Collection
     {
         return $this->discount()
             ->where('start_date', '<=', now())
