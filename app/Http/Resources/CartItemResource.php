@@ -12,7 +12,7 @@ class CartItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $unitPrice = $this->resource->unit_price;
+        $unitPrice = $this->resource->product->price ?? 0.0;
         $unitPriceDiscounted = optional($this->resource->product)->getDiscountedPrice();
         $quantity = $this->resource->quantity;
 
