@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -59,7 +60,7 @@ class Product extends Model
             ->first();
     }
 
-    public function getActiveDiscounts()
+    public function getActiveDiscounts(): Collection
     {
         return $this->discount()
             ->where('start_date', '<=', now())
@@ -81,6 +82,6 @@ class Product extends Model
             return null;
         }
 
-        return $this->price * (1 - ($totalDiscount / 100));
+        return round($this->price * (1 - ($totalDiscount / 100)), 2);
     }
 }

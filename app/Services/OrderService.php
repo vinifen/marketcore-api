@@ -7,30 +7,49 @@ use App\Models\OrderItem;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Exceptions\ApiException;
+use App\Models\Coupon;
 use App\Models\Discount;
 
 class OrderService
 {
-    public function store(): void
+    public function store(array $data): void
     {
         $cart = $this->getCurrentCart();
+
+        $coupon = null;
+        if (!empty($data['coupon_code'])) {
+            $coupon = Coupon::findCouponByCode($data['coupon_code']);
+            if (!$coupon) {
+                throw new ApiException('Coupon not found or expired.', null, 404);
+            }
+            $data['coupon_id'] = $coupon->id;
+        } else {
+            $data['coupon_id'] = null;
+        }
+
+        $couponPercentage = $coupon->discount_percentage ?? null;
+        $total = $this->calculateTotalWithCoupon($cart, $couponPercentage);
+
+        
     }
 
     protected function calculateTotal(Cart $cart): float
     {
         $total = 0.0;
         foreach ($cart->items as $item) {
-            $total += $item->product->price * $item->quantity;
+            $total += $item->unit_price * $item->quantity;
         }
         return $total;
     }
 
-    protected function calculateTotalWithCoupon(Cart $cart, ?float $coupon): float
+    protected function calculateTotalWithCoupon(Cart $cart, ?float $couponPercentage): float
     {
         $total = $this->calculateTotal($cart);
-        if ($coupon) {
-            $total -= $total * ($coupon / 100);
+
+        if ($couponPercentage !== null && $couponPercentage > 0) {
+            $total -= $total * ($couponPercentage / 100);
         }
+
         $this->validateTotalAmount($total);
         return $total;
     }
