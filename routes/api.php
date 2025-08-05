@@ -37,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod']);
 
     Route::apiResource('users', UserController::class);
+    Route::post('users/{user}/restore', [UserController::class, 'restore']);
+    Route::delete('users/{user}/force-delete', [UserController::class, 'forceDelete']);
+
     Route::apiResource('addresses', AddressController::class);
 
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);

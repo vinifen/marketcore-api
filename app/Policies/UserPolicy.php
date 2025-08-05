@@ -46,10 +46,30 @@ class UserPolicy
         return true;
     }
 
-    public function forceDelete(User $authUser, User $targetUser): true
+    public function restore(User $authUser, User $targetUser): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'delete'
+        );
+        return true;
+    }
+
+    public function delete(User $authUser, User $targetUser): true
     {
         $this->authorizeUnlessPrivileged(
             $authUser->id === $targetUser->id,
+            $authUser->isAdmin(),
+            'delete'
+        );
+        return true;
+    }
+
+    public function forceDelete(User $authUser, User $targetUser): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
             $authUser->isAdmin(),
             'delete'
         );
