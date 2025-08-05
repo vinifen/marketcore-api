@@ -46,6 +46,18 @@ class User extends Authenticatable
     ];
 
     /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'role' => UserRole::class,
+        ];
+    }
+
+    /**
      * @return HasMany<Address, User>
      */
     protected function addresses(): HasMany
@@ -59,18 +71,6 @@ class User extends Authenticatable
     protected function cart(): HasOne
     {
         return $this->hasOne(Cart::class);
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'role' => UserRole::class,
-        ];
     }
 
     public function isAdmin(): bool

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $id
  * @property int $order_id
- * @property int $product_id
+ * @property int|null $product_id
  * @property int $quantity
  * @property float $unit_price
  */

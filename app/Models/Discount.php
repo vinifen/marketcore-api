@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
- * @property int $product_id
+ * @property int|null $product_id
  * @property string|null $description
  * @property string $start_date
  * @property string $end_date

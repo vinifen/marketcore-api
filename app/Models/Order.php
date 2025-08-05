@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
- * @property int $user_id
- * @property int $address_id
- * @property int $coupon_id
+ * @property int|null $user_id
+ * @property int|null $address_id
+ * @property int|null $coupon_id
  * @property string $order_date
  * @property float $total_amount
  * @property OrderStatus $status
