@@ -41,7 +41,17 @@ class ProductPolicy
         return true;
     }
 
-    public function forceDelete(User $authUser, Product $product): true
+    public function restore(User $authUser, Product $product): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isStaff(),
+            'restore'
+        );
+        return true;
+    }
+
+    public function delete(User $authUser, Product $product): true
     {
         $this->authorizeUnlessPrivileged(
             false,
@@ -51,13 +61,13 @@ class ProductPolicy
         return true;
     }
 
-    // public function delete(User $authUser, Product $product): true
-    // {
-    //     return true;
-    // }
-
-    // public function restore(User $authUser, Product $product): true
-    // {
-    //     return true;
-    // }
+    public function forceDelete(User $authUser, Product $product): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'delete'
+        );
+        return true;
+    }
 }

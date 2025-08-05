@@ -43,7 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('addresses', AddressController::class);
 
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
+
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+    Route::post('products/{product}/restore', [ProductController::class, 'restore']);
+    Route::delete('products/{product}/force-delete', [ProductController::class, 'forceDelete']);
+
     Route::apiResource('discounts', DiscountController::class)->except(['index', 'show']);
 
     Route::apiResource('cart', CartController::class)->only(['index', 'show']);

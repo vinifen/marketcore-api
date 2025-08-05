@@ -51,9 +51,30 @@ class ProductController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $product = $this->findModelOrFail(Product::class, $id);
-        $this->authorize('forceDelete', $product);
+        $this->authorize('delete', $product);
 
         $product->delete();
+        return ApiResponse::success(null, 204);
+    }
+    
+    public function restore(int $id): JsonResponse
+    {
+        $product = $this->findModelTrashedOrFail(Product::class, $id);
+        $this->authorize('restore', $product);
+
+        $product->restore();
+        $product->load('category');
+
+        return ApiResponse::success(new ProductResource($product));
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $product = $this->findModelTrashedOrFail(Product::class, $id);
+        $this->authorize('forceDelete', $product);
+
+        $product->forceDelete();
+
         return ApiResponse::success(null, 204);
     }
 }

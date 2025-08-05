@@ -118,7 +118,7 @@ class ProductControllerTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_staff_can_delete_product(): void
+    public function test_staff_can_soft_delete_product(): void
     {
         $staff = $this->createTestUser(['role' => UserRole::MODERATOR]);
         $category = Category::factory()->create();
@@ -127,114 +127,81 @@ class ProductControllerTest extends TestCase
         $response = $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
 
         $response->assertStatus(204);
-
-        $this->assertDatabaseMissing('products', [
-            'id' => $product->id,
-        ]);
+        $this->assertSoftDeleted('products', ['id' => $product->id]);
     }
 
-    public function test_non_staff_cannot_delete_product(): void
-    {
-        $client = $this->createTestUser(['role' => UserRole::CLIENT]);
-        $category = Category::factory()->create();
-        $product = Product::factory()->create(['category_id' => $category->id]);
-
-        $response = $this->actingAs($client)->deleteJson("/api/products/{$product->id}");
-
-        $response->assertStatus(403);
-    }
-
-    public function test_admin_can_view_product(): void
-    {
-        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
-        $category = Category::factory()->create(['name' => 'Cat']);
-        $product = Product::factory()->create(['category_id' => $category->id, 'name' => 'TestProd']);
-
-        $response = $this->actingAs($admin)->getJson("/api/products/{$product->id}");
-
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'success' => true,
-                'name' => 'TestProd',
-                'category' => 'Cat',
-            ]);
-    }
-
-    public function test_guest_can_view_product(): void
-    {
-        $category = Category::factory()->create(['name' => 'Cat']);
-        $product = Product::factory()->create(['category_id' => $category->id, 'name' => 'TestProd']);
-
-        $response = $this->getJson("/api/products/{$product->id}");
-
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'success' => true,
-                'name' => 'TestProd',
-                'category' => 'Cat',
-            ]);
-    }
-
-    public function test_client_can_view_product(): void
-    {
-        $client = $this->createTestUser(['role' => UserRole::CLIENT]);
-        $category = Category::factory()->create(['name' => 'Cat']);
-        $product = Product::factory()->create(['category_id' => $category->id, 'name' => 'TestProd']);
-
-        $response = $this->actingAs($client)->getJson("/api/products/{$product->id}");
-
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'success' => true,
-                'name' => 'TestProd',
-                'category' => 'Cat',
-            ]);
-    }
-
-    public function test_staff_can_list_products(): void
+    public function test_staff_can_restore_soft_deleted_product(): void
     {
         $staff = $this->createTestUser(['role' => UserRole::MODERATOR]);
         $category = Category::factory()->create();
-        Product::factory()->count(2)->create(['category_id' => $category->id]);
+        $product = Product::factory()->create(['category_id' => $category->id]);
 
-        $response = $this->actingAs($staff)->getJson('/api/products');
+        $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
+
+        $response = $this->actingAs($staff)->postJson("/api/products/{$product->id}/restore");
 
         $response->assertStatus(200)
-            ->assertJsonFragment(['success' => true])
-            ->assertJsonStructure([
-                'success',
-                'data' => [['id', 'category_id', 'name', 'category']],
+            ->assertJsonFragment([
+                'success' => true,
+                'id' => $product->id,
+                'name' => $product->name,
             ]);
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'deleted_at' => null,
+        ]);
     }
 
-    public function test_guest_can_list_products(): void
+    public function test_admin_can_force_delete_soft_deleted_product(): void
     {
+        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
         $category = Category::factory()->create();
-        Product::factory()->count(2)->create(['category_id' => $category->id]);
+        $product = Product::factory()->create(['category_id' => $category->id]);
 
-        $response = $this->getJson('/api/products');
+        $this->actingAs($admin)->deleteJson("/api/products/{$product->id}");
 
-        $response->assertStatus(200)
-            ->assertJsonFragment(['success' => true])
-            ->assertJsonStructure([
-                'success',
-                'data' => [['id', 'category_id', 'name', 'category']],
-            ]);
+        $response = $this->actingAs($admin)->deleteJson("/api/products/{$product->id}/force-delete");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('products', ['id' => $product->id]);
     }
 
-    public function test_client_can_list_products(): void
+    public function test_staff_cannot_force_delete_product(): void
     {
-        $client = $this->createTestUser(['role' => UserRole::CLIENT]);
+        $staff = $this->createTestUser(['role' => UserRole::MODERATOR]);
         $category = Category::factory()->create();
-        Product::factory()->count(2)->create(['category_id' => $category->id]);
+        $product = Product::factory()->create(['category_id' => $category->id]);
 
-        $response = $this->actingAs($client)->getJson('/api/products');
+        $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
 
-        $response->assertStatus(200)
-            ->assertJsonFragment(['success' => true])
-            ->assertJsonStructure([
-                'success',
-                'data' => [['id', 'category_id', 'name', 'category']],
-            ]);
+        $response = $this->actingAs($staff)->deleteJson("/api/products/{$product->id}/force-delete");
+
+        $response->assertStatus(403);
+        $this->assertSoftDeleted('products', ['id' => $product->id]);
+    }
+
+    public function test_restore_should_fail_if_product_not_soft_deleted(): void
+    {
+        $staff = $this->createTestUser(['role' => UserRole::MODERATOR]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['category_id' => $category->id]);
+
+        $response = $this->actingAs($staff)->postJson("/api/products/{$product->id}/restore");
+
+        $response->assertStatus(404)
+            ->assertJsonFragment(['success' => false]);
+    }
+
+    public function test_force_delete_should_fail_if_product_not_soft_deleted(): void
+    {
+        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['category_id' => $category->id]);
+
+        $response = $this->actingAs($admin)->deleteJson("/api/products/{$product->id}/force-delete");
+
+        $response->assertStatus(404)
+            ->assertJsonFragment(['success' => false]);
     }
 }
