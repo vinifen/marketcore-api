@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -17,6 +18,7 @@ class Discount extends Model
 {
     /** @use HasFactory<\Database\Factories\DiscountFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * @var list<string>

@@ -20,6 +20,8 @@ return new class extends Migration
                 ->references('id')
                 ->on('categories')
                 ->onDelete('set null');
+
+            $table->softDeletes();
         });
     }
 

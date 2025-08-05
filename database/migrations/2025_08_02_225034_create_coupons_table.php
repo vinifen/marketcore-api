@@ -15,6 +15,8 @@ return new class extends Migration
             $table->date('end_date');
             $table->decimal('discount_percentage', 5, 2);
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 
