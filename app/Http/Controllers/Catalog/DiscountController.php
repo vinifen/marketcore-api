@@ -51,9 +51,30 @@ class DiscountController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $discount = $this->findModelOrFail(Discount::class, $id);
-        $this->authorize('forceDelete', $discount);
+        $this->authorize('delete', $discount);
 
         $discount->delete();
+        return ApiResponse::success(null, 204);
+    }
+
+    public function restore(int $id): JsonResponse
+    {
+        $discount = $this->findModelTrashedOrFail(Discount::class, $id);
+        $this->authorize('restore', $discount);
+
+        $discount->restore();
+        $discount->load('product');
+
+        return ApiResponse::success(new DiscountResource($discount));
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $discount = $this->findModelTrashedOrFail(Discount::class, $id);
+        $this->authorize('forceDelete', $discount);
+
+        $discount->forceDelete();
+
         return ApiResponse::success(null, 204);
     }
 }

@@ -41,7 +41,17 @@ class DiscountPolicy
         return true;
     }
 
-    public function forceDelete(User $authUser, Discount $discount): true
+    public function restore(User $authUser, Discount $discount): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'restore'
+        );
+        return true;
+    }
+
+    public function delete(User $authUser, Discount $discount): true
     {
         $this->authorizeUnlessPrivileged(
             false,
@@ -51,13 +61,13 @@ class DiscountPolicy
         return true;
     }
 
-    // public function delete(User $authUser, Discount $discount): true
-    // {
-    //     return true;
-    // }
-
-    // public function restore(User $authUser, Discount $discount): true
-    // {
-    //     return true;
-    // }
+    public function forceDelete(User $authUser, Discount $discount): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'delete'
+        );
+        return true;
+    }
 }
