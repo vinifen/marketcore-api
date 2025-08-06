@@ -71,7 +71,7 @@ class UserPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isAdmin(),
-            'delete'
+            'force delete'
         );
         return true;
     }

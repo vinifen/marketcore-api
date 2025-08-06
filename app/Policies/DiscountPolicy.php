@@ -66,7 +66,7 @@ class DiscountPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isAdmin(),
-            'delete'
+            'force delete'
         );
         return true;
     }

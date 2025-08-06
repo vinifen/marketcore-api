@@ -41,6 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('users/{user}/force-delete', [UserController::class, 'forceDelete']);
 
     Route::apiResource('addresses', AddressController::class);
+    Route::post('addresses/{address}/restore', [AddressController::class, 'restore']);
+    Route::delete('addresses/{address}/force-delete', [AddressController::class, 'forceDelete']);
 
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
 

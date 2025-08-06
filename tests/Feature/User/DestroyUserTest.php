@@ -195,7 +195,7 @@ class DestroyUserTest extends TestCase
         $response = $this->actingAs($client)->deleteJson("api/users/{$user->id}/force-delete");
 
         $response->assertStatus(403)
-            ->assertJson($this->defaultErrorResponse('You are not authorized to delete this resource.'));
+            ->assertJson($this->defaultErrorResponse('You are not authorized to force delete this resource.'));
     }
 
     public function test_should_not_force_delete_if_user_not_soft_deleted(): void

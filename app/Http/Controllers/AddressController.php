@@ -46,8 +46,30 @@ class AddressController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $address = $this->findModelOrFail(Address::class, $id);
-        $this->authorize('forceDelete', $address);
+        $this->authorize('delete', $address);
+
         $address->delete();
+        return ApiResponse::success(null, 204);
+    }
+
+    public function restore(int $id): JsonResponse
+    {
+        $address = $this->findModelTrashedOrFail(Address::class, $id);
+        $this->authorize('restore', $address);
+
+        $address->restore();
+        $address->load('user');
+
+        return ApiResponse::success(new AddressResource($address));
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $address = $this->findModelTrashedOrFail(Address::class, $id);
+        $this->authorize('forceDelete', $address);
+
+        $address->forceDelete();
+
         return ApiResponse::success(null, 204);
     }
 }
