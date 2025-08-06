@@ -202,19 +202,6 @@ class DiscountControllerTest extends TestCase
         $this->assertDatabaseMissing('discounts', ['id' => $discount->id]);
     }
 
-    public function test_force_delete_should_fail_if_discount_not_soft_deleted(): void
-    {
-        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
-        $category = Category::factory()->create();
-        $product = Product::factory()->create(['category_id' => $category->id]);
-        $discount = Discount::factory()->create(['product_id' => $product->id]);
-
-        $response = $this->actingAs($admin)->deleteJson("/api/discounts/{$discount->id}/force-delete");
-
-        $response->assertStatus(404)
-            ->assertJsonFragment(['success' => false]);
-    }
-
     public function test_non_admin_cannot_restore_discount(): void
     {
         $admin = $this->createTestUser(['email' => 'admin@example.com', 'role' => UserRole::ADMIN]);

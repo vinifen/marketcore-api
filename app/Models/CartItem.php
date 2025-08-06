@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -15,6 +16,7 @@ class CartItem extends Model
 {
     /** @use HasFactory<\Database\Factories\CartItemFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * @var list<string>

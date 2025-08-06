@@ -83,7 +83,7 @@ class UserController extends Controller
     public function forceDelete(int $id): JsonResponse
     {
         /** @var \App\Models\User $user */
-        $user = $this->findModelTrashedOrFail(User::class, $id);
+        $user = $this->findModelOrFailWithTrashed(User::class, $id);
         $this->authorize('forceDelete', $user);
 
         $user->forceDelete();

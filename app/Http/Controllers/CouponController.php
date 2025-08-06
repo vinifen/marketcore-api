@@ -68,7 +68,7 @@ class CouponController extends Controller
 
     public function forceDelete(int $id): JsonResponse
     {
-        $coupon = $this->findModelTrashedOrFail(Coupon::class, $id);
+        $coupon = $this->findModelOrFailWithTrashed(Coupon::class, $id);
         $this->authorize('forceDelete', $coupon);
 
         $coupon->forceDelete();

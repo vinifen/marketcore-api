@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 /**
  * @property int $id
@@ -17,6 +19,10 @@ class Cart extends Model
 {
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory;
+    use SoftDeletes; 
+    use CascadeSoftDeletes;
+
+    protected $cascadeDeletes = ['cartItems'];
 
     /**
      * @var list<string>
@@ -47,5 +53,17 @@ class Cart extends Model
     public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    protected static function booted()
+    {
+        static::restoring(function ($cart) {
+            $cart->cartItems()->withTrashed()->get()->each->restore();
+        });
     }
 }

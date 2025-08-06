@@ -86,16 +86,16 @@ class CartItemService
     public function removeOne(CartItem $cartItem): void
     {
         if ($cartItem->quantity <= 1) {
-            $this->delete($cartItem);
+            $this->forceDelete($cartItem);
         } else {
             $cartItem->quantity -= 1;
             $cartItem->save();
         }
     }
 
-    public function delete(CartItem $cartItem): void
+    public function forceDelete(CartItem $cartItem): void
     {
-        if (!$cartItem->delete()) {
+        if (!$cartItem->forceDelete()) {
             throw new ApiException('Failed to delete cart item.', null, 500);
         }
     }

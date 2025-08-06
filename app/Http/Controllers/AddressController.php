@@ -65,7 +65,7 @@ class AddressController extends Controller
 
     public function forceDelete(int $id): JsonResponse
     {
-        $address = $this->findModelTrashedOrFail(Address::class, $id);
+        $address = $this->findModelOrFailWithTrashed(Address::class, $id);
         $this->authorize('forceDelete', $address);
 
         $address->forceDelete();

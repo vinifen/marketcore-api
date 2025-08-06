@@ -31,4 +31,15 @@ abstract class Controller
 
         return $model;
     }
+
+    protected function findModelOrFailWithTrashed(string $modelClass, int $id): Model
+    {
+        $model = $modelClass::withTrashed()->find($id);
+
+        if (!$model) {
+            throw new ApiException("Not found.", null, 404);
+        }
+
+        return $model;
+    }
 }

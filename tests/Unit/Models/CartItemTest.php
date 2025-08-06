@@ -78,6 +78,7 @@ class CartItemTest extends TestCase
             'cart_id' => 'integer',
             'product_id' => 'integer',
             'quantity' => 'integer',
+            'deleted_at' => 'datetime',
         ], $cartItem->getCasts());
     }
 }

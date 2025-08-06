@@ -28,7 +28,7 @@ class CartController extends Controller
     {
         $cart = $this->findModelOrFail(Cart::class, $id);
         $this->authorize('clear', $cart);
-        $cart->items()->delete();
+        $cart->items()->forceDelete();
         return ApiResponse::success(['message' => 'Cart cleared successfully']);
     }
 

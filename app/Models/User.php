@@ -38,7 +38,7 @@ class User extends Authenticatable
         'role',
     ];
 
-    protected $cascadeDeletes = ['addresses'];
+    protected $cascadeDeletes = ['addresses', 'cart'];
 
     /**
      *
@@ -102,9 +102,8 @@ class User extends Authenticatable
         });
 
         static::restoring(function ($user) {
-            $user->addresses()->withTrashed()->get()->each(function ($address) {
-                $address->restore();
-            });
+            $user->addresses()->withTrashed()->get()->each->restore();
+            $user->cart()->withTrashed()->get()->each->restore();
         });
     }
 }

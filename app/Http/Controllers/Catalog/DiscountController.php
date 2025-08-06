@@ -70,7 +70,7 @@ class DiscountController extends Controller
 
     public function forceDelete(int $id): JsonResponse
     {
-        $discount = $this->findModelTrashedOrFail(Discount::class, $id);
+        $discount = $this->findModelOrFailWithTrashed(Discount::class, $id);
         $this->authorize('forceDelete', $discount);
 
         $discount->forceDelete();

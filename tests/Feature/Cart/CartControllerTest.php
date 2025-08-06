@@ -31,7 +31,7 @@ class CartControllerTest extends TestCase
         $user = User::factory()->create();
         $cartId = $user->cart->id ?? Cart::where('user_id', $user->id)->value('id');
 
-        $user->delete();
+        $user->forceDelete();
 
         $this->assertDatabaseMissing('carts', [
             'id' => $cartId,

@@ -67,10 +67,10 @@ class CartItemController extends Controller
 
     public function destroy(int $id, CartItemService $cartItemService): JsonResponse
     {
-        $cartItem = $this->findModelOrFail(CartItem::class, $id);
+        $cartItem = $this->findModelOrFailWithTrashed(CartItem::class, $id);
         $this->authorize('forceDelete', $cartItem);
 
-        $cartItemService->delete($cartItem);
+        $cartItemService->forceDelete($cartItem);
         return ApiResponse::success(null, 204);
     }
 }

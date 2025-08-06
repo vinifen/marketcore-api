@@ -154,17 +154,6 @@ class CouponControllerTest extends TestCase
         $this->assertDatabaseMissing('coupons', ['id' => $coupon->id]);
     }
 
-    public function test_force_delete_should_fail_if_coupon_not_soft_deleted(): void
-    {
-        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
-        $coupon = Coupon::factory()->create();
-
-        $response = $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}/force-delete");
-
-        $response->assertStatus(404)
-            ->assertJsonFragment(['success' => false]);
-    }
-
     public function test_non_admin_cannot_restore_coupon(): void
     {
         $admin = $this->createTestUser(['email' => 'admin@example.com', 'role' => UserRole::ADMIN]);

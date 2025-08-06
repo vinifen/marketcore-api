@@ -70,7 +70,7 @@ class ProductController extends Controller
 
     public function forceDelete(int $id): JsonResponse
     {
-        $product = $this->findModelTrashedOrFail(Product::class, $id);
+        $product = $this->findModelOrFailWithTrashed(Product::class, $id);
         $this->authorize('forceDelete', $product);
 
         $product->forceDelete();

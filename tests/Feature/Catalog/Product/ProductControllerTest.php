@@ -4,6 +4,7 @@ namespace Tests\Feature\Catalog\Product;
 
 use App\Enums\UserRole;
 use App\Models\Category;
+use App\Models\Discount;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -193,15 +194,33 @@ class ProductControllerTest extends TestCase
             ->assertJsonFragment(['success' => false]);
     }
 
-    public function test_force_delete_should_fail_if_product_not_soft_deleted(): void
+    public function test_soft_delete_product_also_soft_deletes_discounts(): void
     {
-        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
+        $staff = $this->createTestUser(['role' => UserRole::MODERATOR]);
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
+        $discount1 = Discount::factory()->create(['product_id' => $product->id]);
+        $discount2 = Discount::factory()->create(['product_id' => $product->id]);
 
-        $response = $this->actingAs($admin)->deleteJson("/api/products/{$product->id}/force-delete");
+        $response = $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
+        $response->assertStatus(204);
 
-        $response->assertStatus(404)
-            ->assertJsonFragment(['success' => false]);
+        $this->assertSoftDeleted('products', ['id' => $product->id]);
+        $this->assertSoftDeleted('discounts', ['id' => $discount1->id]);
+        $this->assertSoftDeleted('discounts', ['id' => $discount2->id]);
+    }
+
+    public function test_restore_product_also_restores_discounts(): void
+    {
+        $staff = $this->createTestUser(['role' => UserRole::MODERATOR]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['category_id' => $category->id]);
+        $discount = Discount::factory()->create(['product_id' => $product->id]);
+
+        $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
+        $this->actingAs($staff)->postJson("/api/products/{$product->id}/restore");
+
+        $this->assertDatabaseHas('products', ['id' => $product->id, 'deleted_at' => null]);
+        $this->assertDatabaseHas('discounts', ['id' => $discount->id, 'deleted_at' => null]);
     }
 }

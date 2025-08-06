@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 /**
  * @property int $id
@@ -19,6 +20,9 @@ class Product extends Model
     /** @use HasFactory<\Database\Factories\ProductFactory> */
     use HasFactory;
     use SoftDeletes;
+    use CascadeSoftDeletes;
+
+    protected $cascadeDeletes = ['discounts'];
 
     /**
      * @var list<string>
@@ -49,14 +53,21 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function discount()
+    public function discounts()
     {
         return $this->hasMany(Discount::class);
     }
 
+    protected static function booted()
+    {
+        static::restoring(function ($product) {
+            $product->discounts()->withTrashed()->get()->each->restore();
+        });
+    }
+
     protected function getActiveDiscounts(): Collection
     {
-        return $this->discount()
+        return $this->discounts()
             ->where('start_date', '<=', now())
             ->where('end_date', '>=', now())
             ->get();

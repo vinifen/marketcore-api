@@ -197,15 +197,4 @@ class DestroyUserTest extends TestCase
         $response->assertStatus(403)
             ->assertJson($this->defaultErrorResponse('You are not authorized to force delete this resource.'));
     }
-
-    public function test_should_not_force_delete_if_user_not_soft_deleted(): void
-    {
-        $admin = $this->createTestUser(['role' => UserRole::ADMIN, 'email' => 'admin8@email.com']);
-        $user = $this->createTestUser(['email' => 'user7@email.com']);
-
-        $response = $this->actingAs($admin)->deleteJson("api/users/{$user->id}/force-delete");
-
-        $response->assertStatus(404)
-            ->assertJson($this->defaultErrorResponse('Trashed model not found.'));
-    }
 }
