@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 /**
  * @property int $id
@@ -25,6 +26,7 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
+    use CascadeSoftDeletes;
 
     /**
      * @var list<string>
@@ -35,6 +37,8 @@ class User extends Authenticatable
         'password',
         'role',
     ];
+
+    protected $cascadeDeletes = ['addresses'];
 
     /**
      *
@@ -94,35 +98,13 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::created(function ($user) {
-            Cart::create(['user_id' => $user->id]);
+            \App\Models\Cart::create(['user_id' => $user->id]);
+        });
+
+        static::restoring(function ($user) {
+            $user->addresses()->withTrashed()->get()->each(function ($address) {
+                $address->restore();
+            });
         });
     }
 }
-
-
-    // protected static function booted()
-    // {
-    //     static::created(function ($user) {
-    //         Cart::create(['user_id' => $user->id]);
-    //     });
-
-    //     static::deleting(function ($user) {
-    //         $user->addresses()->each(function ($address) {
-    //             $address->delete();
-    //         });
-
-    //         if ($user->cart) {
-    //             $user->cart->delete();
-    //         }
-    //     });
-
-    //     static::restoring(function ($user) {
-    //         $user->addresses()->withTrashed()->each(function ($address) {
-    //             $address->restore();
-    //         });
-
-    //         if ($user->cart()->withTrashed()->exists()) {
-    //             $user->cart()->withTrashed()->first()->restore();
-    //         }
-    //     });
-    // }
