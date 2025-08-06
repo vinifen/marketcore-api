@@ -9,36 +9,81 @@ use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Exceptions\ApiException;
 use App\Models\Coupon;
-use App\Models\Discount;
 
 class OrderService
 {
-    public function store(array $data): void
+    public function store(array $data, int $user_id, ProductService $productService): Order
     {
         $cart = $this->getCurrentCart();
 
-        $coupon = null;
+        $coupon = $this->getCouponFromData($data);
+        $data['coupon_id'] = $coupon?->id;
+
+        $totalPrice = $this->calculateTotalWithCoupon($cart, $coupon?->discount_percentage);
+
+        $this->decreaseProductsStock($cart, $productService);
+
+        $order = $this->createOrder($user_id, $totalPrice, $data['coupon_id']);
+
+        $this->createOrderItems($order, $cart);
+
+        $this->clearCart($cart);
+
+        return $order;
+    }
+
+    private function getCouponFromData(array $data): ?Coupon
+    {
         if (!empty($data['coupon_code'])) {
             $coupon = Coupon::findCouponByCode($data['coupon_code']);
             if (!$coupon) {
                 throw new ApiException('Coupon not found or expired.', null, 404);
             }
-            $data['coupon_id'] = $coupon->id;
-        } else {
-            $data['coupon_id'] = null;
+            return $coupon;
         }
+        return null;
+    }
 
-        $couponPercentage = $coupon->discount_percentage ?? null;
-        $total = $this->calculateTotalWithCoupon($cart, $couponPercentage);
+    private function decreaseProductsStock(Cart $cart, ProductService $productService): void
+    {
+        foreach ($cart->items as $item) {
+            $productService->decreaseStock($item->product, $item->quantity);
+        }
+    }
 
-        
+    private function createOrder(int $user_id, float $totalPrice, ?int $coupon_id): Order
+    {
+        return Order::create([
+            'user_id' => $user_id,
+            'total_price' => $totalPrice,
+            'status' => OrderStatus::PENDING,
+            'coupon_id' => $coupon_id,
+        ]);
+    }
+
+    private function createOrderItems(Order $order, Cart $cart): void
+    {
+        foreach ($cart->items as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'unit_price' => $item->unit_price,
+            ]);
+        }
+    }
+
+    private function clearCart(Cart $cart): void
+    {
+        $cart->items()->delete();
+        $cart->save();
     }
 
     protected function calculateTotal(Cart $cart): float
     {
         $total = 0.0;
         foreach ($cart->items as $item) {
-            $total += $item->unit_price * $item->quantity;
+            $total += $item->product->getDiscountedPrice() ?? $item->unit_price * $item->quantity;
         }
         return $total;
     }
@@ -77,9 +122,13 @@ class OrderService
         return $cart;
     }
 
-    public function cancelOrder(Order $order): void
+    public function cancelOrder(Order $order, ProductService $productService): Order
     {
+        foreach ($order->items as $item) {
+            $productService->increaseStock($item->product, $item->quantity);
+        }
         $order->status = OrderStatus::CANCELED;
         $order->save();
+        return $order;
     }
 }

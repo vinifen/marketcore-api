@@ -7,9 +7,9 @@ use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Order;
-use App\Models\Coupon;
 use App\Models\User;
 use App\Services\OrderService;
+use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 
 class OrderController extends Controller
@@ -23,22 +23,20 @@ class OrderController extends Controller
         return ApiResponse::success(OrderResource::collection($orders));
     }
 
-    public function store(StoreOrderRequest $request): JsonResponse
+    public function store(StoreOrderRequest $request, OrderService $orderService): JsonResponse
     {
         $this->authorize('create', Order::class);
+        $user = User::find($request->user_id);
 
-        $data = $request->validated();
-
-        if (!empty($data['coupon_code'])) {
-            $coupon = Coupon::where('code', $data['coupon_code'])->first();
-            $data['coupon_id'] = $coupon?->id;
-            unset($data['coupon_code']);
+        if (!$user) {
+            return ApiResponse::error('User not found.', 404);
         }
 
-        $user = User::find($data['user_id']);
-        $data['user_email'] = $user?->email;
-
-        $order = Order::create($data);
+        $order = $orderService->store(
+            $request->products,
+            $user->id,
+            app(ProductService::class)
+        );
 
         return ApiResponse::success(new OrderResource($order), 201);
     }
@@ -78,7 +76,7 @@ class OrderController extends Controller
     {
         $this->authorize('cancel', $order);
 
-        $result = $orderService->cancelOrder($order);
+        $order = $orderService->cancelOrder($order, app(ProductService::class));
 
         return ApiResponse::success(new OrderResource($order));
     }
