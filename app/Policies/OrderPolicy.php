@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Order;
 use App\Models\User;
 use App\Policies\Concerns\AuthorizesActions;
+use App\Enums\OrderStatus;
 
 class OrderPolicy
 {
@@ -24,7 +25,7 @@ class OrderPolicy
     public function view(User $authUser, Order $order): true
     {
         $this->authorizeUnlessPrivileged(
-            $order->user_id === $authUser->id,
+            $authUser->id === $order->user_id,
             $authUser->isStaff(),
             'view'
         );
@@ -45,9 +46,55 @@ class OrderPolicy
     public function update(User $authUser, Order $order): true
     {
         $this->authorizeUnlessPrivileged(
-            $order->user_id === $authUser->id,
+            $order->user_id === $authUser->id &&
+            $order->status !== OrderStatus::CANCELED &&
+            $order->status !== OrderStatus::COMPLETED &&
+            $order->status !== OrderStatus::SHIPPED,
             $authUser->isAdmin(),
             'update'
+        );
+        return true;
+    }
+
+    public function updateStatus(User $authUser, Order $order): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'updateStatus'
+        );
+        return true;
+    }
+
+    public function cancel(User $authUser, Order $order): true
+    {
+        $this->authorizeUnlessPrivileged(
+            $order->user_id === $authUser->id &&
+            $order->status !== OrderStatus::CANCELED &&
+            $order->status !== OrderStatus::COMPLETED &&
+            $order->status !== OrderStatus::SHIPPED,
+            $authUser->isAdmin(),
+            'cancel'
+        );
+        return true;
+    }
+
+    public function delete(User $authUser, Order $order): true
+    {
+        $this->authorizeUnlessPrivileged(
+            $order->user_id === $authUser->id,
+            $authUser->isAdmin(),
+            'delete'
+        );
+        return true;
+    }
+
+    public function restore(User $authUser, Order $order): true
+    {
+        $this->authorizeUnlessPrivileged(
+            $order->user_id === $authUser->id,
+            $authUser->isAdmin(),
+            'restore'
         );
         return true;
     }
@@ -61,14 +108,4 @@ class OrderPolicy
         );
         return true;
     }
-
-    // public function delete(User $authUser, Order $order): bool
-    // {
-    //     return false;
-    // }
-
-    // public function restore(User $authUser, Order $order): bool
-    // {
-    //     return false;
-    // }
 }

@@ -12,6 +12,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\UserController;
 use App\Http\Responses\ApiResponse;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
 
 Route::get('/', function () {
     return ApiResponse::success([
@@ -65,7 +66,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('coupons/{coupon}/force-delete', [CouponController::class, 'forceDelete']);
 
 
-    Route::apiResource('order', OrderController::class)->only(['index', 'show', 'store']);
+    Route::apiResource('order', OrderController::class);
+    Route::post('order/{order}/restore', [OrderController::class, 'restore']);
+    Route::delete('order/{order}/force-delete', [OrderController::class, 'forceDelete']);
+    Route::put('order/{order}/status', [OrderController::class, 'updateStatus']);
+    Route::post('order/{order}/cancel', [OrderController::class, 'cancel']);
+
+    Route::apiResource('order-items', OrderItemController::class);
+    Route::post('order-items/{orderItem}/restore', [OrderItemController::class, 'restore']);
+    Route::delete('order-items/{orderItem}/force-delete', [OrderItemController::class, 'forceDelete']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });

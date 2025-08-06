@@ -9,6 +9,7 @@ use App\Http\Responses\ApiResponse;
 use App\Models\Order;
 use App\Models\Coupon;
 use App\Models\User;
+use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 
 class OrderController extends Controller
@@ -60,11 +61,52 @@ class OrderController extends Controller
         return ApiResponse::success(new OrderResource($order));
     }
 
+    public function updateStatus(Order $order, UpdateOrderRequest $request): JsonResponse
+    {
+        $this->authorize('update', $order);
+
+        $data = $request->validated();
+        if (isset($data['status'])) {
+            $order->status = $data['status'];
+            $order->save();
+        }
+
+        return ApiResponse::success(new OrderResource($order));
+    }
+
+    public function cancel(Order $order, OrderService $orderService): JsonResponse
+    {
+        $this->authorize('cancel', $order);
+
+        $result = $orderService->cancelOrder($order);
+
+        return ApiResponse::success(new OrderResource($order));
+    }
+
     public function destroy(Order $order): JsonResponse
+    {
+        $this->authorize('delete', $order);
+
+        $order->delete();
+
+        return ApiResponse::success(null, 204);
+    }
+
+    public function restore(Order $order): JsonResponse
+    {
+        $this->authorize('restore', $order);
+
+        $order->restore();
+        $order->load(['user', 'address', 'coupon']);
+
+        return ApiResponse::success(new OrderResource($order));
+    }
+
+    public function forceDelete(Order $order): JsonResponse
     {
         $this->authorize('forceDelete', $order);
 
-        $order->delete();
+        $order->forceDelete();
 
         return ApiResponse::success(null, 204);
     }

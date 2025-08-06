@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Cart;
@@ -74,5 +75,11 @@ class OrderService
             throw new ApiException('No cart found for the authenticated user.', null, 404);
         }
         return $cart;
+    }
+
+    public function cancelOrder(Order $order): void
+    {
+        $order->status = OrderStatus::CANCELED;
+        $order->save();
     }
 }

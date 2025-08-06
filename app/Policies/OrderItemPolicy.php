@@ -24,7 +24,7 @@ class OrderItemPolicy
     public function view(User $authUser, OrderItem $orderItem): true
     {
         $this->authorizeUnlessPrivileged(
-            false,
+            $authUser->id === $orderItem->order->user_id,
             $authUser->isStaff(),
             'view'
         );

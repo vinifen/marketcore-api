@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 /**
  * @property int $id
@@ -22,6 +23,7 @@ class Order extends Model
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory;
     use SoftDeletes;
+    use CascadeSoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -41,6 +43,8 @@ class Order extends Model
         'total_amount' => 'float',
         'status' => OrderStatus::class,
     ];
+
+    protected $cascadeDeletes = ['orderItems'];
 
     /**
      * @return BelongsTo<User, Order>
@@ -64,5 +68,17 @@ class Order extends Model
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    protected static function booted()
+    {
+        static::restoring(function ($order) {
+            $order->orderItems()->withTrashed()->get()->each->restore();
+        });
     }
 }

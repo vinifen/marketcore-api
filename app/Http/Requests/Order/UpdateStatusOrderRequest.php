@@ -20,7 +20,6 @@ class UpdateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'address_id' => 'sometimes|exists:addresses,id',
             'status' => 'sometimes|in:' . implode(',', array_column(OrderStatus::cases(), 'value')),
         ];
     }
