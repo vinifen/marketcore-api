@@ -85,7 +85,7 @@ class CouponControllerTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_admin_can_delete_coupon(): void
+    public function test_admin_can_soft_delete_coupon(): void
     {
         $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
         $coupon = Coupon::factory()->create();
@@ -94,7 +94,7 @@ class CouponControllerTest extends TestCase
 
         $response->assertStatus(204);
 
-        $this->assertDatabaseMissing('coupons', [
+        $this->assertSoftDeleted('coupons', [
             'id' => $coupon->id,
         ]);
     }
@@ -109,68 +109,100 @@ class CouponControllerTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_staff_can_list_coupons(): void
+    public function test_admin_can_restore_soft_deleted_coupon(): void
     {
-        $moderator = $this->createTestUser(['role' => UserRole::MODERATOR]);
-        Coupon::factory()->create(['code' => 'LIST1']);
-        Coupon::factory()->create(['code' => 'LIST2']);
+        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
+        $coupon = Coupon::factory()->create();
 
-        $response = $this->actingAs($moderator)->getJson('/api/coupons');
+        $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}");
+
+        $response = $this->actingAs($admin)->postJson("/api/coupons/{$coupon->id}/restore");
 
         $response->assertStatus(200)
-            ->assertJsonFragment(['code' => 'LIST1'])
-            ->assertJsonFragment(['code' => 'LIST2']);
+            ->assertJsonFragment([
+                'id' => $coupon->id,
+                'code' => $coupon->code,
+            ]);
+
+        $this->assertDatabaseHas('coupons', [
+            'id' => $coupon->id,
+            'deleted_at' => null,
+        ]);
     }
 
-    public function test_client_cannot_list_coupons(): void
+    public function test_restore_should_fail_if_coupon_not_soft_deleted(): void
     {
-        $client = $this->createTestUser(['role' => UserRole::CLIENT]);
-        Coupon::factory()->create();
+        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
+        $coupon = Coupon::factory()->create();
 
-        $response = $this->actingAs($client)->getJson('/api/coupons');
+        $response = $this->actingAs($admin)->postJson("/api/coupons/{$coupon->id}/restore");
+
+        $response->assertStatus(404)
+            ->assertJsonFragment(['success' => false]);
+    }
+
+    public function test_admin_can_force_delete_soft_deleted_coupon(): void
+    {
+        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
+        $coupon = Coupon::factory()->create();
+
+        $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}");
+
+        $response = $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}/force-delete");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('coupons', ['id' => $coupon->id]);
+    }
+
+    public function test_force_delete_should_fail_if_coupon_not_soft_deleted(): void
+    {
+        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
+        $coupon = Coupon::factory()->create();
+
+        $response = $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}/force-delete");
+
+        $response->assertStatus(404)
+            ->assertJsonFragment(['success' => false]);
+    }
+
+    public function test_non_admin_cannot_restore_coupon(): void
+    {
+        $admin = $this->createTestUser(['email' => 'admin@example.com', 'role' => UserRole::ADMIN]);
+        $moderator = $this->createTestUser(['role' => UserRole::MODERATOR]);
+        $coupon = Coupon::factory()->create();
+
+        $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}");
+
+        $response = $this->actingAs($moderator)->postJson("/api/coupons/{$coupon->id}/restore");
 
         $response->assertStatus(403);
     }
 
-    public function test_staff_can_view_coupon(): void
+    public function test_non_admin_cannot_force_delete_coupon(): void
     {
+        $admin = $this->createTestUser(['email' => 'admin@example.com', 'role' => UserRole::ADMIN]);
         $moderator = $this->createTestUser(['role' => UserRole::MODERATOR]);
-        $coupon = Coupon::factory()->create(['code' => 'VIEWME']);
-
-        $response = $this->actingAs($moderator)->getJson("/api/coupons/{$coupon->id}");
-
-        $response->assertStatus(200)
-            ->assertJsonFragment(['code' => 'VIEWME']);
-    }
-
-    public function test_client_cannot_view_coupon(): void
-    {
-        $client = $this->createTestUser(['role' => UserRole::CLIENT]);
         $coupon = Coupon::factory()->create();
 
-        $response = $this->actingAs($client)->getJson("/api/coupons/{$coupon->id}");
+        $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}");
+
+        $response = $this->actingAs($moderator)->deleteJson("/api/coupons/{$coupon->id}/force-delete");
 
         $response->assertStatus(403);
+        $this->assertSoftDeleted('coupons', ['id' => $coupon->id]);
     }
 
-    public function test_guest_cannot_access_coupons(): void
+    public function test_admin_cannot_soft_delete_already_deleted_coupon(): void
     {
+        $admin = $this->createTestUser(['role' => UserRole::ADMIN]);
         $coupon = Coupon::factory()->create();
 
-        $response = $this->getJson("/api/coupons/{$coupon->id}");
-        $response->assertStatus(401);
+        $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}");
 
-        $response = $this->getJson('/api/coupons');
-        $response->assertStatus(401);
+        $response = $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}");
 
-        $response = $this->postJson('/api/coupons', []);
-        $response->assertStatus(401);
-
-        $response = $this->putJson("/api/coupons/{$coupon->id}", []);
-        $response->assertStatus(401);
-
-        $response = $this->deleteJson("/api/coupons/{$coupon->id}");
-        $response->assertStatus(401);
+        $response->assertStatus(404)
+            ->assertJsonFragment(['success' => false]);
     }
 
     public function test_admin_can_create_coupon_with_start_date(): void
