@@ -37,7 +37,6 @@ class UpdateOrderStatusTest extends TestCase
 
         $this->address = Address::factory()->create(['user_id' => $this->user->id]);
 
-        // Create an order
         $this->order = Order::factory()->create([
             'user_id' => $this->user->id,
             'address_id' => $this->address->id,
@@ -45,7 +44,6 @@ class UpdateOrderStatusTest extends TestCase
             'total_amount' => 200.00,
         ]);
 
-        // Create order items
         OrderItem::factory()->create([
             'order_id' => $this->order->id,
             'product_id' => $this->product->id,
@@ -123,7 +121,7 @@ class UpdateOrderStatusTest extends TestCase
         ]);
     }
 
-    public function test_moderator_can_update_order_status(): void
+    public function test_moderator_cannot_update_order_status(): void
     {
         $moderator = $this->createTestUser([
             'email' => 'moderator@example.com',
@@ -134,11 +132,8 @@ class UpdateOrderStatusTest extends TestCase
             'status' => OrderStatus::PROCESSING->value,
         ]);
 
-        $response->assertStatus(200)
-                ->assertJson($this->defaultSuccessResponse([
-                    'id' => $this->order->id,
-                    'status' => OrderStatus::PROCESSING->value,
-                ]));
+        $response->assertStatus(403)
+                ->assertJson($this->defaultErrorResponse('You are not authorized to update status from this resource.'));
     }
 
     public function test_regular_user_cannot_update_order_status(): void
@@ -148,7 +143,7 @@ class UpdateOrderStatusTest extends TestCase
         ]);
 
         $response->assertStatus(403)
-                ->assertJson($this->defaultErrorResponse('You are not authorized to update this resource.'));
+                ->assertJson($this->defaultErrorResponse('You are not authorized to update status from this resource.'));
     }
 
     public function test_other_user_cannot_update_order_status(): void
@@ -160,7 +155,7 @@ class UpdateOrderStatusTest extends TestCase
         ]);
 
         $response->assertStatus(403)
-                ->assertJson($this->defaultErrorResponse('You are not authorized to update this resource.'));
+                ->assertJson($this->defaultErrorResponse('You are not authorized to update status from this resource.'));
     }
 
     public function test_should_fail_with_invalid_status(): void
@@ -198,7 +193,7 @@ class UpdateOrderStatusTest extends TestCase
                 ->assertJson($this->defaultErrorResponse('Unauthenticated.'));
     }
 
-    public function test_cannot_update_canceled_order_status(): void
+    public function test_admin_can_update_canceled_order_status(): void
     {
         $this->order->update(['status' => OrderStatus::CANCELED]);
 
@@ -211,11 +206,14 @@ class UpdateOrderStatusTest extends TestCase
             'status' => OrderStatus::PROCESSING->value,
         ]);
 
-        $response->assertStatus(422)
-                ->assertJson($this->defaultErrorResponse('Cannot update status of a canceled order.'));
+        $response->assertStatus(200)
+                ->assertJson($this->defaultSuccessResponse([
+                    'id' => $this->order->id,
+                    'status' => OrderStatus::PROCESSING->value,
+                ]));
     }
 
-    public function test_cannot_update_completed_order_status(): void
+    public function test_admin_can_update_completed_order_status(): void
     {
         $this->order->update(['status' => OrderStatus::COMPLETED]);
 
@@ -228,11 +226,14 @@ class UpdateOrderStatusTest extends TestCase
             'status' => OrderStatus::PROCESSING->value,
         ]);
 
-        $response->assertStatus(422)
-                ->assertJson($this->defaultErrorResponse('Cannot update status of a completed order.'));
+        $response->assertStatus(200)
+                ->assertJson($this->defaultSuccessResponse([
+                    'id' => $this->order->id,
+                    'status' => OrderStatus::PROCESSING->value,
+                ]));
     }
 
-    public function test_status_progression_validation(): void
+    public function test_admin_can_make_any_status_transition(): void
     {
         $admin = $this->createTestUser([
             'email' => 'admin@example.com',
@@ -242,12 +243,49 @@ class UpdateOrderStatusTest extends TestCase
         // Update to PROCESSING
         $this->order->update(['status' => OrderStatus::PROCESSING]);
 
-        // Try to go back to PENDING (should fail)
+        // Admin can go back to PENDING (admins can do anything)
         $response = $this->actingAs($admin)->putJson("api/order/{$this->order->id}/status", [
             'status' => OrderStatus::PENDING->value,
         ]);
 
-        $response->assertStatus(422)
-                ->assertJson($this->defaultErrorResponse('Invalid status transition from PROCESSING to PENDING.'));
+        $response->assertStatus(200)
+                ->assertJson($this->defaultSuccessResponse([
+                    'id' => $this->order->id,
+                    'status' => OrderStatus::PENDING->value,
+                ]));
+    }
+
+    public function test_moderator_cannot_update_canceled_order_status(): void
+    {
+        $this->order->update(['status' => OrderStatus::CANCELED]);
+
+        $moderator = $this->createTestUser([
+            'email' => 'moderator@example.com',
+            'role' => UserRole::MODERATOR,
+        ]);
+
+        $response = $this->actingAs($moderator)->putJson("api/order/{$this->order->id}/status", [
+            'status' => OrderStatus::PROCESSING->value,
+        ]);
+
+        $response->assertStatus(403)
+                ->assertJson($this->defaultErrorResponse('You are not authorized to update status from this resource.'));
+    }
+
+    public function test_moderator_cannot_update_completed_order_status(): void
+    {
+        $this->order->update(['status' => OrderStatus::COMPLETED]);
+
+        $moderator = $this->createTestUser([
+            'email' => 'moderator@example.com',
+            'role' => UserRole::MODERATOR,
+        ]);
+
+        $response = $this->actingAs($moderator)->putJson("api/order/{$this->order->id}/status", [
+            'status' => OrderStatus::PROCESSING->value,
+        ]);
+
+        $response->assertStatus(403)
+                ->assertJson($this->defaultErrorResponse('You are not authorized to update status from this resource.'));
     }
 }

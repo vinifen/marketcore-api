@@ -62,7 +62,7 @@ class OrderController extends Controller
 
     public function updateStatus(Order $order, UpdateStatusOrderRequest $request): JsonResponse
     {
-        $this->authorize('update', $order);
+        $this->authorize('updateStatus', $order);
 
         $data = $request->validated();
         if (isset($data['status'])) {
@@ -73,8 +73,9 @@ class OrderController extends Controller
         return ApiResponse::success(new OrderResource($order));
     }
 
-    public function cancel(Order $order, OrderService $orderService): JsonResponse
+    public function cancel(int $id, OrderService $orderService): JsonResponse
     {
+        $order = $this->findModelOrFail(Order::class, $id);
         $this->authorize('cancel', $order);
 
         $order = $orderService->cancelOrder($order, app(ProductService::class));
@@ -82,8 +83,9 @@ class OrderController extends Controller
         return ApiResponse::success(new OrderResource($order));
     }
 
-    public function destroy(Order $order): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
+        $order = $this->findModelOrFail(Order::class, $id);
         $this->authorize('delete', $order);
 
         $order->delete();
@@ -91,18 +93,21 @@ class OrderController extends Controller
         return ApiResponse::success(null, 204);
     }
 
-    public function restore(Order $order): JsonResponse
+    public function restore(int $id): JsonResponse
     {
+        $order = $this->findModelTrashedOrFail(Order::class, $id);
         $this->authorize('restore', $order);
-
         $order->restore();
+
+        return ApiResponse::success(new OrderResource($order));
         $order->load(['user', 'address', 'coupon']);
 
         return ApiResponse::success(new OrderResource($order));
     }
 
-    public function forceDelete(Order $order): JsonResponse
+    public function forceDelete(int $id): JsonResponse
     {
+        $order = $this->findModelOrFailWithTrashed(Order::class, $id);
         $this->authorize('forceDelete', $order);
 
         $order->forceDelete();

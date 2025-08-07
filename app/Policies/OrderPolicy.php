@@ -61,7 +61,7 @@ class OrderPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isAdmin(),
-            'updateStatus'
+            'update status from'
         );
         return true;
     }
@@ -82,7 +82,7 @@ class OrderPolicy
     public function delete(User $authUser, Order $order): true
     {
         $this->authorizeUnlessPrivileged(
-            $order->user_id === $authUser->id,
+            false,
             $authUser->isAdmin(),
             'delete'
         );
@@ -92,7 +92,7 @@ class OrderPolicy
     public function restore(User $authUser, Order $order): true
     {
         $this->authorizeUnlessPrivileged(
-            $order->user_id === $authUser->id,
+            false,
             $authUser->isAdmin(),
             'restore'
         );
@@ -102,7 +102,7 @@ class OrderPolicy
     public function forceDelete(User $authUser, Order $order): true
     {
         $this->authorizeUnlessPrivileged(
-            $order->user_id === $authUser->id,
+            false,
             $authUser->isAdmin(),
             'delete'
         );
