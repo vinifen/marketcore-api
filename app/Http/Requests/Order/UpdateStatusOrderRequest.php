@@ -7,7 +7,7 @@ use App\Exceptions\ApiException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateOrderRequest extends FormRequest
+class UpdateStatusOrderRequest extends FormRequest
 {
     public function authorize(): true
     {

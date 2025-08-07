@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
+use App\Http\Requests\Order\UpdateStatusOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Order;
@@ -59,7 +60,7 @@ class OrderController extends Controller
         return ApiResponse::success(new OrderResource($order));
     }
 
-    public function updateStatus(Order $order, UpdateOrderRequest $request): JsonResponse
+    public function updateStatus(Order $order, UpdateStatusOrderRequest $request): JsonResponse
     {
         $this->authorize('update', $order);
 
