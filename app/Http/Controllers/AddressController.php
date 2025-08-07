@@ -28,6 +28,7 @@ class AddressController extends Controller
 
     public function show(int $id): JsonResponse
     {
+        /** @var Address $address */
         $address = $this->findModelOrFail(Address::class, $id);
         $this->authorize('view', $address);
         $address->load('user');
@@ -36,6 +37,7 @@ class AddressController extends Controller
 
     public function update(UpdateAddressRequest $request, int $id): JsonResponse
     {
+        /** @var Address $address */
         $address = $this->findModelOrFail(Address::class, $id);
         $this->authorize('update', $address);
         $address->update($request->validated());
@@ -45,6 +47,7 @@ class AddressController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
+        /** @var Address $address */
         $address = $this->findModelOrFail(Address::class, $id);
         $this->authorize('delete', $address);
 
@@ -54,6 +57,7 @@ class AddressController extends Controller
 
     public function restore(int $id): JsonResponse
     {
+        /** @var Address $address */
         $address = $this->findModelTrashedOrFail(Address::class, $id);
         $this->authorize('restore', $address);
 
@@ -65,6 +69,7 @@ class AddressController extends Controller
 
     public function forceDelete(int $id): JsonResponse
     {
+        /** @var Address $address */
         $address = $this->findModelOrFailWithTrashed(Address::class, $id);
         $this->authorize('forceDelete', $address);
 

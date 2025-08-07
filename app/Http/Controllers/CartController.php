@@ -26,6 +26,7 @@ class CartController extends Controller
 
     public function clear(int $id): JsonResponse
     {
+        /** @var Cart $cart */
         $cart = $this->findModelOrFail(Cart::class, $id);
         $this->authorize('clear', $cart);
         $cart->items()->forceDelete();

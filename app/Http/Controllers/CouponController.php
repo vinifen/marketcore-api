@@ -58,6 +58,7 @@ class CouponController extends Controller
 
     public function restore(int $id): JsonResponse
     {
+        /** @var Coupon $coupon */
         $coupon = $this->findModelTrashedOrFail(Coupon::class, $id);
         $this->authorize('restore', $coupon);
 

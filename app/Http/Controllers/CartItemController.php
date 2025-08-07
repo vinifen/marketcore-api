@@ -58,6 +58,7 @@ class CartItemController extends Controller
 
     public function removeOne(int $id, CartItemService $cartItemService): JsonResponse
     {
+        /** @var CartItem $cartItem */
         $cartItem = $this->findModelOrFail(CartItem::class, $id);
         $this->authorize('removeOne', $cartItem);
 

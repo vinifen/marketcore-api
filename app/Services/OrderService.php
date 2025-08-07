@@ -12,6 +12,9 @@ use App\Models\Coupon;
 
 class OrderService
 {
+    /**
+     * @param array<string, mixed> $data
+     */
     public function store(array $data, int $user_id, ProductService $productService): Order
     {
         $cart = $this->getCurrentCart();
@@ -32,6 +35,9 @@ class OrderService
         return $order;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function getCouponFromData(array $data): ?Coupon
     {
         if (!empty($data['coupon_code'])) {
@@ -47,7 +53,10 @@ class OrderService
     private function decreaseProductsStock(Cart $cart, ProductService $productService): void
     {
         foreach ($cart->items as $item) {
-            $productService->decreaseStock($item->product, $item->quantity);
+            $product = $item->product;
+            if ($product) {
+                $productService->decreaseStock($product, $item->quantity);
+            }
         }
     }
 
@@ -55,7 +64,7 @@ class OrderService
     {
         return Order::create([
             'user_id' => $user_id,
-            'total_price' => $totalPrice,
+            'total_amount' => $totalPrice,
             'status' => OrderStatus::PENDING,
             'coupon_id' => $coupon_id,
         ]);
@@ -64,12 +73,16 @@ class OrderService
     private function createOrderItems(Order $order, Cart $cart): void
     {
         foreach ($cart->items as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item->product_id,
-                'quantity' => $item->quantity,
-                'unit_price' => $item->unit_price,
-            ]);
+            $product = $item->product;
+            if ($product) {
+                $unitPrice = $product->getDiscountedPrice() ?? $product->price;
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $unitPrice,
+                ]);
+            }
         }
     }
 
@@ -83,7 +96,11 @@ class OrderService
     {
         $total = 0.0;
         foreach ($cart->items as $item) {
-            $total += $item->product->getDiscountedPrice() ?? $item->unit_price * $item->quantity;
+            $product = $item->product;
+            if ($product) {
+                $unitPrice = $product->getDiscountedPrice() ?? $product->price;
+                $total += $unitPrice * $item->quantity;
+            }
         }
         return $total;
     }
@@ -125,7 +142,10 @@ class OrderService
     public function cancelOrder(Order $order, ProductService $productService): Order
     {
         foreach ($order->items as $item) {
-            $productService->increaseStock($item->product, $item->quantity);
+            $product = $item->product;
+            if ($product) {
+                $productService->increaseStock($product, $item->quantity);
+            }
         }
         $order->status = OrderStatus::CANCELED;
         $order->save();

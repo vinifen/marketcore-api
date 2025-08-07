@@ -40,7 +40,7 @@ class Coupon extends Model
         'discount_percentage' => 'float',
     ];
 
-    public function findCouponByCode(string $code): ?self
+    public static function findCouponByCode(string $code): ?self
     {
         return self::where('code', $code)
             ->where('start_date', '<=', now())

@@ -26,7 +26,8 @@ class CartItemService
 
         $data['quantity'] = $quantity;
 
-        return $this->createCartItem($data);
+        $result = CartItem::create($data);
+        return $result;
     }
 
     protected function findProduct(int $productId): Product
@@ -61,21 +62,15 @@ class CartItemService
         return $existing;
     }
 
-    protected function createCartItem(array $data): CartItem
-    {
-        $result = CartItem::create($data);
-        if (!$result) {
-            throw new ApiException('Failed to create cart item.', null, 500);
-        }
-        return $result;
-    }
-
     public function updateQuantity(
         CartItem $cartItem,
         int $quantity,
         ProductService $productService
     ): CartItem {
-        $productService->ensureProductHasStock($cartItem->product, $quantity);
+        $product = $cartItem->product;
+        if ($product) {
+            $productService->ensureProductHasStock($product, $quantity);
+        }
         $cartItem->quantity = $quantity;
         if (!$cartItem->save()) {
             throw new ApiException('Failed to update cart item.', null, 500);

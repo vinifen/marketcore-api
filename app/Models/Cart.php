@@ -22,6 +22,7 @@ class Cart extends Model
     use SoftDeletes;
     use CascadeSoftDeletes;
 
+    /** @var array<string> */
     protected $cascadeDeletes = ['items'];
 
     /**

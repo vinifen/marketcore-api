@@ -22,6 +22,7 @@ class Product extends Model
     use SoftDeletes;
     use CascadeSoftDeletes;
 
+    /** @var array<string> */
     protected $cascadeDeletes = ['discounts'];
 
     /**
@@ -53,6 +54,9 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Discount, $this>
+     */
     public function discounts()
     {
         return $this->hasMany(Discount::class);
@@ -65,6 +69,9 @@ class Product extends Model
         });
     }
 
+    /**
+     * @return Collection<int, Discount>
+     */
     protected function getActiveDiscounts(): Collection
     {
         return $this->discounts()

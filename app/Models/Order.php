@@ -17,6 +17,7 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
  * @property string $order_date
  * @property float $total_amount
  * @property OrderStatus $status
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $items
  */
 class Order extends Model
 {
@@ -44,6 +45,7 @@ class Order extends Model
         'status' => OrderStatus::class,
     ];
 
+    /** @var array<string> */
     protected $cascadeDeletes = ['items'];
 
     /**
@@ -70,6 +72,9 @@ class Order extends Model
         return $this->belongsTo(Coupon::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<OrderItem, Order>
+     */
     public function items()
     {
         return $this->hasMany(OrderItem::class);

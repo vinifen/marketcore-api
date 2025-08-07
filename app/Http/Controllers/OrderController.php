@@ -29,7 +29,7 @@ class OrderController extends Controller
         $this->authorize('create', Order::class);
         $user = User::find($request->user_id);
 
-        if (!$user) {
+        if (!$user instanceof User) {
             return ApiResponse::error('User not found.', 404);
         }
 

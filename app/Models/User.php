@@ -38,6 +38,7 @@ class User extends Authenticatable
         'role',
     ];
 
+    /** @var array<string> */
     protected $cascadeDeletes = ['addresses', 'cart'];
 
     /**
