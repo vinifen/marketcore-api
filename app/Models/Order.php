@@ -44,7 +44,7 @@ class Order extends Model
         'status' => OrderStatus::class,
     ];
 
-    protected $cascadeDeletes = ['orderItems'];
+    protected $cascadeDeletes = ['items'];
 
     /**
      * @return BelongsTo<User, Order>
@@ -70,7 +70,7 @@ class Order extends Model
         return $this->belongsTo(Coupon::class);
     }
 
-    public function orderItems()
+    public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
@@ -78,7 +78,7 @@ class Order extends Model
     protected static function booted()
     {
         static::restoring(function ($order) {
-            $order->orderItems()->withTrashed()->get()->each->restore();
+            $order->items()->withTrashed()->get()->each->restore();
         });
     }
 }
