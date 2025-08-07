@@ -159,7 +159,7 @@ class DestroyUserTest extends TestCase
 
     public function test_should_not_restore_if_not_admin(): void
     {
-        $client = $this->createTestUser(['role' => UserRole::CLIENT, 'email' => 'client4@email.com']);
+        $client = $this->createTestUser(['role' => UserRole::CLIENT, 'email' => 'client@email.com']);
         $user = $this->createTestUser(['email' => 'user4@email.com']);
 
         $this->actingAs($user)->deleteJson("api/users/{$user->id}", [

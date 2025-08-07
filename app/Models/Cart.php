@@ -22,7 +22,7 @@ class Cart extends Model
     use SoftDeletes;
     use CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['cartItems'];
+    protected $cascadeDeletes = ['items'];
 
     /**
      * @var list<string>
@@ -55,15 +55,10 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
-    public function cartItems()
-    {
-        return $this->hasMany(CartItem::class);
-    }
-
     protected static function booted()
     {
         static::restoring(function ($cart) {
-            $cart->cartItems()->withTrashed()->get()->each->restore();
+            $cart->items()->withTrashed()->get()->each->restore();
         });
     }
 }
