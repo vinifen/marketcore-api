@@ -4,6 +4,7 @@ namespace Tests\Feature\User;
 
 use App\Enums\UserRole;
 use App\Models\Address;
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -40,7 +41,6 @@ class CascadeSoftDeleteUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        // Restore user
         $response = $this->actingAs($admin)->postJson("api/users/{$user->id}/restore");
         $response->assertStatus(200);
 
@@ -51,7 +51,7 @@ class CascadeSoftDeleteUserTest extends TestCase
     public function test_soft_delete_user_also_soft_deletes_cart_and_cart_items(): void
     {
         $user = $this->createTestUser();
-        $cart = $user->cart;
+        $cart = $user->cart ?? Cart::factory()->create(['user_id' => $user->id]);
 
         $product1 = Product::factory()->create();
         $product2 = Product::factory()->create();
@@ -81,7 +81,7 @@ class CascadeSoftDeleteUserTest extends TestCase
     {
         $admin = $this->createTestUser(['email' => 'admin-cart@email.com', 'role' => UserRole::ADMIN]);
         $user = $this->createTestUser(['email' => 'cart-user@email.com']);
-        $cart = $user->cart;
+        $cart = $user->cart ?? Cart::factory()->create(['user_id' => $user->id]);
 
         $product = Product::factory()->create();
         $cartItem = CartItem::factory()->create([

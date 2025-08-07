@@ -286,7 +286,7 @@ class CartItemControllerTest extends TestCase
 
         $payload = [
             'cart_id' => $cart->id,
-            'product_id' => 99999, // non-existent product
+            'product_id' => 99999,
             'quantity' => 1,
         ];
 
@@ -309,7 +309,7 @@ class CartItemControllerTest extends TestCase
         ]);
 
         $payload = [
-            'quantity' => 10, // more than available stock
+            'quantity' => 10,
         ];
 
         $response = $this->actingAs($user)->putJson("/api/cart-items/{$cartItem->id}", $payload);

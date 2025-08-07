@@ -56,7 +56,7 @@ class ProductController extends Controller
         $product->delete();
         return ApiResponse::success(null, 204);
     }
-    
+
     public function restore(int $id): JsonResponse
     {
         $product = $this->findModelTrashedOrFail(Product::class, $id);

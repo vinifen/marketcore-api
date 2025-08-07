@@ -19,7 +19,7 @@ class Cart extends Model
 {
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory;
-    use SoftDeletes; 
+    use SoftDeletes;
     use CascadeSoftDeletes;
 
     protected $cascadeDeletes = ['cartItems'];

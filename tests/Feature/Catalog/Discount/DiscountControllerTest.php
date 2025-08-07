@@ -87,6 +87,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id, 'description' => 'Old']);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $payload = [
             'description' => 'New description',
@@ -115,6 +116,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id]);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $payload = [
             'description' => 'Update attempt',
@@ -131,6 +133,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id]);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $response = $this->actingAs($admin)->deleteJson("/api/discounts/{$discount->id}");
 
@@ -144,6 +147,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id]);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $response = $this->actingAs($moderator)->deleteJson("/api/discounts/{$discount->id}");
 
@@ -156,6 +160,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id]);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $this->actingAs($admin)->deleteJson("/api/discounts/{$discount->id}");
 
@@ -180,6 +185,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id]);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $response = $this->actingAs($admin)->postJson("/api/discounts/{$discount->id}/restore");
 
@@ -193,6 +199,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id]);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $this->actingAs($admin)->deleteJson("/api/discounts/{$discount->id}");
 
@@ -209,6 +216,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id]);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $this->actingAs($admin)->deleteJson("/api/discounts/{$discount->id}");
 
@@ -224,6 +232,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id]);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $this->actingAs($admin)->deleteJson("/api/discounts/{$discount->id}");
 
@@ -237,7 +246,10 @@ class DiscountControllerTest extends TestCase
     {
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
-        Discount::factory()->count(2)->create(['product_id' => $product->id]);
+        $discounts = Discount::factory()->count(2)->create(['product_id' => $product->id]);
+        foreach ($discounts as $discount) {
+            $this->assertInstanceOf(Discount::class, $discount);
+        }
 
         $response = $this->getJson('/api/discounts');
 
@@ -254,6 +266,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id, 'description' => 'Test Discount']);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $response = $this->getJson("/api/discounts/{$discount->id}");
 
@@ -269,7 +282,10 @@ class DiscountControllerTest extends TestCase
         $client = $this->createTestUser(['role' => UserRole::CLIENT]);
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
-        Discount::factory()->count(2)->create(['product_id' => $product->id]);
+        $discounts = Discount::factory()->count(2)->create(['product_id' => $product->id]);
+        foreach ($discounts as $discount) {
+            $this->assertInstanceOf(Discount::class, $discount);
+        }
 
         $response = $this->actingAs($client)->getJson('/api/discounts');
 
@@ -287,6 +303,7 @@ class DiscountControllerTest extends TestCase
         $category = Category::factory()->create();
         $product = Product::factory()->create(['category_id' => $category->id]);
         $discount = Discount::factory()->create(['product_id' => $product->id, 'description' => 'Test Discount']);
+        $this->assertInstanceOf(Discount::class, $discount);
 
         $response = $this->actingAs($client)->getJson("/api/discounts/{$discount->id}");
 
