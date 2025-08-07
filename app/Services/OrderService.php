@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Cart;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Exceptions\ApiException;
 use App\Models\Coupon;
@@ -17,7 +18,12 @@ class OrderService
      */
     public function store(array $data, int $user_id, ProductService $productService): Order
     {
-        $cart = $this->getCurrentCart();
+        $cart = $this->getCartForUser($user_id);
+
+        // Check if cart has items
+        if ($cart->items->isEmpty()) {
+            throw new ApiException('No cart found for the authenticated user.', null, 404);
+        }
 
         $coupon = $this->getCouponFromData($data);
         $data['coupon_id'] = $coupon?->id;
@@ -26,13 +32,14 @@ class OrderService
 
         $this->decreaseProductsStock($cart, $productService);
 
-        $order = $this->createOrder($user_id, $totalPrice, $data['coupon_id']);
+        $order = $this->createOrder($user_id, $totalPrice, $data);
 
         $this->createOrderItems($order, $cart);
 
-        $this->clearCart($cart);
+        // Clear the cart after successful order creation
+        $cart->items()->forceDelete();
 
-        return $order;
+        return $order->load(['items', 'user', 'coupon']);
     }
 
     /**
@@ -60,13 +67,15 @@ class OrderService
         }
     }
 
-    private function createOrder(int $user_id, float $totalPrice, ?int $coupon_id): Order
+    private function createOrder(int $user_id, float $totalPrice, array $data): Order
     {
         return Order::create([
             'user_id' => $user_id,
+            'address_id' => $data['address_id'] ?? null,
+            'order_date' => $data['order_date'] ?? now(),
             'total_amount' => $totalPrice,
-            'status' => OrderStatus::PENDING,
-            'coupon_id' => $coupon_id,
+            'status' => $data['status'] ?? OrderStatus::PENDING,
+            'coupon_id' => $data['coupon_id'] ?? null,
         ]);
     }
 
@@ -84,12 +93,6 @@ class OrderService
                 ]);
             }
         }
-    }
-
-    private function clearCart(Cart $cart): void
-    {
-        $cart->items()->delete();
-        $cart->save();
     }
 
     protected function calculateTotal(Cart $cart): float
@@ -133,6 +136,20 @@ class OrderService
     protected static function getCurrentCart(): Cart
     {
         $cart = Auth::user()?->cart;
+        if (!$cart) {
+            throw new ApiException('No cart found for the authenticated user.', null, 404);
+        }
+        return $cart;
+    }
+
+    protected function getCartForUser(int $user_id): Cart
+    {
+        $user = User::find($user_id);
+        if (!$user) {
+            throw new ApiException('User not found.', null, 404);
+        }
+        
+        $cart = $user->cart;
         if (!$cart) {
             throw new ApiException('No cart found for the authenticated user.', null, 404);
         }

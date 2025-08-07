@@ -34,7 +34,7 @@ class OrderController extends Controller
         }
 
         $order = $orderService->store(
-            $request->products,
+            $request->validated(),
             $user->id,
             app(ProductService::class)
         );
