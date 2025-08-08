@@ -14,6 +14,7 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
  * @property string $name
  * @property int $stock
  * @property float $price
+ * @property string|null $image_url
  */
 class Product extends Model
 {
@@ -33,6 +34,7 @@ class Product extends Model
         'name',
         'stock',
         'price',
+        'image_url',
     ];
 
     /**
@@ -44,6 +46,7 @@ class Product extends Model
         'name' => 'string',
         'stock' => 'integer',
         'price' => 'float',
+        'image_url' => 'string',
     ];
 
     /**
