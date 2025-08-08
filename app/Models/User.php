@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 /**
  * @property int $id
@@ -23,6 +25,8 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use Notifiable;
+    use SoftDeletes;
+    use CascadeSoftDeletes;
 
     /**
      * @var list<string>
@@ -34,6 +38,9 @@ class User extends Authenticatable
         'role',
     ];
 
+    /** @var array<string> */
+    protected $cascadeDeletes = ['addresses', 'cart'];
+
     /**
      *
      * @var list<string>
@@ -42,6 +49,18 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'role' => UserRole::class,
+        ];
+    }
 
     /**
      * @return HasMany<Address, User>
@@ -57,18 +76,6 @@ class User extends Authenticatable
     protected function cart(): HasOne
     {
         return $this->hasOne(Cart::class);
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'role' => UserRole::class,
-        ];
     }
 
     public function isAdmin(): bool
@@ -92,7 +99,12 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::created(function ($user) {
-            Cart::create(['user_id' => $user->id]);
+            \App\Models\Cart::create(['user_id' => $user->id]);
+        });
+
+        static::restoring(function ($user) {
+            $user->addresses()->withTrashed()->get()->each->restore();
+            $user->cart()->withTrashed()->get()->each->restore();
         });
     }
 }

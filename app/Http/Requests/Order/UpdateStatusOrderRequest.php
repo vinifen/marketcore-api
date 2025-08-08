@@ -7,7 +7,7 @@ use App\Exceptions\ApiException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateOrderRequest extends FormRequest
+class UpdateStatusOrderRequest extends FormRequest
 {
     public function authorize(): true
     {
@@ -20,7 +20,7 @@ class UpdateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'address_id' => 'sometimes|exists:addresses,id',
+            'status' => 'sometimes|in:' . implode(',', array_column(OrderStatus::cases(), 'value')),
         ];
     }
     protected function failedValidation(Validator $validator): void

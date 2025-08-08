@@ -19,9 +19,20 @@ class CartPolicy
     public function view(User $authUser, Cart $cart): true
     {
         $this->authorizeUnlessPrivileged(
-            $cart->user_id === $authUser->id,
+            $authUser->id === $cart->user_id,
             $authUser->isStaff(),
             'view cart'
+        );
+        return true;
+    }
+
+    public function clear(User $authUser, Cart $cart): true
+    {
+        $this->authorizeUnlessPrivileged(
+            $authUser->id === $cart->user_id,
+            $authUser->isStaff(),
+            null,
+            'You are not authorized to clear this cart.'
         );
         return true;
     }

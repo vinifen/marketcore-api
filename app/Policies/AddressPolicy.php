@@ -31,14 +31,14 @@ class AddressPolicy
         return true;
     }
 
-    public function create(User $authUser): bool
+    public function create(User $authUser): true
     {
         $requestedUserId = (int) request()->input('user_id');
 
         $this->authorizeUnlessPrivileged(
             $authUser->id === $requestedUserId,
             $authUser->isAdmin(),
-            'create',
+            null,
             'You do not have permission to create an address for this user.'
         );
 
@@ -55,7 +55,7 @@ class AddressPolicy
         return true;
     }
 
-    public function forceDelete(User $authUser, Address $address): true
+    public function delete(User $authUser, Address $address): true
     {
         $this->authorizeUnlessPrivileged(
             $authUser->id === $address->user_id,
@@ -65,13 +65,23 @@ class AddressPolicy
         return true;
     }
 
-    // public function delete(User $authUser, Address $address): true
-    // {
-    //     return true;
-    // }
+    public function restore(User $authUser, Address $address): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'restore'
+        );
+        return true;
+    }
 
-    // public function restore(User $authUser, Address $address): true
-    // {
-    //     return true;
-    // }
+    public function forceDelete(User $authUser, Address $address): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'force delete'
+        );
+        return true;
+    }
 }

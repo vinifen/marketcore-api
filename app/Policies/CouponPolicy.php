@@ -56,18 +56,28 @@ class CouponPolicy
         $this->authorizeUnlessPrivileged(
             false,
             $authUser->isAdmin(),
+            'force delete'
+        );
+        return true;
+    }
+
+    public function delete(User $authUser, Coupon $coupon): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
             'delete'
         );
         return true;
     }
 
-    // public function delete(User $authUser, Category $category): true
-    // {
-    //     return true;
-    // }
-
-    // public function restore(User $authUser, Category $category): true
-    // {
-    //     return true;
-    // }
+    public function restore(User $authUser, Coupon $coupon): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'restore'
+        );
+        return true;
+    }
 }

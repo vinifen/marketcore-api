@@ -12,6 +12,15 @@ class CartItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $unitPrice = $this->resource->product->price ?? 0.0;
+        $unitPriceDiscounted = optional($this->resource->product)->getDiscountedPrice();
+        $quantity = $this->resource->quantity;
+
+        $totalPrice = round($unitPrice * $quantity, 2);
+        $totalPriceDiscounted = $unitPriceDiscounted !== null
+            ? round($unitPriceDiscounted * $quantity, 2)
+            : null;
+
         return [
             'id' => $this->resource->id,
             'user_id' => optional($this->resource->cart->user)->id,
@@ -19,9 +28,12 @@ class CartItemResource extends JsonResource
             'cart_id' => $this->resource->cart_id,
             'product_id' => $this->resource->product_id,
             'product_name' => optional($this->resource->product)->name,
-            'quantity' => $this->resource->quantity,
-            'unit_price' => $this->resource->unit_price,
-            'total_price' => $this->resource->quantity * $this->resource->unit_price,
+            'unit_price' => $unitPrice,
+            'unit_price_discounted' => $unitPriceDiscounted,
+            'quantity' => $quantity,
+            'total_price' => $totalPrice,
+            'total_price_discounted' => $totalPriceDiscounted,
+            'discount_value' => optional($this->resource->product)->getTotalDiscountPercentage(),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->timestamps();
@@ -24,7 +24,9 @@ return new class extends Migration
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('cascade');
+                ->onDelete('set null');
+
+            $table->softDeletes();
         });
     }
 

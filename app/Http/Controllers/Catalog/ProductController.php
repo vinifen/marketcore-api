@@ -31,6 +31,7 @@ class ProductController extends Controller
 
     public function show(int $id): JsonResponse
     {
+        /** @var Product $product */
         $product = $this->findModelOrFail(Product::class, $id);
         $this->authorize('view', $product);
 
@@ -40,6 +41,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, int $id): JsonResponse
     {
+        /** @var Product $product */
         $product = $this->findModelOrFail(Product::class, $id);
         $this->authorize('update', $product);
 
@@ -50,10 +52,34 @@ class ProductController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
+        /** @var Product $product */
         $product = $this->findModelOrFail(Product::class, $id);
-        $this->authorize('forceDelete', $product);
+        $this->authorize('delete', $product);
 
         $product->delete();
+        return ApiResponse::success(null, 204);
+    }
+
+    public function restore(int $id): JsonResponse
+    {
+        /** @var Product $product */
+        $product = $this->findModelTrashedOrFail(Product::class, $id);
+        $this->authorize('restore', $product);
+
+        $product->restore();
+        $product->load('category');
+
+        return ApiResponse::success(new ProductResource($product));
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        /** @var Product $product */
+        $product = $this->findModelOrFailWithTrashed(Product::class, $id);
+        $this->authorize('forceDelete', $product);
+
+        $product->forceDelete();
+
         return ApiResponse::success(null, 204);
     }
 }

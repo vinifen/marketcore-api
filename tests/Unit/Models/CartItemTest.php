@@ -22,14 +22,12 @@ class CartItemTest extends TestCase
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 2,
-            'unit_price' => 10.5,
         ]);
 
         $this->assertInstanceOf(CartItem::class, $cartItem);
         $this->assertEquals($cart->id, $cartItem->cart_id);
         $this->assertEquals($product->id, $cartItem->product_id);
         $this->assertEquals(2, $cartItem->quantity);
-        $this->assertEquals(10.5, $cartItem->unit_price);
     }
 
     public function test_cart_item_belongs_to_cart(): void
@@ -68,7 +66,6 @@ class CartItemTest extends TestCase
             'cart_id',
             'product_id',
             'quantity',
-            'unit_price',
         ], $cartItem->getFillable());
     }
 
@@ -81,7 +78,7 @@ class CartItemTest extends TestCase
             'cart_id' => 'integer',
             'product_id' => 'integer',
             'quantity' => 'integer',
-            'unit_price' => 'float',
+            'deleted_at' => 'datetime',
         ], $cartItem->getCasts());
     }
 }

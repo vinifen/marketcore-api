@@ -17,7 +17,12 @@ return new class extends Migration
                 $table->decimal('discount_percentage', 5, 2);
                 $table->timestamps();
 
-                $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+                $table->foreign('product_id')
+                    ->references('id')
+                    ->on('products')
+                    ->onDelete('cascade');
+
+                $table->softDeletes();
             });
         }
 

@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('country', 100);
 
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 
