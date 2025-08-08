@@ -18,10 +18,19 @@ class ViewOrderTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @phpstan-ignore property.uninitialized */
     private User $user;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Product $product;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Order $order;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Address $address;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Coupon $coupon;
 
     protected function setUp(): void
@@ -29,7 +38,7 @@ class ViewOrderTest extends TestCase
         parent::setUp();
 
         $this->user = $this->createTestUser();
-        
+
         $category = Category::factory()->create();
         $this->product = Product::factory()->create([
             'category_id' => $category->id,
@@ -230,12 +239,12 @@ class ViewOrderTest extends TestCase
         $this->assertArrayHasKey('user', $responseData);
         $this->assertArrayHasKey('address', $responseData);
         $this->assertArrayHasKey('coupon', $responseData);
-        
+
         $this->assertEquals($this->user->id, $responseData['user']['id']);
         $this->assertEquals($this->user->email, $responseData['user']['email']);
-        
+
         $this->assertEquals($this->address->id, $responseData['address']['id']);
-        
+
         $this->assertEquals($this->coupon->id, $responseData['coupon']['id']);
     }
 }

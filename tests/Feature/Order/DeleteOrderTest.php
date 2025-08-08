@@ -17,9 +17,16 @@ class DeleteOrderTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @phpstan-ignore property.uninitialized */
     private User $user;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Product $product;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Order $order;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Address $address;
 
     protected function setUp(): void
@@ -27,7 +34,7 @@ class DeleteOrderTest extends TestCase
         parent::setUp();
 
         $this->user = $this->createTestUser();
-        
+
         $category = Category::factory()->create();
         $this->product = Product::factory()->create([
             'category_id' => $category->id,

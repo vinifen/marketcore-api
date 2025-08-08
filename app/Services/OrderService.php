@@ -67,6 +67,9 @@ class OrderService
         }
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function createOrder(int $user_id, float $totalPrice, array $data): Order
     {
         return Order::create([
@@ -148,7 +151,7 @@ class OrderService
         if (!$user) {
             throw new ApiException('User not found.', null, 404);
         }
-        
+
         $cart = $user->cart;
         if (!$cart) {
             throw new ApiException('No cart found for the authenticated user.', null, 404);

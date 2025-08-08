@@ -76,6 +76,7 @@ class OrderController extends Controller
     public function cancel(int $id, OrderService $orderService): JsonResponse
     {
         $order = $this->findModelOrFail(Order::class, $id);
+        /** @var Order $order */
         $this->authorize('cancel', $order);
 
         $order = $orderService->cancelOrder($order, app(ProductService::class));
@@ -97,9 +98,8 @@ class OrderController extends Controller
     {
         $order = $this->findModelTrashedOrFail(Order::class, $id);
         $this->authorize('restore', $order);
+        /** @var Order $order */
         $order->restore();
-
-        return ApiResponse::success(new OrderResource($order));
         $order->load(['user', 'address', 'coupon']);
 
         return ApiResponse::success(new OrderResource($order));

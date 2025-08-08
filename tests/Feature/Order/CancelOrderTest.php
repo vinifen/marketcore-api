@@ -17,9 +17,16 @@ class CancelOrderTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @phpstan-ignore property.uninitialized */
     private User $user;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Product $product;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Order $order;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Address $address;
 
     protected function setUp(): void
@@ -27,7 +34,7 @@ class CancelOrderTest extends TestCase
         parent::setUp();
 
         $this->user = $this->createTestUser();
-        
+
         $category = Category::factory()->create();
         $this->product = Product::factory()->create([
             'category_id' => $category->id,
@@ -235,7 +242,7 @@ class CancelOrderTest extends TestCase
 
         $this->product->refresh();
         $product2->refresh();
-        
+
         $this->assertEquals(10, $this->product->stock); // 8 + 2 = 10
         $this->assertEquals(8, $product2->stock); // 5 + 3 = 8
     }

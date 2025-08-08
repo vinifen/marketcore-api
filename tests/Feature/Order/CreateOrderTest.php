@@ -19,9 +19,16 @@ class CreateOrderTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @phpstan-ignore property.uninitialized */
     private User $user;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Product $product;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Cart $cart;
+    
+    /** @phpstan-ignore property.uninitialized */
     private Address $address;
 
     protected function setUp(): void
@@ -29,7 +36,7 @@ class CreateOrderTest extends TestCase
         parent::setUp();
 
         $this->user = $this->createTestUser();
-        
+
         $category = Category::factory()->create();
         $this->product = Product::factory()->create([
             'category_id' => $category->id,
@@ -37,7 +44,7 @@ class CreateOrderTest extends TestCase
             'stock' => 10,
         ]);
 
-        $this->cart = $this->user->cart;
+        $this->cart = $this->user->cart ?: Cart::factory()->create(['user_id' => $this->user->id]);
         CartItem::factory()->create([
             'cart_id' => $this->cart->id,
             'product_id' => $this->product->id,
