@@ -38,11 +38,14 @@ class ProductService
 
     private function uploadImage(UploadedFile $image): string
     {
-        $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
-        
+        $filename = (string) Str::uuid() . '.' . $image->getClientOriginalExtension();
+
         $path = $image->storeAs('products', $filename, 'public');
-        
-        return Storage::url($path);
+        if ($path === false) {
+            throw new ApiException('Failed to store product image.', null, 500);
+        }
+
+    return Storage::url($path);
     }
 
     public function deleteImage(?string $imageUrl): void
@@ -51,27 +54,46 @@ class ProductService
             return;
         }
 
-        $path = str_replace('/storage/', '', parse_url($imageUrl, PHP_URL_PATH));
+        $pathFromUrl = parse_url($imageUrl, PHP_URL_PATH);
+        if (!is_string($pathFromUrl)) {
+            return;
+        }
+        $path = ltrim(str_replace('/storage/', '', $pathFromUrl), '/');
         
         if (Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
         }
     }
 
-    public function updateProduct(Product $product, array $data, ?UploadedFile $image = null): Product
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function updateProduct(
+        Product $product,
+        array $data,
+        ?UploadedFile $image = null,
+        ?bool $removeImage = false
+    ): Product
     {
         $oldImageUrl = $product->image_url;
 
         if ($image) {
-
             $data['image_url'] = $this->uploadImage($image);
 
             if ($oldImageUrl) {
                 $this->deleteImage($oldImageUrl);
             }
+        } elseif ($removeImage) {
+            if ($oldImageUrl) {
+                $this->deleteImage($oldImageUrl);
+            }
+            $data['image_url'] = null;
         }
 
-        $product->update($data);
-        return $product->fresh();
+        unset($data['remove_image'], $data['image']);
+
+    $product->update($data);
+    $product->refresh();
+    return $product;
     }
 }

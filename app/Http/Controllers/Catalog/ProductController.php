@@ -9,6 +9,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use App\Http\Responses\ApiResponse;
+use App\Services\ProductService;
 
 class ProductController extends Controller
 {
@@ -39,13 +40,22 @@ class ProductController extends Controller
         return ApiResponse::success(new ProductResource($product));
     }
 
-    public function update(UpdateProductRequest $request, int $id): JsonResponse
+    public function update(
+        UpdateProductRequest $request,
+        int $id,
+        ProductService $productService
+    ): JsonResponse
     {
         /** @var Product $product */
         $product = $this->findModelOrFail(Product::class, $id);
         $this->authorize('update', $product);
 
-        $product->update($request->validated());
+        $productService->updateProduct(
+            $product,
+            $request->validated(),
+            $request->file('image'),
+            $request->boolean('remove_image')
+        );
         $product->load('category');
         return ApiResponse::success(new ProductResource($product));
     }

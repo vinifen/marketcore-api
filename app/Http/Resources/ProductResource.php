@@ -19,6 +19,7 @@ class ProductResource extends JsonResource
             'stock' => $this->resource->stock,
             'price' => $this->resource->price,
             'category' => $this->whenLoaded('category', fn () => $this->resource->category?->name),
+            'image_url' => $this->resource->image_url,
         ];
     }
 }
