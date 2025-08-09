@@ -41,7 +41,7 @@ class Order extends Model
         'address_id' => 'integer',
         'coupon_id' => 'integer',
         'order_date' => 'datetime',
-        'total_amount' => 'float',
+        'total_amount' => 'decimal:2',
         'status' => OrderStatus::class,
     ];
 

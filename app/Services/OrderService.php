@@ -20,9 +20,8 @@ class OrderService
     {
         $cart = $this->getCartForUser($user_id);
 
-        // Check if cart has items
         if ($cart->items->isEmpty()) {
-            throw new ApiException('No cart found for the authenticated user.', null, 404);
+            throw new ApiException('User cart is empty.', null, 422);
         }
 
         $coupon = $this->getCouponFromData($data);
@@ -36,7 +35,6 @@ class OrderService
 
         $this->createOrderItems($order, $cart);
 
-        // Clear the cart after successful order creation
         $cart->items()->forceDelete();
 
         return $order->load(['items', 'user', 'coupon']);
@@ -100,31 +98,40 @@ class OrderService
 
     protected function calculateTotal(Cart $cart): float
     {
-        $total = 0.0;
+        $totalCents = 0;
         foreach ($cart->items as $item) {
             $product = $item->product;
             if ($product) {
-                $unitPrice = $product->getDiscountedPrice() ?? $product->price;
-                $total += $unitPrice * $item->quantity;
+                $unitPrice = $product->getDiscountedPrice() ?? $product->price; // float
+                // Convert to integer cents to avoid floating point drift
+                $unitCents = (int) round($unitPrice * 100);
+                $totalCents += $unitCents * $item->quantity;
             }
         }
-        return $total;
+        return $totalCents / 100; // back to float with 2 decimals max of precision
     }
 
     protected function calculateTotalWithCoupon(Cart $cart, ?float $couponPercentage): float
     {
-        $total = $this->calculateTotal($cart);
+        $total = $this->calculateTotal($cart); // float representation (already aggregated)
 
         if ($couponPercentage !== null && $couponPercentage > 0) {
-            $total -= $total * ($couponPercentage / 100);
+            // Work in cents for discount as well
+            $totalCents = (int) round($total * 100);
+            $discountCents = (int) round($totalCents * ($couponPercentage / 100));
+            $totalCents -= $discountCents;
+            $total = $totalCents / 100;
         }
 
+        // Final rounding once
+        $total = round($total, 2);
         $this->validateTotalAmount($total);
         return $total;
     }
 
     protected function validateTotalAmount(float $total): void
     {
+        // Validation errors are client-related; use 422
         if ($total < 0) {
             throw new ApiException('Total amount cannot be negative.', null, 422);
         }
@@ -134,15 +141,6 @@ class OrderService
         if ($total > 999999.99) {
             throw new ApiException('Total amount exceeds the maximum limit.', null, 422);
         }
-    }
-
-    protected static function getCurrentCart(): Cart
-    {
-        $cart = Auth::user()?->cart;
-        if (!$cart) {
-            throw new ApiException('No cart found for the authenticated user.', null, 404);
-        }
-        return $cart;
     }
 
     protected function getCartForUser(int $user_id): Cart

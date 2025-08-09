@@ -24,7 +24,6 @@ class StoreOrderRequest extends FormRequest
             'address_id' => 'required|exists:addresses,id',
             'coupon_code' => 'nullable|exists:coupons,code',
             'order_date' => 'sometimes|date',
-            'status' => 'required|in:' . implode(',', array_column(OrderStatus::cases(), 'value')),
         ];
     }
 

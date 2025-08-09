@@ -45,7 +45,7 @@ class Product extends Model
         'category_id' => 'integer',
         'name' => 'string',
         'stock' => 'integer',
-        'price' => 'float',
+        'price' => 'decimal:2',
         'image_url' => 'string',
     ];
 

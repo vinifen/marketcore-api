@@ -95,7 +95,7 @@ class ProductControllerTest extends TestCase
                 'success' => true,
                 'name' => 'Updated Name',
                 'stock' => 20,
-                'price' => 199.99,
+                'price' => '199.99',
             ]);
 
         $this->assertDatabaseHas('products', [

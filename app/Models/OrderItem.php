@@ -37,7 +37,7 @@ class OrderItem extends Model
         'order_id' => 'integer',
         'product_id' => 'integer',
         'quantity' => 'integer',
-        'unit_price' => 'float',
+        'unit_price' => 'decimal:2',
     ];
 
     /**

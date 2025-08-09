@@ -39,7 +39,7 @@ class ProductTest extends TestCase
         ]);
 
         $this->assertSame(10, $product->stock);
-        $this->assertSame(99.99, $product->price);
+        $this->assertSame('99.99', $product->price);
     }
 
     public function test_it_belongs_to_category(): void

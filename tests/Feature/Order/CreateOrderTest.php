@@ -154,8 +154,8 @@ class CreateOrderTest extends TestCase
             'status' => OrderStatus::PENDING->value,
         ]);
 
-        $response->assertStatus(404)
-                ->assertJson($this->defaultErrorResponse('No cart found for the authenticated user.'));
+        $response->assertStatus(422)
+                ->assertJson($this->defaultErrorResponse('User cart is empty.'));
     }
 
     public function test_should_fail_with_invalid_coupon(): void
@@ -201,24 +201,12 @@ class CreateOrderTest extends TestCase
                 ->assertJson($this->defaultErrorResponse('Unauthenticated.'));
     }
 
-    public function test_should_fail_with_invalid_status(): void
-    {
-        $response = $this->actingAs($this->user)->postJson('api/order', [
-            'user_id' => $this->user->id,
-            'address_id' => $this->address->id,
-            'status' => 'INVALID_STATUS',
-        ]);
-
-        $response->assertStatus(422)
-                ->assertJsonValidationErrors(['status']);
-    }
-
     public function test_should_fail_when_missing_required_fields(): void
     {
         $response = $this->actingAs($this->user)->postJson('api/order', []);
 
         $response->assertStatus(422)
-                ->assertJsonValidationErrors(['user_id', 'address_id', 'status']);
+                ->assertJsonValidationErrors(['user_id', 'address_id']);
     }
 
     public function test_admin_should_be_able_to_create_order_for_any_user(): void
