@@ -46,6 +46,7 @@ class CouponTest extends TestCase
             'start_date' => 'date',
             'end_date' => 'date',
             'discount_percentage' => 'float',
+            'deleted_at' => 'datetime',
         ], $coupon->getCasts());
     }
 }

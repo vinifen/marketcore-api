@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
+use App\Http\Requests\Order\UpdateStatusOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Order;
-use App\Models\Coupon;
 use App\Models\User;
+use App\Services\OrderService;
+use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 
 class OrderController extends Controller
@@ -22,22 +24,20 @@ class OrderController extends Controller
         return ApiResponse::success(OrderResource::collection($orders));
     }
 
-    public function store(StoreOrderRequest $request): JsonResponse
+    public function store(StoreOrderRequest $request, OrderService $orderService): JsonResponse
     {
         $this->authorize('create', Order::class);
+        $user = User::find($request->user_id);
 
-        $data = $request->validated();
-
-        if (!empty($data['coupon_code'])) {
-            $coupon = Coupon::where('code', $data['coupon_code'])->first();
-            $data['coupon_id'] = $coupon?->id;
-            unset($data['coupon_code']);
+        if (!$user instanceof User) {
+            return ApiResponse::error('User not found.', 404);
         }
 
-        $user = User::find($data['user_id']);
-        $data['user_email'] = $user?->email;
-
-        $order = Order::create($data);
+        $order = $orderService->store(
+            $request->validated(),
+            $user->id,
+            app(ProductService::class)
+        );
 
         return ApiResponse::success(new OrderResource($order), 201);
     }
@@ -60,11 +60,57 @@ class OrderController extends Controller
         return ApiResponse::success(new OrderResource($order));
     }
 
-    public function destroy(Order $order): JsonResponse
+    public function updateStatus(Order $order, UpdateStatusOrderRequest $request): JsonResponse
     {
-        $this->authorize('forceDelete', $order);
+        $this->authorize('updateStatus', $order);
+
+        $data = $request->validated();
+        if (isset($data['status'])) {
+            $order->status = $data['status'];
+            $order->save();
+        }
+
+        return ApiResponse::success(new OrderResource($order));
+    }
+
+    public function cancel(int $id, OrderService $orderService): JsonResponse
+    {
+        $order = $this->findModelOrFail(Order::class, $id);
+        /** @var Order $order */
+        $this->authorize('cancel', $order);
+
+        $order = $orderService->cancelOrder($order, app(ProductService::class));
+
+        return ApiResponse::success(new OrderResource($order));
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $order = $this->findModelOrFail(Order::class, $id);
+        $this->authorize('delete', $order);
 
         $order->delete();
+
+        return ApiResponse::success(null, 204);
+    }
+
+    public function restore(int $id): JsonResponse
+    {
+        $order = $this->findModelTrashedOrFail(Order::class, $id);
+        $this->authorize('restore', $order);
+        /** @var Order $order */
+        $order->restore();
+        $order->load(['user', 'address', 'coupon']);
+
+        return ApiResponse::success(new OrderResource($order));
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $order = $this->findModelOrFailWithTrashed(Order::class, $id);
+        $this->authorize('forceDelete', $order);
+
+        $order->forceDelete();
 
         return ApiResponse::success(null, 204);
     }

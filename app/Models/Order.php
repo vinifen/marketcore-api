@@ -6,25 +6,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 /**
  * @property int $id
  * @property int|null $user_id
- * @property string|null $user_email
  * @property int|null $address_id
  * @property int|null $coupon_id
  * @property string $order_date
  * @property float $total_amount
  * @property OrderStatus $status
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $items
  */
 class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory;
+    use SoftDeletes;
+    use CascadeSoftDeletes;
 
     protected $fillable = [
         'user_id',
-        'user_email',
         'address_id',
         'coupon_id',
         'order_date',
@@ -35,13 +38,15 @@ class Order extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'user_email' => 'string',
         'address_id' => 'integer',
         'coupon_id' => 'integer',
         'order_date' => 'datetime',
-        'total_amount' => 'float',
+        'total_amount' => 'decimal:2',
         'status' => OrderStatus::class,
     ];
+
+    /** @var array<string> */
+    protected $cascadeDeletes = ['items'];
 
     /**
      * @return BelongsTo<User, Order>
@@ -65,5 +70,20 @@ class Order extends Model
     public function coupon(): BelongsTo
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<OrderItem, Order>
+     */
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    protected static function booted()
+    {
+        static::restoring(function ($order) {
+            $order->items()->withTrashed()->get()->each->restore();
+        });
     }
 }

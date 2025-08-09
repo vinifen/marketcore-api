@@ -50,9 +50,30 @@ class CouponController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $coupon = $this->findModelOrFail(Coupon::class, $id);
-        $this->authorize('forceDelete', $coupon);
+        $this->authorize('delete', $coupon);
 
         $coupon->delete();
+        return ApiResponse::success(null, 204);
+    }
+
+    public function restore(int $id): JsonResponse
+    {
+        /** @var Coupon $coupon */
+        $coupon = $this->findModelTrashedOrFail(Coupon::class, $id);
+        $this->authorize('restore', $coupon);
+
+        $coupon->restore();
+
+        return ApiResponse::success(new CouponResource($coupon));
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $coupon = $this->findModelOrFailWithTrashed(Coupon::class, $id);
+        $this->authorize('forceDelete', $coupon);
+
+        $coupon->forceDelete();
+
         return ApiResponse::success(null, 204);
     }
 }

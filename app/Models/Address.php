@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -20,6 +21,7 @@ class Address extends Model
 {
     /** @use HasFactory<\Database\Factories\AddressFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * @var list<string>
@@ -39,6 +41,7 @@ class Address extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'id' => 'integer',
         'user_id' => 'integer',
         'street' => 'string',
         'city' => 'string',

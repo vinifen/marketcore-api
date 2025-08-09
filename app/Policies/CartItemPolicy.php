@@ -72,18 +72,8 @@ class CartItemPolicy
         $this->authorizeUnlessPrivileged(
             $cartItem->cart && $cartItem->cart->user_id === $authUser->id,
             $authUser->isAdmin(),
-            'delete',
+            'force delete',
         );
         return true;
     }
-
-    // public function delete(User $authUser, CartItem $cartItem): bool
-    // {
-    //     return false;
-    // }
-
-    // public function restore(User $authUser, CartItem $cartItem): bool
-    // {
-    //     return false;
-    // }
 }

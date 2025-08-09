@@ -28,6 +28,7 @@ class CategoryController extends Controller
 
     public function show(int $id): JsonResponse
     {
+        /** @var Category $category */
         $category = $this->findModelOrFail(Category::class, $id);
         $this->authorize('view', $category);
         return ApiResponse::success(new CategoryResource($category));
@@ -35,6 +36,7 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, int $id): JsonResponse
     {
+        /** @var Category $category */
         $category = $this->findModelOrFail(Category::class, $id);
         $this->authorize('update', $category);
         $category->update($request->validated());
@@ -43,6 +45,7 @@ class CategoryController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
+        /** @var Category $category */
         $category = $this->findModelOrFail(Category::class, $id);
         $this->authorize('forceDelete', $category);
         $category->delete();

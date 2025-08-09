@@ -21,7 +21,6 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'address_id' => 'sometimes|exists:addresses,id',
-            'status' => 'sometimes|in:' . implode(',', array_column(OrderStatus::cases(), 'value')),
         ];
     }
     protected function failedValidation(Validator $validator): void

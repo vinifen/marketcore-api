@@ -23,36 +23,62 @@ class OrderItemPolicy
 
     public function view(User $authUser, OrderItem $orderItem): true
     {
+        $order = $orderItem->order;
         $this->authorizeUnlessPrivileged(
-            false,
+            $order && $authUser->id === $order->user_id,
             $authUser->isStaff(),
             'view'
         );
         return true;
     }
 
-    // public function create(User $authUser): bool
-    // {
-    //     return false;
-    // }
+    public function create(User $authUser): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'create'
+        );
+        return true;
+    }
 
-    // public function update(User $authUser, OrderItem $orderItem): bool
-    // {
-    //     return false;
-    // }
+    public function update(User $authUser, OrderItem $orderItem): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'update'
+        );
+        return true;
+    }
 
-    // public function forceDelete(User $authUser, OrderItem $orderItem): bool
-    // {
-    //     return false;
-    // }
+    public function forceDelete(User $authUser, OrderItem $orderItem): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'force delete'
+        );
+        return true;
+    }
 
-    // public function delete(User $authUser, OrderItem $orderItem): bool
-    // {
-    //     return false;
-    // }
+    public function delete(User $authUser, OrderItem $orderItem): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'delete'
+        );
+        return true;
+    }
 
-    // public function restore(User $authUser, OrderItem $orderItem): bool
-    // {
-    //     return false;
-    // }
+    public function restore(User $authUser, OrderItem $orderItem): true
+    {
+        $this->authorizeUnlessPrivileged(
+            false,
+            $authUser->isAdmin(),
+            'restore'
+        );
+        return true;
+    }
 }

@@ -14,12 +14,15 @@ return new class extends Migration
             $table->string('name');
             $table->integer('stock');
             $table->decimal('price', 10, 2);
+            $table->string('image_url')->nullable();
             $table->timestamps();
 
             $table->foreign('category_id')
                 ->references('id')
                 ->on('categories')
                 ->onDelete('set null');
+
+            $table->softDeletes();
         });
     }
 
