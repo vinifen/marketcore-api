@@ -137,7 +137,7 @@ class DiscountControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/discounts/{$discount->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
         $this->assertSoftDeleted('discounts', ['id' => $discount->id]);
     }
 
@@ -205,7 +205,7 @@ class DiscountControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/discounts/{$discount->id}/force-delete");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
         $this->assertDatabaseMissing('discounts', ['id' => $discount->id]);
     }
 

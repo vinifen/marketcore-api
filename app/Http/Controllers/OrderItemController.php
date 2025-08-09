@@ -46,7 +46,7 @@ class OrderItemController extends Controller
         $orderItem = $this->findModelOrFail(OrderItem::class, $id);
         $this->authorize('delete', $orderItem);
         $orderItem->delete();
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 
     public function forceDelete(int $id): JsonResponse
@@ -54,7 +54,7 @@ class OrderItemController extends Controller
         $orderItem = $this->findModelOrFailWithTrashed(OrderItem::class, $id);
         $this->authorize('forceDelete', $orderItem);
         $orderItem->forceDelete();
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 
     public function restore(int $id): JsonResponse

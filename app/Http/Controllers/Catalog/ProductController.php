@@ -66,7 +66,7 @@ class ProductController extends Controller
         $this->authorize('delete', $product);
 
         $product->delete();
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 
     public function restore(int $id): JsonResponse
@@ -89,6 +89,6 @@ class ProductController extends Controller
 
         $product->forceDelete();
 
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 }

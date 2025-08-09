@@ -66,7 +66,7 @@ class UserController extends Controller
         $authService->validatePassword($user->password, $password);
         $user->delete();
 
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 
     public function restore(int $id): JsonResponse
@@ -88,6 +88,6 @@ class UserController extends Controller
 
         $user->forceDelete();
 
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 }

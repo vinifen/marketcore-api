@@ -129,7 +129,7 @@ class ProductControllerTest extends TestCase
 
         $response = $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
         $this->assertSoftDeleted('products', ['id' => $product->id]);
     }
 
@@ -166,7 +166,7 @@ class ProductControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/products/{$product->id}/force-delete");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
         $this->assertDatabaseMissing('products', ['id' => $product->id]);
     }
 
@@ -208,7 +208,7 @@ class ProductControllerTest extends TestCase
         $this->assertInstanceOf(Discount::class, $discount2);
 
         $response = $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('products', ['id' => $product->id]);
         $this->assertSoftDeleted('discounts', ['id' => $discount1->id]);

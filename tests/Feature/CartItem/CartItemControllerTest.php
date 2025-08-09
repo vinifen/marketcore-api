@@ -126,7 +126,7 @@ class CartItemControllerTest extends TestCase
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('cart_items', [
             'id' => $cartItem->id,
@@ -373,7 +373,7 @@ class CartItemControllerTest extends TestCase
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseHas('cart_items', [
             'id' => $cartItem->id,
@@ -381,7 +381,7 @@ class CartItemControllerTest extends TestCase
         ]);
     }
 
-    public function test_remove_one_decrements_quantity_and_returns_204(): void
+    public function test_remove_one_decrements_quantity_and_returns_200(): void
     {
         $user = $this->createTestUser();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
@@ -395,7 +395,7 @@ class CartItemControllerTest extends TestCase
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseHas('cart_items', [
             'id' => $cartItem->id,
@@ -417,14 +417,14 @@ class CartItemControllerTest extends TestCase
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('cart_items', [
             'id' => $cartItem->id,
         ]);
     }
 
-    public function test_delete_cart_item_removes_from_database_and_returns_204(): void
+    public function test_delete_cart_item_removes_from_database_and_returns_200(): void
     {
         $user = $this->createTestUser();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
@@ -438,7 +438,7 @@ class CartItemControllerTest extends TestCase
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('cart_items', [
             'id' => $cartItem->id,

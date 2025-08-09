@@ -52,7 +52,7 @@ class AddressController extends Controller
         $this->authorize('delete', $address);
 
         $address->delete();
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 
     public function restore(int $id): JsonResponse
@@ -75,6 +75,6 @@ class AddressController extends Controller
 
         $address->forceDelete();
 
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 }

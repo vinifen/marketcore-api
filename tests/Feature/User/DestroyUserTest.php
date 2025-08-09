@@ -18,7 +18,7 @@ class DestroyUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $user->id]);
     }
@@ -58,7 +58,7 @@ class DestroyUserTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("api/users/{$user->id}/force-delete");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
@@ -99,7 +99,7 @@ class DestroyUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $moderator->id]);
     }
@@ -113,7 +113,7 @@ class DestroyUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $client->id]);
     }
