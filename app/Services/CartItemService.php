@@ -13,42 +13,66 @@ class CartItemService
      */
     public function store(array $data, ProductService $productService): CartItem
     {
-        $product = Product::find($data['product_id']);
-        if (!$product) {
-            throw new ApiException('Product not found.', null, 404);
-        }
-
+        $product = $this->findProduct($data['product_id']);
         $quantity = $data['quantity'] ?? 1;
+
         $productService->ensureProductHasStock($product, $quantity);
 
-        $existing = CartItem::where('cart_id', $data['cart_id'])
-            ->where('product_id', $data['product_id'])
-            ->first();
+        $existing = $this->findExistingCartItem($data['cart_id'], $data['product_id']);
 
         if ($existing) {
-            $newQuantity = $existing->quantity + $quantity;
-            $productService->ensureProductHasStock($product, $newQuantity);
-
-            $existing->quantity = $newQuantity;
-            if (!$existing->save()) {
-                throw new ApiException('Failed to update cart item.', null, 500);
-            }
-            return $existing;
+            return $this->updateExistingItem($existing, $quantity, $productService, $product);
         }
 
         $data['quantity'] = $quantity;
-        $data['unit_price'] = $product->price;
+
         $result = CartItem::create($data);
         return $result;
     }
 
-    public function updateQuantity(CartItem $cartItem, int $quantity, ProductService $productService): CartItem
+    protected function findProduct(int $productId): Product
     {
-        $productService->ensureProductHasStock($cartItem->product, $quantity);
+        $product = Product::find($productId);
+        if (!$product) {
+            throw new ApiException('Product not found.', null, 404);
+        }
+        return $product;
+    }
+
+    protected function findExistingCartItem(int $cartId, int $productId): ?CartItem
+    {
+        return CartItem::where('cart_id', $cartId)
+            ->where('product_id', $productId)
+            ->first();
+    }
+
+    protected function updateExistingItem(
+        CartItem $existing,
+        int $quantity,
+        ProductService $productService,
+        Product $product
+    ): CartItem {
+        $newQuantity = $existing->quantity + $quantity;
+        $productService->ensureProductHasStock($product, $newQuantity);
+
+        $existing->quantity = $newQuantity;
+        if (!$existing->save()) {
+            throw new ApiException('Failed to update cart item.', null, 500);
+        }
+        return $existing;
+    }
+
+    public function updateQuantity(
+        CartItem $cartItem,
+        int $quantity,
+        ProductService $productService
+    ): CartItem {
+        $product = $cartItem->product;
+        if ($product) {
+            $productService->ensureProductHasStock($product, $quantity);
+        }
         $cartItem->quantity = $quantity;
-        $cartItem->unit_price = $cartItem->product->price;
-        $result = $cartItem->save();
-        if (!$result) {
+        if (!$cartItem->save()) {
             throw new ApiException('Failed to update cart item.', null, 500);
         }
         return $cartItem;
@@ -57,17 +81,10 @@ class CartItemService
     public function removeOne(CartItem $cartItem): void
     {
         if ($cartItem->quantity <= 1) {
-            $this->delete($cartItem);
+            $cartItem->forceDelete();
         } else {
             $cartItem->quantity -= 1;
             $cartItem->save();
-        }
-    }
-
-    public function delete(CartItem $cartItem): void
-    {
-        if (!$cartItem->delete()) {
-            throw new ApiException('Failed to delete cart item.', null, 500);
         }
     }
 }

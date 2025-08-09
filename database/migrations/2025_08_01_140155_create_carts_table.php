@@ -14,7 +14,10 @@ return new class extends Migration
                 ->unique()
                 ->constrained()
                 ->onDelete('cascade');
+
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

@@ -4,18 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
  * @property int $cart_id
  * @property int $product_id
  * @property int $quantity
- * @property float $unit_price
  */
 class CartItem extends Model
 {
     /** @use HasFactory<\Database\Factories\CartItemFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * @var list<string>
@@ -24,7 +25,6 @@ class CartItem extends Model
         'cart_id',
         'product_id',
         'quantity',
-        'unit_price',
     ];
 
     /**
@@ -35,7 +35,6 @@ class CartItem extends Model
         'cart_id' => 'integer',
         'product_id' => 'integer',
         'quantity' => 'integer',
-        'unit_price' => 'float',
     ];
 
     /**

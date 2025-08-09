@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Address>
@@ -15,7 +16,7 @@ class AddressFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->numberBetween(1, 10),
+            'user_id' => User::factory(),
             'street' => $this->faker->streetName(),
             'number' => $this->faker->numberBetween(1, 99999),
             'complement' => $this->faker->secondaryAddress(),

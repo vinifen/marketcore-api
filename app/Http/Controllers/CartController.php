@@ -24,6 +24,15 @@ class CartController extends Controller
         return ApiResponse::success(new CartResource($cart));
     }
 
+    public function clear(int $id): JsonResponse
+    {
+        /** @var Cart $cart */
+        $cart = $this->findModelOrFail(Cart::class, $id);
+        $this->authorize('clear', $cart);
+        $cart->items()->forceDelete();
+        return ApiResponse::success(['message' => 'Cart cleared successfully']);
+    }
+
     // public function store(StoreCartRequest $request)
     // {
     //     //

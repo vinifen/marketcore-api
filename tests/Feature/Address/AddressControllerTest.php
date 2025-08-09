@@ -141,7 +141,7 @@ class AddressControllerTest extends TestCase
         $user = $this->createTestUser(['email' => 'user2@example.com']);
         $address = Address::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($admin)->deleteJson("/api/addresses/{$address->id}");
+        $response = $this->actingAs($admin)->deleteJson("/api/addresses/{$address->id}/force-delete");
 
         $response->assertStatus(204);
 

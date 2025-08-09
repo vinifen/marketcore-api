@@ -60,11 +60,33 @@ class UserController extends Controller
     ): JsonResponse {
         /** @var \App\Models\User $user */
         $user = $this->findModelOrFail(User::class, $id);
-        $this->authorize('forceDelete', $user);
+        $this->authorize('delete', $user);
 
         $password = (string) $request->input('password');
         $authService->validatePassword($user->password, $password);
         $user->delete();
+
+        return ApiResponse::success(null, 204);
+    }
+
+    public function restore(int $id): JsonResponse
+    {
+        /** @var \App\Models\User $user */
+        $user = $this->findModelTrashedOrFail(User::class, $id);
+        $this->authorize('restore', $user);
+
+        $user->restore();
+
+        return ApiResponse::success(new UserResource($user));
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        /** @var \App\Models\User $user */
+        $user = $this->findModelOrFailWithTrashed(User::class, $id);
+        $this->authorize('forceDelete', $user);
+
+        $user->forceDelete();
 
         return ApiResponse::success(null, 204);
     }

@@ -63,4 +63,13 @@ abstract class TestCase extends BaseTestCase
             ),
         ];
     }
+
+    public function tinyPng(): string
+    {
+        // 1x1 transparent PNG
+        $b64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/ax3u0QAAAAASUVORK5CYII=';
+        $data = base64_decode($b64, true);
+        $this->assertIsString($data);
+        return $data;
+    }
 }

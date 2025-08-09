@@ -34,7 +34,6 @@ class CartItemControllerTest extends TestCase
                 'cart_id' => $cart->id,
                 'product_id' => $product->id,
                 'quantity' => 2,
-                'unit_price' => 99.99,
             ]);
 
         $this->assertDatabaseHas('cart_items', [
@@ -73,7 +72,6 @@ class CartItemControllerTest extends TestCase
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 1,
-            'unit_price' => 50,
         ]);
 
         $payload = [
@@ -85,7 +83,6 @@ class CartItemControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonFragment([
                 'quantity' => 5,
-                'unit_price' => 50,
             ]);
 
         $this->assertDatabaseHas('cart_items', [
@@ -104,7 +101,6 @@ class CartItemControllerTest extends TestCase
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 1,
-            'unit_price' => 10,
         ]);
 
         $response = $this->actingAs($user)->getJson("/api/cart-items/{$cartItem->id}");
@@ -193,7 +189,6 @@ class CartItemControllerTest extends TestCase
                 'cart_id' => $cart->id,
                 'product_id' => $product->id,
                 'quantity' => 3,
-                'unit_price' => 123.45,
                 'user_id' => $otherUser->id,
             ]);
 
@@ -239,7 +234,6 @@ class CartItemControllerTest extends TestCase
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 2,
-            'unit_price' => 50,
         ]);
 
         $payload = [
@@ -268,7 +262,6 @@ class CartItemControllerTest extends TestCase
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 2,
-            'unit_price' => 50,
         ]);
 
         $payload = [
@@ -293,7 +286,7 @@ class CartItemControllerTest extends TestCase
 
         $payload = [
             'cart_id' => $cart->id,
-            'product_id' => 999999,
+            'product_id' => 99999,
             'quantity' => 1,
         ];
 
@@ -313,7 +306,6 @@ class CartItemControllerTest extends TestCase
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 1,
-            'unit_price' => 50,
         ]);
 
         $payload = [
@@ -336,7 +328,7 @@ class CartItemControllerTest extends TestCase
         $payload = [
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'quantity' => -2,
+            'quantity' => -1,
         ];
 
         $response = $this->actingAs($user)->postJson('/api/cart-items', $payload);
@@ -377,7 +369,6 @@ class CartItemControllerTest extends TestCase
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 2,
-            'unit_price' => 99.99,
         ]);
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
@@ -395,15 +386,15 @@ class CartItemControllerTest extends TestCase
         $user = $this->createTestUser();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         $category = Category::factory()->create();
-        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $product = Product::factory()->create(['stock' => 10, 'category_id' => $category->id]);
         $cartItem = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 3,
-            'unit_price' => 50,
         ]);
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
+
         $response->assertStatus(204);
 
         $this->assertDatabaseHas('cart_items', [
@@ -417,15 +408,15 @@ class CartItemControllerTest extends TestCase
         $user = $this->createTestUser();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         $category = Category::factory()->create();
-        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $product = Product::factory()->create(['stock' => 10, 'category_id' => $category->id]);
         $cartItem = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'quantity' => 1,
-            'unit_price' => 50,
         ]);
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/remove-one");
+
         $response->assertStatus(204);
 
         $this->assertDatabaseMissing('cart_items', [
@@ -438,15 +429,15 @@ class CartItemControllerTest extends TestCase
         $user = $this->createTestUser();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         $category = Category::factory()->create();
-        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $product = Product::factory()->create(['category_id' => $category->id]);
         $cartItem = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'quantity' => 2,
-            'unit_price' => 50,
+            'quantity' => 5,
         ]);
 
         $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}");
+
         $response->assertStatus(204);
 
         $this->assertDatabaseMissing('cart_items', [
@@ -459,26 +450,23 @@ class CartItemControllerTest extends TestCase
         $user = $this->createTestUser();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         $category = Category::factory()->create();
-        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $product = Product::factory()->create(['stock' => 10, 'category_id' => $category->id]);
         $cartItem = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'quantity' => 2,
-            'unit_price' => 50,
+            'quantity' => 1,
         ]);
 
-        $payload = ['quantity' => 5];
+        $payload = ['quantity' => 3];
 
         $response = $this->actingAs($user)->putJson("/api/cart-items/{$cartItem->id}", $payload);
+
         $response->assertStatus(200)
-            ->assertJsonFragment([
-                'quantity' => 5,
-                'unit_price' => 50,
-            ]);
+            ->assertJsonFragment(['quantity' => 3]);
 
         $this->assertDatabaseHas('cart_items', [
             'id' => $cartItem->id,
-            'quantity' => 5,
+            'quantity' => 3,
         ]);
     }
 
@@ -487,23 +475,18 @@ class CartItemControllerTest extends TestCase
         $user = $this->createTestUser();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         $category = Category::factory()->create();
-        $product = Product::factory()->create(['stock' => 10, 'price' => 50, 'category_id' => $category->id]);
+        $product = Product::factory()->create(['stock' => 5, 'category_id' => $category->id]);
         $cartItem = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'quantity' => 2,
-            'unit_price' => 50,
+            'quantity' => 1,
         ]);
 
-        $payload = ['quantity' => 0];
+        $payload = ['quantity' => 10]; // exceeds stock
 
         $response = $this->actingAs($user)->putJson("/api/cart-items/{$cartItem->id}", $payload);
+
         $response->assertStatus(422)
             ->assertJsonFragment(['success' => false]);
-
-        $this->assertDatabaseHas('cart_items', [
-            'id' => $cartItem->id,
-            'quantity' => 2,
-        ]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderItem\StoreOrderItemRequest;
+use App\Http\Requests\OrderItem\UpdateOrderItemRequest;
 use App\Http\Resources\OrderItemResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\OrderItem;
@@ -21,6 +23,46 @@ class OrderItemController extends Controller
         $orderItem = $this->findModelOrFail(OrderItem::class, $id);
         $this->authorize('view', $orderItem);
         $orderItem->load(['order', 'product']);
+        return ApiResponse::success(new OrderItemResource($orderItem));
+    }
+
+    public function store(StoreOrderItemRequest $request): JsonResponse
+    {
+        $this->authorize('create', OrderItem::class);
+        $orderItem = OrderItem::create($request->validated());
+        return ApiResponse::success(new OrderItemResource($orderItem), 201);
+    }
+
+    public function update(UpdateOrderItemRequest $request, int $id): JsonResponse
+    {
+        $orderItem = $this->findModelOrFail(OrderItem::class, $id);
+        $this->authorize('update', $orderItem);
+        $orderItem->update($request->validated());
+        return ApiResponse::success(new OrderItemResource($orderItem));
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $orderItem = $this->findModelOrFail(OrderItem::class, $id);
+        $this->authorize('delete', $orderItem);
+        $orderItem->delete();
+        return ApiResponse::success(null, 204);
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+        $orderItem = $this->findModelOrFailWithTrashed(OrderItem::class, $id);
+        $this->authorize('forceDelete', $orderItem);
+        $orderItem->forceDelete();
+        return ApiResponse::success(null, 204);
+    }
+
+    public function restore(int $id): JsonResponse
+    {
+        $orderItem = $this->findModelTrashedOrFail(OrderItem::class, $id);
+        $this->authorize('restore', $orderItem);
+        /** @var OrderItem $orderItem */
+        $orderItem->restore();
         return ApiResponse::success(new OrderItemResource($orderItem));
     }
 }
