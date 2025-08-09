@@ -19,13 +19,13 @@ class DeleteOrderTest extends TestCase
 
     /** @phpstan-ignore property.uninitialized */
     private User $user;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private Product $product;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private Order $order;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private Address $address;
 

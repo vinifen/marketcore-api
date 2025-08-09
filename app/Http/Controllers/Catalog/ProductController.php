@@ -44,8 +44,7 @@ class ProductController extends Controller
         UpdateProductRequest $request,
         int $id,
         ProductService $productService
-    ): JsonResponse
-    {
+    ): JsonResponse {
         /** @var Product $product */
         $product = $this->findModelOrFail(Product::class, $id);
         $this->authorize('update', $product);

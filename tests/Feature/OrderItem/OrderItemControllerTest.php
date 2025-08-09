@@ -19,19 +19,19 @@ class OrderItemControllerTest extends TestCase
 
     /** @phpstan-ignore property.uninitialized */
     private User $adminUser;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private User $staffUser;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private User $regularUser;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private Product $product;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private Order $order;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private OrderItem $orderItem;
 

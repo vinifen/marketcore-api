@@ -9,7 +9,6 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Coupon;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,13 +20,13 @@ class CreateOrderTest extends TestCase
 
     /** @phpstan-ignore property.uninitialized */
     private User $user;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private Product $product;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private Cart $cart;
-    
+
     /** @phpstan-ignore property.uninitialized */
     private Address $address;
 
@@ -183,7 +182,11 @@ class CreateOrderTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-                ->assertJson($this->defaultErrorResponse('Cannot decrease stock by 2. Only 1 units available for product \'' . $this->product->name . '\'.'));
+                ->assertJson($this->defaultErrorResponse(
+                    'Cannot decrease stock by 2. Only 1 units available for product \'' .
+                    $this->product->name .
+                    '\'.'
+                ));
     }
 
     public function test_should_fail_when_not_authenticated(): void
