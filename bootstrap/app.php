@@ -9,9 +9,12 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,9 +24,23 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->api(prepend: [
+            EnsureFrontendRequestsAreStateful::class,
+        ]);
+        
+        $middleware->alias([
+            'throttle' => ThrottleRequests::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (TooManyRequestsHttpException $e) {
+            return ApiResponse::error(
+                'Too many requests. Please try again later.',
+                null,
+                $e->getStatusCode()
+            );
+        });
+
         $exceptions->render(function (NotFoundHttpException $e) {
             return ApiResponse::error(
                 $e->getMessage(),

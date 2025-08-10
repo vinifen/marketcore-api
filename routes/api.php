@@ -25,6 +25,7 @@ Route::get('/', function () {
     ], 200);
 });
 
+
 Route::get('/storage/{path}', function (string $path) {
     if (!Storage::disk('public')->exists($path)) {
         throw new ApiException('File not found', null, 404);
@@ -37,19 +38,25 @@ Route::get('/storage/{path}', function (string $path) {
     return response($file, 200)->header('Content-Type', $mimeType);
 })->where('path', '.*');
 
-Route::post('/register', [AuthController::class, 'registerClient']);
-Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{category}', [CategoryController::class, 'show']);
+Route::middleware('throttle:2,1')->group(function () {
+    Route::post('/register', [AuthController::class, 'registerClient']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{product}', [ProductController::class, 'show']);
 
-Route::get('/discounts', [DiscountController::class, 'index']);
-Route::get('/discounts/{discount}', [DiscountController::class, 'show']);
+Route::middleware('throttle:120,1')->group(function () {
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{category}', [CategoryController::class, 'show']);
 
-Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{product}', [ProductController::class, 'show']);
+
+    Route::get('/discounts', [DiscountController::class, 'index']);
+    Route::get('/discounts/{discount}', [DiscountController::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'throttle:120,1'])->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod']);
 
     Route::apiResource('users', UserController::class);
@@ -81,7 +88,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('coupons', CouponController::class);
     Route::post('coupons/{coupon}/restore', [CouponController::class, 'restore']);
     Route::delete('coupons/{coupon}/force-delete', [CouponController::class, 'forceDelete']);
-
 
     Route::apiResource('order', OrderController::class);
     Route::post('order/{order}/restore', [OrderController::class, 'restore']);
