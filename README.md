@@ -93,14 +93,14 @@ Run `help` to see all available simplified commands:
 - `./run phpcs` - Code standards check
 - `./run all-tests` - Run all quality checks
 
-## � API Documentation Preview
+## 📖 API Documentation Preview
 
 ### Swagger Interface
 ![API Documentation Interface 1](https://res.cloudinary.com/dqafdlj0c/image/upload/v1754863793/marketcore-api-swagger-1_mqhipp.png)
 
 ![API Documentation Interface 2](https://res.cloudinary.com/dqafdlj0c/image/upload/v1754864062/marketcore-api-swagger-2_qpdq8b.png)
 
-## �📊 Project Statistics
+## 📊 Project Statistics
 - **111+ Development Hours**: Dedicated time investment in building this comprehensive solution
 - **350+ Tests**: Comprehensive unit and feature test coverage
 - **PHPStan Level 8**: Strict static analysis with zero errors
@@ -123,11 +123,11 @@ This project demonstrates professional-grade development practices including:
 - **Branching Strategy**: Organized development workflow with main and feature branches
 - **Best Practices**: Following Laravel and PHP community standards
 
-## �️ Database Schema
+## 🛢️ Database Schema
 ![Database Schema](https://github.com/vinifen/marketcore-api/blob/refactor/43/organize-files/docs/database/marketcore-api-dbdiagram-io.png)
 *Complete database documentation available in [`docs/database/`](docs/database/)*
 
-## �🔄 Git Workflow & Project Management
+## 🔄 Git Workflow & Project Management
 This project follows professional development practices with comprehensive version control:
 
 ### **Repository Structure:**
