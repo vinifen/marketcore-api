@@ -57,7 +57,7 @@ class DiscountController extends Controller
         $this->authorize('delete', $discount);
 
         $discount->delete();
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 
     public function restore(int $id): JsonResponse
@@ -80,6 +80,6 @@ class DiscountController extends Controller
 
         $discount->forceDelete();
 
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 }

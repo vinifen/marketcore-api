@@ -96,6 +96,12 @@ function migrate {
   docker compose exec app php artisan migrate
 }
 
+function storage_link {
+  source .env
+  echo ">> Creating storage symbolic link..."
+  docker compose exec app php artisan storage:link
+}
+
 function composer {
   source .env
   echo ">> Installing Composer dependencies..."
@@ -108,6 +114,7 @@ function rm-all {
   rm -rf pgdata 2>/dev/null || echo "pgdata directory not found, skipping removal"
   rm -rf vendor 2>/dev/null || echo "vendor directory not found, skipping removal"
   rm -f .env 2>/dev/null || echo ".env not found, skipping removal"
+  rm -rf storage/app/public/products 2>/dev/null || echo "storage/app/public/products directory not found, skipping removal"
 
   docker ps -a --filter "name=marketcore-api" -q | xargs -r docker rm -f
 

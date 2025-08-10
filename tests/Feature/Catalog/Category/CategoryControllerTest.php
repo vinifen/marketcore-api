@@ -93,7 +93,7 @@ class CategoryControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/categories/{$category->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('categories', [
             'id' => $category->id,

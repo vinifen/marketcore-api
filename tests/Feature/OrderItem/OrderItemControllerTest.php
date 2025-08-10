@@ -393,7 +393,7 @@ class OrderItemControllerTest extends TestCase
 
         $response = $this->deleteJson("/api/order-items/{$this->orderItem->id}");
 
-        $response->assertNoContent();
+        $response->assertOk();
         $this->assertSoftDeleted('order_items', ['id' => $this->orderItem->id]);
     }
 
@@ -432,7 +432,7 @@ class OrderItemControllerTest extends TestCase
 
         $response = $this->deleteJson("/api/order-items/{$this->orderItem->id}/force-delete");
 
-        $response->assertNoContent();
+        $response->assertOk();
         $this->assertDatabaseMissing('order_items', ['id' => $this->orderItem->id]);
     }
 

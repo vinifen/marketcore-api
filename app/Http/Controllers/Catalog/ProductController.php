@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Catalog;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
-use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Requests\Product\UpdateProductJsonRequest;
+use App\Http\Requests\Product\UpdateProductFormRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -21,11 +23,15 @@ class ProductController extends Controller
         return ApiResponse::success(ProductResource::collection($products));
     }
 
-    public function store(StoreProductRequest $request): JsonResponse
+    public function store(StoreProductRequest $request, ProductService $productService): JsonResponse
     {
         $this->authorize('create', Product::class);
 
-        $product = Product::create($request->validated());
+        $product = $productService->createProduct(
+            $request->validated(),
+            $request->file('image')
+        );
+
         $product->load('category');
         return ApiResponse::success(new ProductResource($product), 201);
     }
@@ -41,7 +47,20 @@ class ProductController extends Controller
     }
 
     public function update(
-        UpdateProductRequest $request,
+        UpdateProductJsonRequest $request,
+        int $id
+    ): JsonResponse {
+        /** @var Product $product */
+        $product = $this->findModelOrFail(Product::class, $id);
+        $this->authorize('update', $product);
+
+        $product->update($request->validated());
+        $product->load('category');
+        return ApiResponse::success(new ProductResource($product));
+    }
+
+    public function updateWithFormData(
+        UpdateProductFormRequest $request,
         int $id,
         ProductService $productService
     ): JsonResponse {
@@ -49,12 +68,13 @@ class ProductController extends Controller
         $product = $this->findModelOrFail(Product::class, $id);
         $this->authorize('update', $product);
 
-        $productService->updateProduct(
+        $product = $productService->updateProduct(
             $product,
             $request->validated(),
             $request->file('image'),
             $request->boolean('remove_image')
         );
+
         $product->load('category');
         return ApiResponse::success(new ProductResource($product));
     }
@@ -66,7 +86,7 @@ class ProductController extends Controller
         $this->authorize('delete', $product);
 
         $product->delete();
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 
     public function restore(int $id): JsonResponse
@@ -89,6 +109,6 @@ class ProductController extends Controller
 
         $product->forceDelete();
 
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 }

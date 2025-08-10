@@ -92,7 +92,7 @@ class CouponControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('coupons', [
             'id' => $coupon->id,
@@ -150,7 +150,7 @@ class CouponControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/coupons/{$coupon->id}/force-delete");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
         $this->assertDatabaseMissing('coupons', ['id' => $coupon->id]);
     }
 

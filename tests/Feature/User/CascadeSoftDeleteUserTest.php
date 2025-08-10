@@ -24,7 +24,7 @@ class CascadeSoftDeleteUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $user->id]);
         $this->assertSoftDeleted('addresses', ['id' => $address1->id]);
@@ -69,7 +69,7 @@ class CascadeSoftDeleteUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $user->id]);
         $this->assertSoftDeleted('carts', ['id' => $cart->id]);
@@ -113,7 +113,7 @@ class CascadeSoftDeleteUserTest extends TestCase
         ]);
 
         $response = $this->actingAs($admin)->deleteJson("api/users/{$user->id}/force-delete");
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
         $this->assertDatabaseMissing('addresses', ['id' => $address1->id]);
@@ -143,7 +143,7 @@ class CascadeSoftDeleteUserTest extends TestCase
         ]);
 
         $response = $this->actingAs($admin)->deleteJson("api/users/{$user->id}/force-delete");
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
         $this->assertDatabaseMissing('carts', ['id' => $cart->id]);
@@ -171,7 +171,7 @@ class CascadeSoftDeleteUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $user->id]);
         $this->assertSoftDeleted('carts', ['id' => $cart->id]);
@@ -232,7 +232,7 @@ class CascadeSoftDeleteUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $user->id]);
         $this->assertSoftDeleted('addresses', ['id' => $address->id]);
@@ -253,7 +253,7 @@ class CascadeSoftDeleteUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $user->id]);
         $this->assertSoftDeleted('carts', ['id' => $cart->id]);
@@ -270,7 +270,7 @@ class CascadeSoftDeleteUserTest extends TestCase
             'password' => $this->originalPassword,
         ]);
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('users', ['id' => $user->id]);
         $this->assertSoftDeleted('carts', ['id' => $cart->id]);

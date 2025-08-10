@@ -13,7 +13,7 @@ class CartResource extends JsonResource
     public function toArray(Request $request): array
     {
         $items = $this->resource->items->map(function ($item) {
-            $unitPrice = $item->product->price ?? 0.0;
+            $unitPrice = (float) ($item->product->price ?? 0.0);
             $unitPriceDiscounted = optional($item->product)->getDiscountedPrice();
             $quantity = $item->quantity;
 
@@ -26,7 +26,7 @@ class CartResource extends JsonResource
                 'quantity' => $quantity,
                 'unit_price' => $unitPrice,
                 'unit_price_discounted' => $unitPriceDiscounted,
-                'discount_value' => optional($item->product)->getTotalDiscountPercentage(),
+                'discount_value' => (float) (optional($item->product)->getTotalDiscountPercentage() ?? 0),
                 'total_price' => $totalPrice,
                 'total_price_discounted' => $totalPriceDiscounted,
             ];

@@ -143,7 +143,7 @@ class AddressControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/addresses/{$address->id}/force-delete");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('addresses', [
             'id' => $address->id,

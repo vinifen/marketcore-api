@@ -68,7 +68,7 @@ class DeleteOrderTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("api/order/{$this->order->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('orders', [
             'id' => $this->order->id,
@@ -107,7 +107,7 @@ class DeleteOrderTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("api/order/{$this->order->id}/force-delete");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('orders', [
             'id' => $this->order->id,
@@ -345,7 +345,7 @@ class DeleteOrderTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("api/order/{$this->order->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('orders', [
             'id' => $this->order->id,
@@ -363,7 +363,7 @@ class DeleteOrderTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("api/order/{$this->order->id}/force-delete");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertDatabaseMissing('orders', [
             'id' => $this->order->id,
@@ -385,7 +385,7 @@ class DeleteOrderTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("api/order/{$this->order->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('orders', [
             'id' => $this->order->id,

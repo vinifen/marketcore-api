@@ -49,6 +49,6 @@ class CategoryController extends Controller
         $category = $this->findModelOrFail(Category::class, $id);
         $this->authorize('forceDelete', $category);
         $category->delete();
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 }

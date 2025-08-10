@@ -91,7 +91,7 @@ class OrderController extends Controller
 
         $order->delete();
 
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 
     public function restore(int $id): JsonResponse
@@ -112,6 +112,6 @@ class OrderController extends Controller
 
         $order->forceDelete();
 
-        return ApiResponse::success(null, 204);
+        return ApiResponse::success(null, 200);
     }
 }

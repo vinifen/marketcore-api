@@ -4,17 +4,17 @@ namespace Docs\swagger;
 
 use OpenApi\Annotations as OA;
 
-class UserDoc
+class CouponDoc
 {
     /**
      * @OA\Get(
-     *     path="/users",
-     *     summary="List Users",
-     *     tags={"User"},
+     *     path="/coupons",
+     *     summary="List Coupons",
+     *     tags={"Coupon"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
-     *         description="Users retrieved successfully.",
+     *         description="Coupons retrieved successfully.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
@@ -24,9 +24,12 @@ class UserDoc
      *                 @OA\Items(
      *                     type="object",
      *                     @OA\Property(property="id", type="integer", example=1),
-     *                     @OA\Property(property="name", type="string", example="John Doe"),
-     *                     @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *                     @OA\Property(property="role", type="string", example="client")
+     *                     @OA\Property(property="code", type="string", example="SUMMER2025"),
+     *                     @OA\Property(property="start_date", type="string", format="date", example="2025-08-01"),
+     *                     @OA\Property(property="end_date", type="string", format="date", example="2025-08-31"),
+     *                     @OA\Property(property="discount_percentage", type="number", format="float", example=15.50),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
      *                 )
      *             )
      *         )
@@ -59,24 +62,24 @@ class UserDoc
 
     /**
      * @OA\Post(
-     *     path="/users",
-     *     summary="Create User",
-     *     tags={"User"},
+     *     path="/coupons",
+     *     summary="Create Coupon",
+     *     tags={"Coupon"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             type="object",
-     *             required={"name", "email", "password", "password_confirmation"},
-     *             @OA\Property(property="name", type="string", example="John Doe"),
-     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *             @OA\Property(property="password", type="string", format="password", example="secret123"),
-     *             @OA\Property(property="password_confirmation", type="string", format="password", example="secret123")
+     *             required={"code", "end_date", "discount_percentage"},
+     *             @OA\Property(property="code", type="string", maxLength=255, example="SUMMER2025"),
+     *             @OA\Property(property="start_date", type="string", format="date", example="2025-08-01"),
+     *             @OA\Property(property="end_date", type="string", format="date", example="2025-08-31"),
+     *             @OA\Property(property="discount_percentage", type="number", format="float", minimum=0.01, maximum=99.99, example=15.50)
      *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="User created successfully.",
+     *         description="Coupon created successfully.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
@@ -84,9 +87,12 @@ class UserDoc
      *                 property="data",
      *                 type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="name", type="string", example="John Doe"),
-     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *                 @OA\Property(property="role", type="string", example="client")
+     *                 @OA\Property(property="code", type="string", example="SUMMER2025"),
+     *                 @OA\Property(property="start_date", type="string", format="date", example="2025-08-01"),
+     *                 @OA\Property(property="end_date", type="string", format="date", example="2025-08-31"),
+     *                 @OA\Property(property="discount_percentage", type="number", format="float", example=15.50),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -121,21 +127,21 @@ class UserDoc
      *             @OA\Property(
      *                 property="errors",
      *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="User creation request failed due to invalid data."),
+     *                 @OA\Property(property="message", type="string", example="Coupon creation failed due to invalid data."),
      *                 @OA\Property(
-     *                     property="name",
+     *                     property="code",
      *                     type="array",
-     *                     @OA\Items(type="string", example="The name field is required.")
+     *                     @OA\Items(type="string", example="The code field is required.")
      *                 ),
      *                 @OA\Property(
-     *                     property="email",
+     *                     property="end_date",
      *                     type="array",
-     *                     @OA\Items(type="string", example="The email field must be a valid email address.")
+     *                     @OA\Items(type="string", example="The end date field is required.")
      *                 ),
      *                 @OA\Property(
-     *                     property="password",
+     *                     property="discount_percentage",
      *                     type="array",
-     *                     @OA\Items(type="string", example="The password field confirmation does not match.")
+     *                     @OA\Items(type="string", example="The discount percentage must be between 0.01 and 99.99.")
      *                 )
      *             )
      *         )
@@ -146,9 +152,9 @@ class UserDoc
 
     /**
      * @OA\Get(
-     *     path="/users/{id}",
-     *     summary="Show User",
-     *     tags={"User"},
+     *     path="/coupons/{id}",
+     *     summary="Show Coupon",
+     *     tags={"Coupon"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -158,7 +164,7 @@ class UserDoc
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="User retrieved successfully.",
+     *         description="Coupon retrieved successfully.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
@@ -166,9 +172,12 @@ class UserDoc
      *                 property="data",
      *                 type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="name", type="string", example="John Doe"),
-     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *                 @OA\Property(property="role", type="string", example="client")
+     *                 @OA\Property(property="code", type="string", example="SUMMER2025"),
+     *                 @OA\Property(property="start_date", type="string", format="date", example="2025-08-01"),
+     *                 @OA\Property(property="end_date", type="string", format="date", example="2025-08-31"),
+     *                 @OA\Property(property="discount_percentage", type="number", format="float", example=15.50),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -185,7 +194,7 @@ class UserDoc
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Wrong parameter error example.",
+     *         description="Not found.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
@@ -198,7 +207,7 @@ class UserDoc
      *     ),
      *     @OA\Response(
      *         response=403,
-     *         description="Authorization error example.",
+     *         description="Authorization error.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
@@ -213,15 +222,11 @@ class UserDoc
      */
     public function show() {}
 
-
     /**
      * @OA\Put(
-     *     path="/users/{id}",
-     *     summary="Update User (Full or Partial)",
-     *         description="Update user data. The request can be full or partial.\n
-     *         The field 'current_password' is required if 'email' or 'new_password' is changed.\n
-     *         The field 'new_password_confirmation' is required if 'new_password' is present.",
-     *     tags={"User"},
+     *     path="/coupons/{id}",
+     *     summary="Update Coupon",
+     *     tags={"Coupon"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -233,26 +238,39 @@ class UserDoc
      *         required=true,
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="name", type="string", example="New Name"),
-     *             @OA\Property(property="email", type="string", format="email", example="new@email.com"),
-     *             @OA\Property(property="new_password", type="string", format="password", example="newPassword123"),
-     *             @OA\Property(property="new_password_confirmation", type="string", format="password", example="newPassword123"),
-     *             @OA\Property(property="current_password", type="string", format="password", example="secret123")
+     *             @OA\Property(property="code", type="string", maxLength=255, example="AUTUMN2025"),
+     *             @OA\Property(property="start_date", type="string", format="date", example="2025-09-01"),
+     *             @OA\Property(property="end_date", type="string", format="date", example="2025-09-30"),
+     *             @OA\Property(property="discount_percentage", type="number", format="float", minimum=0.01, maximum=99.99, example=20.00)
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="User updated successfully.",
+     *         description="Coupon updated successfully.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=2),
-     *                 @OA\Property(property="name", type="string", example="Jane Doe"),
-     *                 @OA\Property(property="email", type="string", format="email", example="jane@example.com"),
-     *                 @OA\Property(property="role", type="string", example="client")
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="code", type="string", example="AUTUMN2025"),
+     *                 @OA\Property(property="start_date", type="string", format="date", example="2025-09-01"),
+     *                 @OA\Property(property="end_date", type="string", format="date", example="2025-09-30"),
+     *                 @OA\Property(property="discount_percentage", type="number", format="float", example=20.00),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="Unauthenticated.")
      *             )
      *         )
      *     ),
@@ -265,35 +283,33 @@ class UserDoc
      *             @OA\Property(
      *                 property="errors",
      *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="User update request failed due to invalid data."),
+     *                 @OA\Property(property="message", type="string", example="Coupon update failed due to invalid data."),
      *                 @OA\Property(
-     *                     property="name",
+     *                     property="code",
      *                     type="array",
-     *                     @OA\Items(type="string", example="The name field must be at least 2 characters.")
+     *                     @OA\Items(type="string", example="The code has already been taken.")
      *                 ),
      *                 @OA\Property(
-     *                     property="email",
+     *                     property="end_date",
      *                     type="array",
-     *                     @OA\Items(type="string", example="The email field must be a valid email address.")
+     *                     @OA\Items(type="string", example="The end date must be a date after or equal to start date.")
      *                 ),
      *                 @OA\Property(
-     *                     property="new_password",
+     *                     property="discount_percentage",
      *                     type="array",
-     *                     @OA\Items(type="string", example="The new password field confirmation does not match.")
+     *                     @OA\Items(type="string", example="The discount percentage must be between 0.01 and 99.99.")
      *                 )
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=403,
-     *         description="Forbidden - incorrect current password.",
+     *         description="Authorization error.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="The current password is incorrect.")
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="You are not authorized to update this resource.")
      *             )
      *         )
      *     ),
@@ -312,12 +328,11 @@ class UserDoc
      */
     public function update() {}
 
-
     /**
      * @OA\Delete(
-     *     path="/users/{id}",
-     *     summary="Delete User",
-     *     tags={"User"},
+     *     path="/coupons/{id}",
+     *     summary="Delete Coupon",
+     *     tags={"Coupon"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -325,18 +340,9 @@ class UserDoc
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         description="Current password is required to authorize the user deletion.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             required={"password"},
-     *             @OA\Property(property="password", type="string", format="password", example="secret123")
-     *         )
-     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="User deleted successfully.",
+     *         description="Coupon deleted successfully.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
@@ -356,29 +362,12 @@ class UserDoc
      *     ),
      *     @OA\Response(
      *         response=403,
-     *         description="Forbidden - incorrect current password.",
+     *         description="Authorization error.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="The current password is incorrect.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation error.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(
-     *                     property="password",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="The password field is required.")
-     *                 )
+     *                 @OA\Property(property="message", type="string", example="You are not authorized to delete this resource.")
      *             )
      *         )
      *     ),
@@ -399,9 +388,9 @@ class UserDoc
 
     /**
      * @OA\Post(
-     *     path="/users/{id}/restore",
-     *     summary="Restore User",
-     *     tags={"User"},
+     *     path="/coupons/{id}/restore",
+     *     summary="Restore Coupon",
+     *     tags={"Coupon"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -411,7 +400,7 @@ class UserDoc
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="User restored successfully.",
+     *         description="Coupon restored successfully.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
@@ -419,9 +408,12 @@ class UserDoc
      *                 property="data",
      *                 type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="name", type="string", example="John Doe"),
-     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *                 @OA\Property(property="role", type="string", example="client")
+     *                 @OA\Property(property="code", type="string", example="SUMMER2025"),
+     *                 @OA\Property(property="start_date", type="string", format="date", example="2025-08-01"),
+     *                 @OA\Property(property="end_date", type="string", format="date", example="2025-08-31"),
+     *                 @OA\Property(property="discount_percentage", type="number", format="float", example=15.50),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -449,12 +441,12 @@ class UserDoc
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Not found.",
+     *         description="Trashed model not found.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Not found.")
+     *                 @OA\Property(property="message", type="string", example="Trashed model not found.")
      *             )
      *         )
      *     )
@@ -464,9 +456,9 @@ class UserDoc
 
     /**
      * @OA\Delete(
-     *     path="/users/{id}/force-delete",
-     *     summary="Force Delete User",
-     *     tags={"User"},
+     *     path="/coupons/{id}/force-delete",
+     *     summary="Force Delete Coupon",
+     *     tags={"Coupon"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -476,7 +468,7 @@ class UserDoc
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="User permanently deleted successfully.",
+     *         description="Coupon permanently deleted successfully.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
@@ -519,5 +511,4 @@ class UserDoc
      * )
      */
     public function forceDelete() {}
-
 }
