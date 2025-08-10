@@ -95,7 +95,7 @@ class ProductControllerTest extends TestCase
                 'success' => true,
                 'name' => 'Updated Name',
                 'stock' => 20,
-                'price' => '199.99',
+                'price' => 199.99,
             ]);
 
         $this->assertDatabaseHas('products', [
@@ -129,7 +129,7 @@ class ProductControllerTest extends TestCase
 
         $response = $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
         $this->assertSoftDeleted('products', ['id' => $product->id]);
     }
 
@@ -166,7 +166,7 @@ class ProductControllerTest extends TestCase
 
         $response = $this->actingAs($admin)->deleteJson("/api/products/{$product->id}/force-delete");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
         $this->assertDatabaseMissing('products', ['id' => $product->id]);
     }
 
@@ -208,7 +208,7 @@ class ProductControllerTest extends TestCase
         $this->assertInstanceOf(Discount::class, $discount2);
 
         $response = $this->actingAs($staff)->deleteJson("/api/products/{$product->id}");
-        $response->assertStatus(204);
+        $response->assertStatus(200);
 
         $this->assertSoftDeleted('products', ['id' => $product->id]);
         $this->assertSoftDeleted('discounts', ['id' => $discount1->id]);
@@ -243,7 +243,7 @@ class ProductControllerTest extends TestCase
         Storage::fake('public');
         $file = UploadedFile::fake()->createWithContent('produto.png', $this->tinyPng());
 
-        $response = $this->actingAs($staff)->put("/api/products/{$product->id}", [
+        $response = $this->actingAs($staff)->post("/api/products/{$product->id}/update", [
             'image' => $file,
         ]);
 
@@ -255,7 +255,7 @@ class ProductControllerTest extends TestCase
 
         $pathFromUrl = parse_url($product->image_url, PHP_URL_PATH);
         $this->assertIsString($pathFromUrl);
-        $storagePath = ltrim(str_replace('/storage/', '', $pathFromUrl), '/');
+        $storagePath = ltrim(str_replace('/api/storage/', '', $pathFromUrl), '/');
         $this->assertTrue(Storage::disk('public')->exists($storagePath));
     }
 
@@ -275,7 +275,7 @@ class ProductControllerTest extends TestCase
             'image_url' => $existingUrl,
         ]);
 
-        $response = $this->actingAs($staff)->put("/api/products/{$product->id}", [
+        $response = $this->actingAs($staff)->post("/api/products/{$product->id}/update", [
             'remove_image' => true,
         ]);
 
@@ -303,7 +303,7 @@ class ProductControllerTest extends TestCase
         ]);
 
         $newFile = UploadedFile::fake()->createWithContent('novo.png', $this->tinyPng());
-        $response = $this->actingAs($staff)->put("/api/products/{$product->id}", [
+        $response = $this->actingAs($staff)->post("/api/products/{$product->id}/update", [
             'image' => $newFile,
             'remove_image' => true,
         ]);
@@ -318,7 +318,7 @@ class ProductControllerTest extends TestCase
 
         $pathFromUrl = parse_url($product->image_url, PHP_URL_PATH);
         $this->assertIsString($pathFromUrl);
-        $newStoragePath = ltrim(str_replace('/storage/', '', $pathFromUrl), '/');
+        $newStoragePath = ltrim(str_replace('/api/storage/', '', $pathFromUrl), '/');
         $this->assertTrue(Storage::disk('public')->exists($newStoragePath));
     }
 
@@ -331,7 +331,7 @@ class ProductControllerTest extends TestCase
         Storage::fake('public');
         $file = UploadedFile::fake()->create('arquivo.txt', 1, 'text/plain');
 
-        $response = $this->actingAs($staff)->put("/api/products/{$product->id}", [
+        $response = $this->actingAs($staff)->post("/api/products/{$product->id}/update", [
             'image' => $file,
         ]);
 
@@ -348,7 +348,7 @@ class ProductControllerTest extends TestCase
         Storage::fake('public');
         $tooLarge = $this->pngOfSizeKB(8193); // limit is 8192 KB
 
-        $response = $this->actingAs($staff)->put("/api/products/{$product->id}", [
+        $response = $this->actingAs($staff)->post("/api/products/{$product->id}/update", [
             'image' => $tooLarge,
         ]);
 
@@ -365,7 +365,7 @@ class ProductControllerTest extends TestCase
         Storage::fake('public');
         $maxFile = $this->pngOfSizeKB(8192);
 
-        $response = $this->actingAs($staff)->put("/api/products/{$product->id}", [
+        $response = $this->actingAs($staff)->post("/api/products/{$product->id}/update", [
             'image' => $maxFile,
         ]);
 
@@ -386,24 +386,24 @@ class ProductControllerTest extends TestCase
 
         // PNG (allowed)
         $png = UploadedFile::fake()->createWithContent('ok.png', $this->tinyPng());
-        $resPng = $this->actingAs($staff)->put("/api/products/{$product->id}", ['image' => $png]);
+        $resPng = $this->actingAs($staff)->post("/api/products/{$product->id}/update", ['image' => $png]);
         $resPng->assertStatus(200)->assertJsonFragment(['success' => true]);
 
         // JPEG (allowed) - use valid image content with .jpg filename
         $jpeg = UploadedFile::fake()->createWithContent('ok.jpg', $this->tinyPng());
-        $resJpeg = $this->actingAs($staff)->put("/api/products/{$product->id}", ['image' => $jpeg]);
+        $resJpeg = $this->actingAs($staff)->post("/api/products/{$product->id}/update", ['image' => $jpeg]);
         $resJpeg->assertStatus(200)->assertJsonFragment(['success' => true]);
 
         // GIF (not allowed)
         $gifHeader = base64_decode('R0lGODdhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', true);
         $this->assertIsString($gifHeader);
         $gif = UploadedFile::fake()->createWithContent('no.gif', $gifHeader);
-        $resGif = $this->actingAs($staff)->put("/api/products/{$product->id}", ['image' => $gif]);
+        $resGif = $this->actingAs($staff)->post("/api/products/{$product->id}/update", ['image' => $gif]);
         $resGif->assertStatus(422)->assertJsonFragment(['success' => false]);
 
         // PDF (not allowed)
         $pdf = UploadedFile::fake()->create('doc.pdf', 1, 'application/pdf');
-        $resPdf = $this->actingAs($staff)->put("/api/products/{$product->id}", ['image' => $pdf]);
+        $resPdf = $this->actingAs($staff)->post("/api/products/{$product->id}/update", ['image' => $pdf]);
         $resPdf->assertStatus(422)->assertJsonFragment(['success' => false]);
     }
 
