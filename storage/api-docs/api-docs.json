@@ -11057,6 +11057,84 @@
                     }
                 ]
             }
+        },
+        "/": {
+            "get": {
+                "tags": [
+                    "Web Root"
+                ],
+                "summary": "Application Root - Welcome Page",
+                "description": "Returns welcome message and basic application information. This is the main entry point of the application.",
+                "operationId": "getWebRoot",
+                "responses": {
+                    "200": {
+                        "description": "Welcome page content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Welcome to the Marketcore API"
+                                                },
+                                                "api": {
+                                                    "type": "string",
+                                                    "example": "http://localhost:8010/api"
+                                                },
+                                                "docs": {
+                                                    "type": "string",
+                                                    "example": "http://localhost:8010/api/documentation"
+                                                },
+                                                "github": {
+                                                    "type": "string",
+                                                    "example": "https://github.com/vinifen/marketcore-api"
+                                                },
+                                                "version": {
+                                                    "type": "string",
+                                                    "example": "1.0.0"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Internal server error"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -11120,6 +11198,14 @@
         {
             "name": "User",
             "description": "User"
+        },
+        {
+            "name": "Web Root",
+            "description": "Web Root"
         }
-    ]
+    ],
+    "externalDocs": {
+        "description": "GitHub Repository",
+        "url": "https://github.com/vinifen/marketcore-api"
+    }
 }

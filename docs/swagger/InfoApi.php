@@ -11,6 +11,11 @@ use OpenApi\Annotations as OA;
  *     description="MarketCore API is an api made to serve a digital market.",
  * ),
  *
+ * @OA\ExternalDocumentation(
+ *     description="GitHub Repository",
+ *     url="https://github.com/vinifen/marketcore-api"
+ * ),
+ *
  * @OA\SecurityScheme(
  *     securityScheme="bearerAuth",
  *     type="http",

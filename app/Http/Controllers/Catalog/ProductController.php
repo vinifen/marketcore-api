@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Catalog;
 
-use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\StoreProductRequest;
-use App\Http\Requests\Product\UpdateProductJsonRequest;
-use App\Http\Requests\Product\UpdateProductFormRequest;
-use App\Http\Resources\ProductResource;
+use App\Http\Requests\Catalog\Product\StoreProductRequest;
+use App\Http\Requests\Catalog\Product\UpdateProductJsonRequest;
+use App\Http\Requests\Catalog\Product\UpdateProductFormRequest;
+use App\Http\Resources\Catalog\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use App\Http\Responses\ApiResponse;
