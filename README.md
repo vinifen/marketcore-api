@@ -35,6 +35,8 @@ This project has been instrumental in my backend development learning process, p
 - **Orders**: Create from cart, cancel own; MODERATOR updates status
 - **Roles**: CLIENT, MODERATOR, ADMIN with increasing permissions
 - **Rules**: Role-based access, one coupon/order, cart/order logic enforced
+- **Authorization**: Laravel Policies for granular user permission control
+- **Data Integrity**: Soft deletes implementation for safe data management
 
 ## 🧰 Technologies Used & Tested
 - **PHP**: v-8.2
