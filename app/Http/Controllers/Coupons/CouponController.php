@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Coupons;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Requests\Coupons\StoreCouponRequest;
 use App\Http\Requests\Coupons\UpdateCouponRequest;
 use App\Http\Resources\Coupons\CouponResource;

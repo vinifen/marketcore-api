@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Cart;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Resources\Cart\CartResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Cart;

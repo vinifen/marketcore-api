@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Orders;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Requests\Orders\OrderItem\StoreOrderItemRequest;
 use App\Http\Requests\Orders\OrderItem\UpdateOrderItemRequest;
 use App\Http\Resources\Orders\OrderItemResource;

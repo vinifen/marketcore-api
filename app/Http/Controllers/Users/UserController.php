@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Responses\ApiResponse;
 use App\Http\Requests\Users\User\UpdateUserRequest;
 use App\Http\Requests\Users\User\DestroyUserRequest;

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Requests\Users\Address\StoreAddressRequest;
 use App\Http\Requests\Users\Address\UpdateAddressRequest;
 use App\Http\Resources\Users\AddressResource;
