@@ -181,7 +181,8 @@ class ProductsDoc
     /**
      * @OA\Put(
      *     path="/products/{id}",
-     *     summary="Update Product",
+     *     summary="Update Product (JSON Only)",
+     *     description="Update product using JSON data only. Validates with UpdateProductJsonRequest. For file uploads, use POST /products/{id}/update",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
@@ -191,7 +192,108 @@ class ProductsDoc
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="category_id", type="integer", nullable=true, example=1),
+     *             @OA\Property(property="name", type="string", example="Updated Product Name"),
+     *             @OA\Property(property="stock", type="integer", minimum=0, example=150),
+     *             @OA\Property(property="price", type="number", format="float", minimum=0, example=39.99)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product updated successfully.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="category_id", type="integer", nullable=true, example=1),
+     *                 @OA\Property(property="name", type="string", example="Updated Product Name"),
+     *                 @OA\Property(property="stock", type="integer", example=150),
+     *                 @OA\Property(property="price", type="number", format="float", example=39.99),
+     *                 @OA\Property(property="category", type="string", nullable=true, example="Category Name"),
+     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/image.jpg")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request - Validates JSON only (UpdateProductJsonRequest).",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="This endpoint only accepts JSON data. For file uploads, use POST /products/{id}/update", description="Possible messages: Non-JSON content type or image fields detected")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Authorization error.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="You are not authorized to update this resource.")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="Product not found.")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="name", type="array", @OA\Items(type="string", example="The name field is required."))
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function update() {}
+
+    /**
+     * @OA\Post(
+     *     path="/products/{id}/update",
+     *     summary="Update Product with Form Data",
+     *     description="Update product using form-data (supports file upload). Validates with UpdateProductFormRequest. For JSON-only updates, use PUT /products/{id}",
+     *     tags={"Products"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
      *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=false,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
@@ -247,42 +349,41 @@ class ProductsDoc
      *         )
      *     ),
      *     @OA\Response(
+     *         response=404,
+     *         description="Product not found.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="Product not found.")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request - Validates form-data only (UpdateProductFormRequest).",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="This endpoint only accepts multipart/form-data. For JSON updates, use PUT /products/{id}")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
      *         response=422,
      *         description="Validation error.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="Product update request failed due to invalid data."),
-     *                 @OA\Property(
-     *                     property="name",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="The name field must be a string.")
-     *                 ),
-     *                 @OA\Property(
-     *                     property="price",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="The price field must be a number.")
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Not found.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Not found.")
+     *                 @OA\Property(property="name", type="array", @OA\Items(type="string", example="The name field is required."))
      *             )
      *         )
      *     )
      * )
      */
-    public function update() {}
+    public function updateWithFormData() {}
 
     /**
      * @OA\Delete(

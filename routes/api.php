@@ -48,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
 
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+    Route::post('products/{product}/update', [ProductController::class, 'updateWithFormData'])->name('products.update.form');
     Route::post('products/{product}/restore', [ProductController::class, 'restore']);
     Route::delete('products/{product}/force-delete', [ProductController::class, 'forceDelete']);
 

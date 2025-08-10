@@ -28,6 +28,8 @@ function setup {
 
   migrate || echo "[warn] Migrations failed (migrate); continuing..."
 
+  storage_link || echo "[warn] Storage link failed (storage_link); continuing..."
+
   seed || echo "[warn] Seeding failed (seed); continuing..."
 }
 
@@ -94,6 +96,12 @@ function migrate {
   source .env
   echo ">> Running database migrations..."
   docker compose exec app php artisan migrate
+}
+
+function storage_link {
+  source .env
+  echo ">> Creating storage symbolic link..."
+  docker compose exec app php artisan storage:link
 }
 
 function composer {

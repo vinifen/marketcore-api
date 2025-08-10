@@ -95,4 +95,19 @@ class ProductService
         $product->refresh();
         return $product;
     }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function createProduct(array $data, ?UploadedFile $image = null): Product
+    {
+        if ($image) {
+            $data['image_url'] = $this->uploadImage($image);
+        }
+
+        unset($data['image']);
+
+        $product = Product::create($data);
+        return $product;
+    }
 }
