@@ -7,7 +7,7 @@ This document provides a comprehensive overview of the MarketCore API database s
 ## Entity Relationship Diagram
 
 ### Visual Representation
-![Database Schema](https://raw.githubusercontent.com/vinifen/marketcore-api/refs/heads/refactor/43/organize-files/docs/database/marketcore-api-dbdiagram-io.png)
+![Database Schema](https://github.com/vinifen/marketcore-api/blob/development/docs/database/marketcore-api-dbdiagram-io.png)
 
 ### Interactive Diagram
 You can visualize and edit the complete database schema using [dbdiagram.io](https://dbdiagram.io/) with the code provided in `schema.dbml`.
