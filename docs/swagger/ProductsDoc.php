@@ -28,7 +28,7 @@ class ProductsDoc
      *                     @OA\Property(property="stock", type="integer", example=100),
      *                     @OA\Property(property="price", type="number", format="float", example=29.99),
      *                     @OA\Property(property="category", type="string", nullable=true, example="Category Name"),
-     *                     @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/image.jpg")
+     *                     @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/api/image.jpg")
      *                 )
      *             )
      *         )
@@ -73,7 +73,7 @@ class ProductsDoc
      *                 @OA\Property(property="stock", type="integer", example=100),
      *                 @OA\Property(property="price", type="number", format="float", example=29.99),
      *                 @OA\Property(property="category", type="string", nullable=true, example="Category Name"),
-     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/image.jpg")
+     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/api/image.jpg")
      *             )
      *         )
      *     ),
@@ -157,7 +157,7 @@ class ProductsDoc
      *                 @OA\Property(property="stock", type="integer", example=100),
      *                 @OA\Property(property="price", type="number", format="float", example=29.99),
      *                 @OA\Property(property="category", type="string", nullable=true, example="Category Name"),
-     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/image.jpg")
+     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/api/image.jpg")
      *             )
      *         )
      *     ),
@@ -216,7 +216,7 @@ class ProductsDoc
      *                 @OA\Property(property="stock", type="integer", example=150),
      *                 @OA\Property(property="price", type="number", format="float", example=39.99),
      *                 @OA\Property(property="category", type="string", nullable=true, example="Category Name"),
-     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/image.jpg")
+     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/api/image.jpg")
      *             )
      *         )
      *     ),
@@ -322,7 +322,7 @@ class ProductsDoc
      *                 @OA\Property(property="stock", type="integer", example=150),
      *                 @OA\Property(property="price", type="number", format="float", example=39.99),
      *                 @OA\Property(property="category", type="string", nullable=true, example="Category Name"),
-     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/image.jpg")
+     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/api/image.jpg")
      *             )
      *         )
      *     ),
@@ -470,7 +470,7 @@ class ProductsDoc
      *                 @OA\Property(property="stock", type="integer", example=100),
      *                 @OA\Property(property="price", type="number", format="float", example=29.99),
      *                 @OA\Property(property="category", type="string", nullable=true, example="Category Name"),
-     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/image.jpg")
+     *                 @OA\Property(property="image_url", type="string", nullable=true, example="https://example.com/api/image.jpg")
      *             )
      *         )
      *     ),

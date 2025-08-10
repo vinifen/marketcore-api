@@ -255,7 +255,7 @@ class ProductControllerTest extends TestCase
 
         $pathFromUrl = parse_url($product->image_url, PHP_URL_PATH);
         $this->assertIsString($pathFromUrl);
-        $storagePath = ltrim(str_replace('/storage/', '', $pathFromUrl), '/');
+        $storagePath = ltrim(str_replace('/api/storage/', '', $pathFromUrl), '/');
         $this->assertTrue(Storage::disk('public')->exists($storagePath));
     }
 
@@ -318,7 +318,7 @@ class ProductControllerTest extends TestCase
 
         $pathFromUrl = parse_url($product->image_url, PHP_URL_PATH);
         $this->assertIsString($pathFromUrl);
-        $newStoragePath = ltrim(str_replace('/storage/', '', $pathFromUrl), '/');
+        $newStoragePath = ltrim(str_replace('/api/storage/', '', $pathFromUrl), '/');
         $this->assertTrue(Storage::disk('public')->exists($newStoragePath));
     }
 

@@ -1274,6 +1274,55 @@
                 ]
             }
         },
+        "/api/": {
+            "get": {
+                "tags": [
+                    "API Root"
+                ],
+                "summary": "API Root - Welcome and Information",
+                "description": "Returns welcome message and basic API information including available endpoints",
+                "operationId": "getApiRoot",
+                "responses": {
+                    "200": {
+                        "description": "API information retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Welcome to the Marketcore API"
+                                                },
+                                                "docs": {
+                                                    "type": "string",
+                                                    "example": "http://localhost:8010/api/documentation"
+                                                },
+                                                "github": {
+                                                    "type": "string",
+                                                    "example": "https://github.com/vinifen/marketcore-api"
+                                                },
+                                                "version": {
+                                                    "type": "string",
+                                                    "example": "1.0.0"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/register": {
             "post": {
                 "tags": [
@@ -8673,7 +8722,7 @@
                                                     },
                                                     "image_url": {
                                                         "type": "string",
-                                                        "example": "https://example.com/image.jpg",
+                                                        "example": "https://example.com/api/image.jpg",
                                                         "nullable": true
                                                     }
                                                 },
@@ -8778,7 +8827,7 @@
                                                 },
                                                 "image_url": {
                                                     "type": "string",
-                                                    "example": "https://example.com/image.jpg",
+                                                    "example": "https://example.com/api/image.jpg",
                                                     "nullable": true
                                                 }
                                             },
@@ -8953,7 +9002,7 @@
                                                 },
                                                 "image_url": {
                                                     "type": "string",
-                                                    "example": "https://example.com/image.jpg",
+                                                    "example": "https://example.com/api/image.jpg",
                                                     "nullable": true
                                                 }
                                             },
@@ -9083,7 +9132,7 @@
                                                 },
                                                 "image_url": {
                                                     "type": "string",
-                                                    "example": "https://example.com/image.jpg",
+                                                    "example": "https://example.com/api/image.jpg",
                                                     "nullable": true
                                                 }
                                             },
@@ -9454,7 +9503,7 @@
                                                 },
                                                 "image_url": {
                                                     "type": "string",
-                                                    "example": "https://example.com/image.jpg",
+                                                    "example": "https://example.com/api/image.jpg",
                                                     "nullable": true
                                                 }
                                             },
@@ -9661,7 +9710,7 @@
                                                 },
                                                 "image_url": {
                                                     "type": "string",
-                                                    "example": "https://example.com/image.jpg",
+                                                    "example": "https://example.com/api/image.jpg",
                                                     "nullable": true
                                                 }
                                             },
@@ -9876,6 +9925,81 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/storage/{path}": {
+            "get": {
+                "tags": [
+                    "File Storage"
+                ],
+                "summary": "Serve Uploaded Files",
+                "description": "Serves uploaded files (images, documents, etc.) via the API with proper content type headers. This route provides access to files stored in the public storage disk.",
+                "operationId": "getStorageFile",
+                "parameters": [
+                    {
+                        "name": "path",
+                        "in": "path",
+                        "description": "File path relative to storage/app/public directory",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "products/image.png"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "File served successfully",
+                        "headers": {
+                            "Content-Type": {
+                                "description": "MIME type of the file",
+                                "schema": {
+                                    "type": "string",
+                                    "example": "image/png"
+                                }
+                            }
+                        },
+                        "content": {
+                            "image/png": {
+                                "schema": {
+                                    "description": "Image file",
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "image/jpeg": {
+                                "schema": {
+                                    "description": "Image file",
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            },
+                            "application/octet-stream": {
+                                "schema": {
+                                    "description": "Generic file",
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "File not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "File not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/users": {
@@ -10950,6 +11074,10 @@
             "description": "Address"
         },
         {
+            "name": "API Root",
+            "description": "API Root"
+        },
+        {
             "name": "Auth",
             "description": "Auth"
         },
@@ -10984,6 +11112,10 @@
         {
             "name": "Products",
             "description": "Products"
+        },
+        {
+            "name": "File Storage",
+            "description": "File Storage"
         },
         {
             "name": "User",

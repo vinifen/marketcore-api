@@ -45,7 +45,9 @@ class ProductService
             throw new ApiException('Failed to store product image.', null, 500);
         }
 
-        return Storage::url($path);
+        $storageUrl = Storage::url($path);
+
+        return str_replace('/storage/', '/api/storage/', $storageUrl);
     }
 
     public function deleteImage(?string $imageUrl): void
@@ -58,7 +60,8 @@ class ProductService
         if (!is_string($pathFromUrl)) {
             return;
         }
-        $path = ltrim(str_replace('/storage/', '', $pathFromUrl), '/');
+
+        $path = ltrim(str_replace(['/api/storage/', '/storage/'], '', $pathFromUrl), '/');
 
         if (Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);

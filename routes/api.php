@@ -13,14 +13,29 @@ use App\Http\Controllers\UserController;
 use App\Http\Responses\ApiResponse;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
+use Illuminate\Support\Facades\Storage;
+use App\Exceptions\ApiException;
 
 Route::get('/', function () {
     return ApiResponse::success([
         'message' => 'Welcome to the Marketcore API',
         'docs' => $_ENV['APP_URL'] . ':' . $_ENV['WEB_SERVER_PORT'] . '/api/documentation',
         'github' => "https://github.com/vinifen/marketcore-api",
+        'version' => '1.0.0',
     ], 200);
 });
+
+Route::get('/storage/{path}', function (string $path) {
+    if (!Storage::disk('public')->exists($path)) {
+        throw new ApiException('File not found', null, 404);
+    }
+
+    $file = Storage::disk('public')->get($path);
+    $fullPath = Storage::disk('public')->path($path);
+    $mimeType = mime_content_type($fullPath) ?: 'application/octet-stream';
+
+    return response($file, 200)->header('Content-Type', $mimeType);
+})->where('path', '.*');
 
 Route::post('/register', [AuthController::class, 'registerClient']);
 Route::post('/login', [AuthController::class, 'login']);
