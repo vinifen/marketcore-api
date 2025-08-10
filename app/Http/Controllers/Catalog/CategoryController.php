@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Category\StoreCategoryRequest;
-use App\Http\Requests\Category\UpdateCategoryRequest;
-use App\Http\Resources\CategoryResource;
+use App\Http\Requests\Catalog\Category\StoreCategoryRequest;
+use App\Http\Requests\Catalog\Category\UpdateCategoryRequest;
+use App\Http\Resources\Catalog\CategoryResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;

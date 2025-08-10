@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Users\AddressController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CartItemController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Cart\CartController;
+use App\Http\Controllers\Cart\CartItemController;
 use App\Http\Controllers\Catalog\CategoryController;
 use App\Http\Controllers\Catalog\ProductController;
 use App\Http\Controllers\Catalog\DiscountController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Coupons\CouponController;
+use App\Http\Controllers\Users\UserController;
 use App\Http\Responses\ApiResponse;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\Orders\OrderController;
+use App\Http\Controllers\Orders\OrderItemController;
 use Illuminate\Support\Facades\Storage;
 use App\Exceptions\ApiException;
 
@@ -24,6 +24,7 @@ Route::get('/', function () {
         'version' => '1.0.0',
     ], 200);
 });
+
 
 Route::get('/storage/{path}', function (string $path) {
     if (!Storage::disk('public')->exists($path)) {
@@ -37,19 +38,25 @@ Route::get('/storage/{path}', function (string $path) {
     return response($file, 200)->header('Content-Type', $mimeType);
 })->where('path', '.*');
 
-Route::post('/register', [AuthController::class, 'registerClient']);
-Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{category}', [CategoryController::class, 'show']);
+Route::middleware('throttle:2,1')->group(function () {
+    Route::post('/register', [AuthController::class, 'registerClient']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{product}', [ProductController::class, 'show']);
 
-Route::get('/discounts', [DiscountController::class, 'index']);
-Route::get('/discounts/{discount}', [DiscountController::class, 'show']);
+Route::middleware('throttle:120,1')->group(function () {
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{category}', [CategoryController::class, 'show']);
 
-Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{product}', [ProductController::class, 'show']);
+
+    Route::get('/discounts', [DiscountController::class, 'index']);
+    Route::get('/discounts/{discount}', [DiscountController::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'throttle:120,1'])->group(function () {
     Route::post('/register/mod', [AuthController::class, 'registerMod']);
 
     Route::apiResource('users', UserController::class);
@@ -81,7 +88,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('coupons', CouponController::class);
     Route::post('coupons/{coupon}/restore', [CouponController::class, 'restore']);
     Route::delete('coupons/{coupon}/force-delete', [CouponController::class, 'forceDelete']);
-
 
     Route::apiResource('order', OrderController::class);
     Route::post('order/{order}/restore', [OrderController::class, 'restore']);
