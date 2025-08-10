@@ -58,8 +58,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('cart', CartController::class)->only(['index', 'show']);
     Route::delete('cart/{cart}/clear', [CartController::class, 'clear']);
 
-    Route::apiResource('cart-items', CartItemController::class);
+    Route::apiResource('cart-items', CartItemController::class)->except(['destroy']);
     Route::delete('cart-items/{cartItem}/remove-one', [CartItemController::class, 'removeOne']);
+    Route::delete('cart-items/{cartItem}/force-delete', [CartItemController::class, 'forceDelete']);
 
     Route::apiResource('coupons', CouponController::class);
     Route::post('coupons/{coupon}/restore', [CouponController::class, 'restore']);

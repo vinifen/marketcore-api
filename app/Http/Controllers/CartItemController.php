@@ -66,7 +66,7 @@ class CartItemController extends Controller
         return ApiResponse::success(null, 200);
     }
 
-    public function destroy(int $id): JsonResponse
+    public function forceDelete(int $id): JsonResponse
     {
         $cartItem = $this->findModelOrFailWithTrashed(CartItem::class, $id);
         $this->authorize('forceDelete', $cartItem);

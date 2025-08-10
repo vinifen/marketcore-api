@@ -124,7 +124,7 @@ class CartItemControllerTest extends TestCase
             'product_id' => $product->id,
         ]);
 
-        $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}");
+        $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/force-delete");
 
         $response->assertStatus(200);
 
@@ -436,7 +436,7 @@ class CartItemControllerTest extends TestCase
             'quantity' => 5,
         ]);
 
-        $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}");
+        $response = $this->actingAs($user)->deleteJson("/api/cart-items/{$cartItem->id}/force-delete");
 
         $response->assertStatus(200);
 
