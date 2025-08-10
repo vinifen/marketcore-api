@@ -126,7 +126,7 @@ This project demonstrates professional-grade development practices including:
 - **Best Practices**: Following Laravel and PHP community standards
 
 ## 🛢️ Database Schema
-![Database Schema](https://github.com/vinifen/marketcore-api/blob/refactor/43/organize-files/docs/database/marketcore-api-dbdiagram-io.png)
+![Database Schema](https://github.com/vinifen/marketcore-api/blob/development/docs/database/marketcore-api-dbdiagram-io.png)
 *Complete database documentation available in [`docs/database/`](docs/database/)*
 
 ## 🔄 Git Workflow & Project Management
