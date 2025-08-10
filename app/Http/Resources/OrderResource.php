@@ -18,7 +18,7 @@ class OrderResource extends JsonResource
             'address_id' => $this->resource->address_id,
             'coupon_id' => $this->resource->coupon_id,
             'order_date' => $this->resource->order_date,
-            'total_amount' => $this->resource->total_amount,
+            'total_amount' => (float) $this->resource->total_amount,
             'status' => $this->resource->status,
             'user' => new UserResource($this->whenLoaded('user')),
             'address' => new AddressResource($this->whenLoaded('address')),
