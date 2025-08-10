@@ -1,0 +1,20 @@
+includes:
+  - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+  level: 8
+  paths:
+    - app
+    - tests
+
+  excludePaths:
+    - bootstrap/*
+    - storage/*
+    - vendor/*
+    - database/migrations/*
+    - public/*
+
+  ignoreErrors:
+    - '#Method .* should return Illuminate\\Database\\Eloquent\\Relations\\.*#'
+
+  checkUninitializedProperties: true

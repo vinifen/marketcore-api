@@ -1,61 +1,159 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Market Core API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+#### v-1.0.0
 
-## About Laravel
+**Market Core API** is a comprehensive Laravel-based marketplace API built entirely from scratch over 111+ hours of dedicated development work. This project was developed to enhance my backend development skills through hands-on implementation of a complete e-commerce solution.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🔧 Built From Scratch
+This project was constructed from the ground up with careful attention to every detail:
+- **Complete Infrastructure Setup**: Docker containers, Nginx configuration, PostgreSQL database
+- **Comprehensive Testing**: 350+ unit and feature tests ensuring robust functionality
+- **Code Quality**: PHPStan Level 8 static analysis, PHPCS code standards enforcement
+- **Complete Documentation**: Full Swagger/OpenAPI documentation for all API endpoints
+- **Security Best Practices**: Rate limiting, authentication, authorization policies, input validation
+- **Custom Solutions**: Tailored API responses, exception handling, and business logic implementation
+- **Simplified Commands**: Custom `./run` script with streamlined commands for easy project management
+- **Professional Git Workflow**: Complete version control with milestones, projects, pull requests, issues, and branching strategy
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 💡 Learning Journey
+This project has been instrumental in my backend development learning process, providing hands-on experience with:
+- Advanced Laravel concepts and best practices
+- Test-driven development methodology
+- API design and documentation
+- Security implementation and code quality standards
+- DevOps practices with Docker and containerization
+- Professional Git workflow and project management
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ✨ Key Features
+- **Auth**: Login & registration
+- **Users**: Manage own profile; ADMIN creates MODERATORs
+- **Addresses**: CRUD for user addresses
+- **Categories**: Public list, ADMIN-only CRUD
+- **Discounts/Coupons**: ADMIN manages; used on products/orders
+- **Products**: Public list, MODERATOR CRUD + image upload
+- **Cart**: One per user; manage items
+- **Orders**: Create from cart, cancel own; MODERATOR updates status
+- **Roles**: CLIENT, MODERATOR, ADMIN with increasing permissions
+- **Rules**: Role-based access, one coupon/order, cart/order logic enforced
+- **Authorization**: Laravel Policies for granular user permission control
+- **Data Integrity**: Soft deletes implementation for safe data management
 
-## Learning Laravel
+## 🧰 Technologies Used & Tested
+- **PHP**: v-8.2
+- **Laravel**: v-12.0
+- **Docker**: 27.5.1, build 27.5.1-0ubuntu3~24.04.2
+- **Docker Compose**: Docker Compose version v2.35.1
+- **Docker & Docker Compose**: Complete containerization with Nginx
+- **PostgreSQL**: Primary database with pgweb interface
+- **Testing**: 350+ comprehensive unit and feature tests
+- **Code Quality**: PHPStan Level 8 static analysis + PHPCS standards
+- **Documentation**: Complete Swagger/OpenAPI specification
+- **Security**: Rate limiting, authentication middleware, authorization policies
+- **Linux**: Ubuntu 24.04.2 LTS development environment
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🚀 Installation
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Clone the repository and navigate into the folder:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git clone https://github.com/vinifen/marketcore-api.git
+cd marketcore-api
+```
 
-## Laravel Sponsors
+### Check `.env.example`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Check if everything is like you would like (default config is working)
 
-### Premium Partners
+### Simple Run with Custom Commands:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+The project includes a custom `./run` script with simplified commands for easy management:
 
-## Contributing
+```bash
+./run setup
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This single command handles the entire setup: environment configuration, Docker containers, dependencies, database migrations, and seeding.
 
-## Code of Conduct
+### Access:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- API: http://localhost:8010/api
+- Docs: http://localhost:8010/api/documentation
+- Pgweb: http://localhost:8011
 
-## Security Vulnerabilities
+### Available Commands:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Run `help` to see all available simplified commands:
 
-## License
+```bash
+./run help
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Common commands:**
+- `./run setup` - Complete project setup
+- `./run test` - Run all tests
+- `./run phpstan` - Static analysis
+- `./run phpcs` - Code standards check
+- `./run all-tests` - Run all quality checks
+
+## 📖 API Documentation Preview
+
+### Swagger Interface
+![API Documentation Interface 1](https://res.cloudinary.com/dqafdlj0c/image/upload/v1754863793/marketcore-api-swagger-1_mqhipp.png)
+
+![API Documentation Interface 2](https://res.cloudinary.com/dqafdlj0c/image/upload/v1754864062/marketcore-api-swagger-2_qpdq8b.png)
+
+## 📊 Project Statistics
+- **111+ Development Hours**: Dedicated time investment in building this comprehensive solution
+- **350+ Tests**: Comprehensive unit and feature test coverage
+- **PHPStan Level 8**: Strict static analysis with zero errors
+- **PHPCS Compliant**: Follows PSR-12 coding standards
+- **100% API Documentation**: Complete Swagger documentation for all endpoints
+- **Security First**: Rate limiting, input validation, and proper authorization
+- **Custom Exception Handling**: Tailored error responses and exception management
+- **Simplified Management**: Custom `./run` script with 15+ streamlined commands
+- **Professional Version Control**: Complete Git workflow with organized project management
+
+## 🎯 Development Excellence
+This project demonstrates professional-grade development practices including:
+- **Test-Driven Development**: Extensive test suite covering all functionality
+- **Code Quality**: Static analysis and coding standards enforcement
+- **API Documentation**: Complete OpenAPI/Swagger specification
+- **Security Implementation**: Authentication, authorization, and rate limiting
+- **Containerization**: Full Docker setup with Nginx and PostgreSQL
+- **Developer Experience**: Simplified command interface for easy project management
+- **Project Management**: Professional Git workflow with milestones, projects, pull requests, and issues
+- **Branching Strategy**: Organized development workflow with main and feature branches
+- **Best Practices**: Following Laravel and PHP community standards
+
+## 🛢️ Database Schema
+![Database Schema](https://github.com/vinifen/marketcore-api/blob/refactor/43/organize-files/docs/database/marketcore-api-dbdiagram-io.png)
+*Complete database documentation available in [`docs/database/`](docs/database/)*
+
+## 🔄 Git Workflow & Project Management
+This project follows professional development practices with comprehensive version control:
+
+### **Repository Structure:**
+- **Main Branch**: Production-ready stable code
+- **Development Branches**: Feature development and bug fixes (e.g., `refactor/43/organize-files`)
+- **Organized Commits**: Clear, descriptive commit messages following conventional standards
+
+### **Project Management Tools:**
+- **📋 GitHub Projects**: Organized task tracking and workflow management
+- **🎯 Milestones**: Clear project phases and release planning
+- **🔧 Issues**: Detailed bug reports, feature requests, and task documentation
+- **🔀 Pull Requests**: Code review process and merge management
+- **📝 Documentation**: Comprehensive README, API docs, and code comments
+
+### **Development Process:**
+- **Feature Branches**: Isolated development for each feature or fix
+- **Code Reviews**: Pull request process ensuring code quality
+- **Issue Tracking**: Systematic approach to bug fixes and enhancements
+- **Release Management**: Milestone-based versioning and deployment planning
+
+## 🤖 AI-Assisted Development
+This project leveraged artificial intelligence to enhance work quality and accelerate learning:
+- **Code Quality Enhancement**: AI assistance in identifying best practices and optimization opportunities
+- **Learning Acceleration**: AI-guided exploration of Laravel concepts and implementation patterns
+- **Problem Solving**: AI support in debugging complex issues and architectural decisions
+- **Documentation Improvement**: AI assistance in creating comprehensive and professional documentation
+- **Knowledge Expansion**: AI-powered learning of advanced PHP and Laravel techniques
