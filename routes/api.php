@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Users\AddressController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CartItemController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Cart\CartController;
+use App\Http\Controllers\Cart\CartItemController;
 use App\Http\Controllers\Catalog\CategoryController;
 use App\Http\Controllers\Catalog\ProductController;
 use App\Http\Controllers\Catalog\DiscountController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Coupons\CouponController;
+use App\Http\Controllers\Users\UserController;
 use App\Http\Responses\ApiResponse;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\Orders\OrderController;
+use App\Http\Controllers\Orders\OrderItemController;
 use Illuminate\Support\Facades\Storage;
 use App\Exceptions\ApiException;
 
