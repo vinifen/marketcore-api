@@ -28,8 +28,6 @@ function setup {
 
   migrate || echo "[warn] Migrations failed (migrate); continuing..."
 
-  storage_link || echo "[warn] Storage link failed (storage_link); continuing..."
-
   seed || echo "[warn] Seeding failed (seed); continuing..."
 }
 
