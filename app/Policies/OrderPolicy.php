@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Policies\Concerns\AuthorizesActions;
 use App\Enums\OrderStatus;
+use App\Models\Address;
 
 class OrderPolicy
 {
@@ -35,8 +36,14 @@ class OrderPolicy
     public function create(User $authUser): true
     {
         $requestedUserId = request()->input('user_id');
+        $requestedAddressId = request()->input('address_id');
+
+        $addressBelongsToUser = Address::where('id', $requestedAddressId)
+            ->where('user_id', $requestedUserId)
+            ->exists();
+
         $this->authorizeUnlessPrivileged(
-            $authUser->id === $requestedUserId,
+            ($authUser->id === $requestedUserId && $addressBelongsToUser),
             $authUser->isAdmin(),
             'create'
         );
