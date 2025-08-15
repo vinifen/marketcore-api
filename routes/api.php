@@ -39,7 +39,7 @@ Route::get('/storage/{path}', function (string $path) {
 })->where('path', '.*');
 
 
-Route::middleware('throttle:2,1')->group(function () {
+Route::middleware('throttle:60,1')->group(function () {
     Route::post('/register', [AuthController::class, 'registerClient']);
     Route::post('/login', [AuthController::class, 'login']);
 });

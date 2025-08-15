@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Http\Resources\Users\UserResource;
 
 class AuthController extends Controller
 {
@@ -22,7 +23,14 @@ class AuthController extends Controller
             UserRole::CLIENT,
             app(UserService::class)
         );
-        return ApiResponse::success($response, 201);
+
+        return ApiResponse::success(
+            [
+                "user" => new UserResource($response['user']),
+                "token" => $response['token']
+            ],
+            201
+        );
     }
 
     public function registerMod(StoreUserRequest $request, AuthService $authService): JsonResponse
@@ -33,13 +41,23 @@ class AuthController extends Controller
             UserRole::MODERATOR,
             app(UserService::class)
         );
-        return ApiResponse::success($response, 201);
+
+        return ApiResponse::success(
+            [
+                "user" => new UserResource($response['user']),
+                "token" => $response['token']
+            ],
+            201
+        );
     }
 
     public function login(LoginUserRequest $request, AuthService $authService): JsonResponse
     {
         $response = $authService->login($request->validated());
-        return ApiResponse::success($response);
+        return ApiResponse::success([
+                "user" => new UserResource($response['user']),
+                "token" => $response['token']
+        ]);
     }
 
     public function logout(Request $request): JsonResponse
