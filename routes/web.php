@@ -11,4 +11,4 @@ Route::get('/', function () {
         'github' => "https://github.com/vinifen/marketcore-api",
         'version' => '1.0.0',
     ], 200);
-});
+})->middleware('throttle:60,1');

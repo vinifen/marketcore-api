@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Services;
+namespace App\Actions\Orders;
 
 use App\Enums\OrderStatus;
+use App\Exceptions\ApiException;
+use App\Models\Cart;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Cart;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use App\Exceptions\ApiException;
-use App\Models\Coupon;
+use App\Services\ProductService;
 
-class OrderService
+class StoreOrderAction
 {
     /**
      * @param array<string, mixed> $data
      */
-    public function store(array $data, int $user_id, ProductService $productService): Order
+    public function execute(array $data, int $user_id, ProductService $productService): Order
     {
         $cart = $this->getCartForUser($user_id);
 
@@ -38,6 +38,20 @@ class OrderService
         $cart->items()->forceDelete();
 
         return $order->load(['items', 'user', 'coupon']);
+    }
+
+    private function getCartForUser(int $user_id): Cart
+    {
+        $user = User::find($user_id);
+        if (!$user) {
+            throw new ApiException('User not found.', null, 404);
+        }
+
+        $cart = $user->cart;
+        if (!$cart) {
+            throw new ApiException('No cart found for the authenticated user.', null, 404);
+        }
+        return $cart;
     }
 
     /**
@@ -85,7 +99,7 @@ class OrderService
         foreach ($cart->items as $item) {
             $product = $item->product;
             if ($product) {
-                $unitPrice = $product->getDiscountedPrice() ?? $product->price;
+                $unitPrice = (float) ($product->getDiscountedPrice() ?? $product->price);
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
@@ -96,42 +110,41 @@ class OrderService
         }
     }
 
-    protected function calculateTotal(Cart $cart): float
+    private function calculateTotal(Cart $cart): float
     {
         $totalCents = 0;
         foreach ($cart->items as $item) {
             $product = $item->product;
             if ($product) {
-                $unitPrice = $product->getDiscountedPrice() ?? $product->price; // float
-                // Convert to integer cents to avoid floating point drift
+                $unitPrice = (float) ($product->getDiscountedPrice() ?? $product->price);
+
                 $unitCents = (int) round($unitPrice * 100);
                 $totalCents += $unitCents * $item->quantity;
             }
         }
-        return $totalCents / 100; // back to float with 2 decimals max of precision
+
+        $totalPrice = $totalCents / 100;
+        return $totalPrice;
     }
 
-    protected function calculateTotalWithCoupon(Cart $cart, ?float $couponPercentage): float
+    private function calculateTotalWithCoupon(Cart $cart, ?float $couponPercentage): float
     {
-        $total = $this->calculateTotal($cart); // float representation (already aggregated)
+        $total = $this->calculateTotal($cart);
 
         if ($couponPercentage !== null && $couponPercentage > 0) {
-            // Work in cents for discount as well
             $totalCents = (int) round($total * 100);
             $discountCents = (int) round($totalCents * ($couponPercentage / 100));
             $totalCents -= $discountCents;
             $total = $totalCents / 100;
         }
 
-        // Final rounding once
         $total = round($total, 2);
         $this->validateTotalAmount($total);
         return $total;
     }
 
-    protected function validateTotalAmount(float $total): void
+    private function validateTotalAmount(float $total): void
     {
-        // Validation errors are client-related; use 422
         if ($total < 0) {
             throw new ApiException('Total amount cannot be negative.', null, 422);
         }
@@ -141,32 +154,5 @@ class OrderService
         if ($total > 999999.99) {
             throw new ApiException('Total amount exceeds the maximum limit.', null, 422);
         }
-    }
-
-    protected function getCartForUser(int $user_id): Cart
-    {
-        $user = User::find($user_id);
-        if (!$user) {
-            throw new ApiException('User not found.', null, 404);
-        }
-
-        $cart = $user->cart;
-        if (!$cart) {
-            throw new ApiException('No cart found for the authenticated user.', null, 404);
-        }
-        return $cart;
-    }
-
-    public function cancelOrder(Order $order, ProductService $productService): Order
-    {
-        foreach ($order->items as $item) {
-            $product = $item->product;
-            if ($product) {
-                $productService->increaseStock($product, $item->quantity);
-            }
-        }
-        $order->status = OrderStatus::CANCELED;
-        $order->save();
-        return $order;
     }
 }

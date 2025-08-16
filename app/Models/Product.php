@@ -97,6 +97,8 @@ class Product extends Model
             return null;
         }
 
-        return round($this->price * (1 - ($totalDiscount / 100)), 2);
+        $discontedPrice = round($this->price * (1 - ($totalDiscount / 100)), 2);
+
+        return $discontedPrice;
     }
 }

@@ -26,34 +26,12 @@ class OrderItemsDoc
      *                     @OA\Property(property="id", type="integer", example=1),
      *                     @OA\Property(property="order_id", type="integer", example=1),
      *                     @OA\Property(property="product_id", type="integer", example=1),
+     *                     @OA\Property(property="product_name", type="string", example="Product Name"),
      *                     @OA\Property(property="quantity", type="integer", example=2),
      *                     @OA\Property(property="unit_price", type="number", format="float", example=49.99),
-     *                     @OA\Property(
-     *                         property="order",
-     *                         type="object",
-     *                         @OA\Property(property="id", type="integer", example=1),
-     *                         @OA\Property(property="user_id", type="integer", example=1),
-     *                         @OA\Property(property="address_id", type="integer", example=1),
-     *                         @OA\Property(property="coupon_id", type="integer", example=1),
-     *                         @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                         @OA\Property(property="total_amount", type="number", format="float", example=299.99),
-     *                         @OA\Property(property="status", type="string", example="PENDING"),
-     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                         @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
-     *                     ),
-     *                     @OA\Property(
-     *                         property="product",
-     *                         type="object",
-     *                         @OA\Property(property="id", type="integer", example=1),
-     *                         @OA\Property(property="category_id", type="integer", example=1),
-     *                         @OA\Property(property="name", type="string", example="Product Name"),
-     *                         @OA\Property(property="stock", type="integer", example=100),
-     *                         @OA\Property(property="price", type="number", format="float", example=49.99),
-     *                         @OA\Property(property="category", type="string", example="Category Name"),
-     *                         @OA\Property(property="image_url", type="string", example="https://example.com/image.jpg")
-     *                     ),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *                     @OA\Property(property="total_price", type="number", format="float", example=99.98),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *                 )
      *             )
      *         )
@@ -113,10 +91,12 @@ class OrderItemsDoc
      *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="order_id", type="integer", example=1),
      *                 @OA\Property(property="product_id", type="integer", example=1),
+     *                 @OA\Property(property="product_name", type="string", example="Product Name"),
      *                 @OA\Property(property="quantity", type="integer", example=2),
      *                 @OA\Property(property="unit_price", type="number", format="float", example=49.99),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *                 @OA\Property(property="total_price", type="number", format="float", example=99.98),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -185,34 +165,12 @@ class OrderItemsDoc
      *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="order_id", type="integer", example=1),
      *                 @OA\Property(property="product_id", type="integer", example=1),
+     *                 @OA\Property(property="product_name", type="string", example="Product Name"),
      *                 @OA\Property(property="quantity", type="integer", example=2),
      *                 @OA\Property(property="unit_price", type="number", format="float", example=49.99),
-     *                 @OA\Property(
-     *                     property="order",
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer", example=1),
-     *                     @OA\Property(property="user_id", type="integer", example=1),
-     *                     @OA\Property(property="address_id", type="integer", example=1),
-     *                     @OA\Property(property="coupon_id", type="integer", example=1),
-     *                     @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                     @OA\Property(property="total_amount", type="number", format="float", example=299.99),
-     *                     @OA\Property(property="status", type="string", example="PENDING"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
-     *                 ),
-     *                 @OA\Property(
-     *                     property="product",
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer", example=1),
-     *                     @OA\Property(property="category_id", type="integer", example=1),
-     *                     @OA\Property(property="name", type="string", example="Product Name"),
-     *                     @OA\Property(property="stock", type="integer", example=100),
-     *                     @OA\Property(property="price", type="number", format="float", example=49.99),
-     *                     @OA\Property(property="category", type="string", example="Category Name"),
-     *                     @OA\Property(property="image_url", type="string", example="https://example.com/image.jpg")
-     *                 ),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *                 @OA\Property(property="total_price", type="number", format="float", example=99.98),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -245,7 +203,7 @@ class OrderItemsDoc
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\OrderItem] 1")
+     *                 @OA\Property(property="message", type="string", example="Not found.")
      *             )
      *         )
      *     )
@@ -288,10 +246,12 @@ class OrderItemsDoc
      *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="order_id", type="integer", example=1),
      *                 @OA\Property(property="product_id", type="integer", example=1),
+     *                 @OA\Property(property="product_name", type="string", example="Product Name"),
      *                 @OA\Property(property="quantity", type="integer", example=2),
      *                 @OA\Property(property="unit_price", type="number", format="float", example=49.99),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *                 @OA\Property(property="total_price", type="number", format="float", example=99.98),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -324,7 +284,7 @@ class OrderItemsDoc
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\OrderItem] 1")
+     *                 @OA\Property(property="message", type="string", example="Not found.")
      *             )
      *         )
      *     ),
@@ -363,7 +323,7 @@ class OrderItemsDoc
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Order item deleted successfully.")
+     *             @OA\Property(property="data", type="null")
      *         )
      *     ),
      *     @OA\Response(
@@ -395,7 +355,7 @@ class OrderItemsDoc
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\OrderItem] 1")
+     *                 @OA\Property(property="message", type="string", example="Not found.")
      *             )
      *         )
      *     )

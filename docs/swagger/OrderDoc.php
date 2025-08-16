@@ -27,11 +27,12 @@ class OrderDoc
      *                     @OA\Property(property="user_id", type="integer", example=1),
      *                     @OA\Property(property="address_id", type="integer", example=1),
      *                     @OA\Property(property="coupon_id", type="integer", example=1),
-     *                     @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                     @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
      *                     @OA\Property(property="total_amount", type="number", format="float", example=299.99),
      *                     @OA\Property(property="status", type="string", example="PENDING"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *                     @OA\Property(property="items_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *                 )
      *             )
      *         )
@@ -49,12 +50,12 @@ class OrderDoc
      *     ),
      *     @OA\Response(
      *         response=403,
-     *         description="Authorization error.",
+     *         description="Forbidden.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to view this resource.")
+     *                 @OA\Property(property="message", type="string", example="This action is unauthorized.")
      *             )
      *         )
      *     )
@@ -71,12 +72,11 @@ class OrderDoc
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             type="object",
      *             required={"user_id", "address_id"},
      *             @OA\Property(property="user_id", type="integer", example=1),
      *             @OA\Property(property="address_id", type="integer", example=1),
-     *             @OA\Property(property="coupon_code", type="string", example="SUMMER2025"),
-     *             @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00Z")
+     *             @OA\Property(property="coupon_code", type="string", example="SAVE10"),
+     *             @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-16T10:00:00Z")
      *         )
      *     ),
      *     @OA\Response(
@@ -92,11 +92,12 @@ class OrderDoc
      *                 @OA\Property(property="user_id", type="integer", example=1),
      *                 @OA\Property(property="address_id", type="integer", example=1),
      *                 @OA\Property(property="coupon_id", type="integer", example=1),
-     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
      *                 @OA\Property(property="total_amount", type="number", format="float", example=299.99),
      *                 @OA\Property(property="status", type="string", example="PENDING"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *                 @OA\Property(property="items_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -113,51 +114,24 @@ class OrderDoc
      *     ),
      *     @OA\Response(
      *         response=403,
-     *         description="Authorization error.",
+     *         description="Forbidden.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to create this resource.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="User not found.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="User not found.")
+     *                 @OA\Property(property="message", type="string", example="This action is unauthorized.")
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Validation error.",
+     *         description="Validation errors.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="Order creation request failed due to invalid data."),
-     *                 @OA\Property(
-     *                     property="user_id",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="The user id field is required.")
-     *                 ),
-     *                 @OA\Property(
-     *                     property="address_id",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="The address id field is required.")
-     *                 ),
-     *                 @OA\Property(
-     *                     property="coupon_code",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="The selected coupon code is invalid.")
-     *                 )
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="user_id", type="array", @OA\Items(type="string", example="The user id field is required.")),
+     *                 @OA\Property(property="address_id", type="array", @OA\Items(type="string", example="The address id field is required."))
      *             )
      *         )
      *     )
@@ -175,6 +149,7 @@ class OrderDoc
      *         name="id",
      *         in="path",
      *         required=true,
+     *         description="Order ID",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -190,15 +165,12 @@ class OrderDoc
      *                 @OA\Property(property="user_id", type="integer", example=1),
      *                 @OA\Property(property="address_id", type="integer", example=1),
      *                 @OA\Property(property="coupon_id", type="integer", example=1),
-     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
      *                 @OA\Property(property="total_amount", type="number", format="float", example=299.99),
      *                 @OA\Property(property="status", type="string", example="PENDING"),
-     *                 @OA\Property(property="user", type="object"),
-     *                 @OA\Property(property="address", type="object"),
-     *                 @OA\Property(property="coupon", type="object"),
-     *                 @OA\Property(property="items", type="array", @OA\Items(type="object")),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *                 @OA\Property(property="items_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -214,28 +186,24 @@ class OrderDoc
      *         )
      *     ),
      *     @OA\Response(
-     *         response=404,
-     *         description="Not found.",
+     *         response=403,
+     *         description="Forbidden.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="Not found.")
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="This action is unauthorized.")
      *             )
      *         )
      *     ),
      *     @OA\Response(
-     *         response=403,
-     *         description="Authorization error.",
+     *         response=404,
+     *         description="Order not found.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to show this resource.")
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="message", type="string", example="Order not found.")
      *             )
      *         )
      *     )
@@ -253,13 +221,16 @@ class OrderDoc
      *         name="id",
      *         in="path",
      *         required=true,
+     *         description="Order ID",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="address_id", type="integer", example=2)
+     *             @OA\Property(property="address_id", type="integer", example=1),
+     *             @OA\Property(property="coupon_id", type="integer", example=1),
+     *             @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-16T10:00:00Z"),
+     *             @OA\Property(property="total_amount", type="number", format="float", example=299.99)
      *         )
      *     ),
      *     @OA\Response(
@@ -273,13 +244,14 @@ class OrderDoc
      *                 type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="user_id", type="integer", example=1),
-     *                 @OA\Property(property="address_id", type="integer", example=2),
+     *                 @OA\Property(property="address_id", type="integer", example=1),
      *                 @OA\Property(property="coupon_id", type="integer", example=1),
-     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
      *                 @OA\Property(property="total_amount", type="number", format="float", example=299.99),
      *                 @OA\Property(property="status", type="string", example="PENDING"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
+     *                 @OA\Property(property="items_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *             )
      *         )
      *     ),
@@ -295,143 +267,30 @@ class OrderDoc
      *         )
      *     ),
      *     @OA\Response(
-     *         response=422,
-     *         description="Validation error.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="Order update request failed due to invalid data."),
-     *                 @OA\Property(
-     *                     property="address_id",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="The selected address id is invalid.")
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
      *         response=403,
-     *         description="Authorization error.",
+     *         description="Forbidden.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to update this resource.")
+     *                 @OA\Property(property="message", type="string", example="This action is unauthorized.")
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Not found.",
+     *         description="Order not found.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Not found.")
+     *                 @OA\Property(property="message", type="string", example="Order not found.")
      *             )
      *         )
      *     )
      * )
      */
     public function update() {}
-
-    /**
-     * @OA\Put(
-     *     path="/order/{id}/status",
-     *     summary="Update Order Status",
-     *     tags={"Order"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="status", type="string", enum={"PENDING", "PROCESSING", "SHIPPED", "COMPLETED", "CANCELED"}, example="PROCESSING")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Order status updated successfully.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="user_id", type="integer", example=1),
-     *                 @OA\Property(property="address_id", type="integer", example=1),
-     *                 @OA\Property(property="coupon_id", type="integer", example=1),
-     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="total_amount", type="number", format="float", example=299.99),
-     *                 @OA\Property(property="status", type="string", example="PROCESSING"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Unauthenticated.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation error.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="Order update request failed due to invalid data."),
-     *                 @OA\Property(
-     *                     property="status",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="The selected status is invalid.")
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Authorization error.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to update this resource.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Not found.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Not found.")
-     *             )
-     *         )
-     *     )
-     * )
-     */
-    public function updateStatus() {}
 
     /**
      * @OA\Post(
@@ -443,11 +302,12 @@ class OrderDoc
      *         name="id",
      *         in="path",
      *         required=true,
+     *         description="Order ID",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Order canceled successfully.",
+     *         description="Order cancelled successfully.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
@@ -458,44 +318,12 @@ class OrderDoc
      *                 @OA\Property(property="user_id", type="integer", example=1),
      *                 @OA\Property(property="address_id", type="integer", example=1),
      *                 @OA\Property(property="coupon_id", type="integer", example=1),
-     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
      *                 @OA\Property(property="total_amount", type="number", format="float", example=299.99),
-     *                 @OA\Property(property="status", type="string", example="CANCELED"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Unauthenticated.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Authorization error.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to cancel this resource.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Not found.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Not found.")
+     *                 @OA\Property(property="status", type="string", example="CANCELLED"),
+     *                 @OA\Property(property="items_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *             )
      *         )
      *     )
@@ -513,6 +341,7 @@ class OrderDoc
      *         name="id",
      *         in="path",
      *         required=true,
+     *         description="Order ID",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -521,40 +350,7 @@ class OrderDoc
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="data", type="string", nullable=true, example=null)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Unauthenticated.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Authorization error.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to delete this resource.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Not found.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Not found.")
-     *             )
+     *             @OA\Property(property="data", type="null")
      *         )
      *     )
      * )
@@ -564,13 +360,14 @@ class OrderDoc
     /**
      * @OA\Post(
      *     path="/order/{id}/restore",
-     *     summary="Restore Order",
+     *     summary="Restore Deleted Order",
      *     tags={"Order"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
+     *         description="Order ID",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -586,47 +383,12 @@ class OrderDoc
      *                 @OA\Property(property="user_id", type="integer", example=1),
      *                 @OA\Property(property="address_id", type="integer", example=1),
      *                 @OA\Property(property="coupon_id", type="integer", example=1),
-     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
+     *                 @OA\Property(property="order_date", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
      *                 @OA\Property(property="total_amount", type="number", format="float", example=299.99),
      *                 @OA\Property(property="status", type="string", example="PENDING"),
-     *                 @OA\Property(property="user", type="object"),
-     *                 @OA\Property(property="address", type="object"),
-     *                 @OA\Property(property="coupon", type="object"),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-09T10:00:00.000000Z")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Unauthenticated.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Authorization error.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to restore this resource.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Trashed model not found.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Trashed model not found.")
+     *                 @OA\Property(property="items_ids", type="array", @OA\Items(type="integer"), example={1, 2, 3}),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-08-16T10:00:00.000000Z")
      *             )
      *         )
      *     )
@@ -636,7 +398,7 @@ class OrderDoc
 
     /**
      * @OA\Delete(
-     *     path="/order/{id}/force-delete",
+     *     path="/order/{id}/force",
      *     summary="Force Delete Order",
      *     tags={"Order"},
      *     security={{"bearerAuth":{}}},
@@ -644,48 +406,16 @@ class OrderDoc
      *         name="id",
      *         in="path",
      *         required=true,
+     *         description="Order ID",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Order permanently deleted successfully.",
+     *         description="Order permanently deleted.",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="data", type="string", nullable=true, example=null)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Unauthenticated.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Authorization error.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="You are not authorized to force delete this resource.")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Not found.",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="message", type="string", example="Not found.")
-     *             )
+     *             @OA\Property(property="data", type="null")
      *         )
      *     )
      * )
