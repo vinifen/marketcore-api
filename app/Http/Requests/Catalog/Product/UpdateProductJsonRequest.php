@@ -26,9 +26,6 @@ class UpdateProductJsonRequest extends FormRequest
         ];
     }
 
-    /**
-     * Custom validation to ensure JSON content type
-     */
     public function prepareForValidation(): void
     {
         if (!$this->isJson()) {

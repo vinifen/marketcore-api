@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Orders\Order;
 
-use App\Enums\OrderStatus;
 use App\Exceptions\ApiException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;

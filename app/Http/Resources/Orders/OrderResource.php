@@ -4,9 +4,6 @@ namespace App\Http\Resources\Orders;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Users\UserResource;
-use App\Http\Resources\Users\AddressResource;
-use App\Http\Resources\Coupons\CouponResource;
 
 class OrderResource extends JsonResource
 {
@@ -23,10 +20,7 @@ class OrderResource extends JsonResource
             'order_date' => $this->resource->order_date,
             'total_amount' => (float) $this->resource->total_amount,
             'status' => $this->resource->status,
-            'user' => new UserResource($this->whenLoaded('user')),
-            'address' => new AddressResource($this->whenLoaded('address')),
-            'coupon' => new CouponResource($this->whenLoaded('coupon')),
-            'items' => OrderItemResource::collection($this->whenLoaded('items')),
+            'items_ids' => $this->whenLoaded('items', fn() => $this->resource->items->pluck('id')),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];

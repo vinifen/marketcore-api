@@ -80,9 +80,10 @@ class ViewOrderTest extends TestCase
                 ]));
 
         $responseData = $response->json('data');
-        $this->assertArrayHasKey('user', $responseData);
-        $this->assertArrayHasKey('address', $responseData);
-        $this->assertArrayHasKey('coupon', $responseData);
+        $this->assertArrayHasKey('user_id', $responseData);
+        $this->assertArrayHasKey('address_id', $responseData);
+        $this->assertArrayHasKey('coupon_id', $responseData);
+        $this->assertArrayHasKey('items_ids', $responseData);
     }
 
     public function test_user_cannot_view_other_user_order(): void
@@ -236,15 +237,14 @@ class ViewOrderTest extends TestCase
         $response->assertStatus(200);
 
         $responseData = $response->json('data');
-        $this->assertArrayHasKey('user', $responseData);
-        $this->assertArrayHasKey('address', $responseData);
-        $this->assertArrayHasKey('coupon', $responseData);
+        $this->assertArrayHasKey('user_id', $responseData);
+        $this->assertArrayHasKey('address_id', $responseData);
+        $this->assertArrayHasKey('coupon_id', $responseData);
 
-        $this->assertEquals($this->user->id, $responseData['user']['id']);
-        $this->assertEquals($this->user->email, $responseData['user']['email']);
+        $this->assertEquals($this->user->id, $responseData['user_id']);
 
-        $this->assertEquals($this->address->id, $responseData['address']['id']);
+        $this->assertEquals($this->address->id, $responseData['address_id']);
 
-        $this->assertEquals($this->coupon->id, $responseData['coupon']['id']);
+        $this->assertEquals($this->coupon->id, $responseData['coupon_id']);
     }
 }

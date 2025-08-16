@@ -31,6 +31,7 @@ class OrderItemController extends Controller
     {
         $this->authorize('create', OrderItem::class);
         $orderItem = OrderItem::create($request->validated());
+        $orderItem->load('product');
         return ApiResponse::success(new OrderItemResource($orderItem), 201);
     }
 
@@ -39,6 +40,7 @@ class OrderItemController extends Controller
         $orderItem = $this->findModelOrFail(OrderItem::class, $id);
         $this->authorize('update', $orderItem);
         $orderItem->update($request->validated());
+        $orderItem->load('product');
         return ApiResponse::success(new OrderItemResource($orderItem));
     }
 
@@ -64,6 +66,7 @@ class OrderItemController extends Controller
         $this->authorize('restore', $orderItem);
         /** @var OrderItem $orderItem */
         $orderItem->restore();
+        $orderItem->load('product');
         return ApiResponse::success(new OrderItemResource($orderItem));
     }
 }

@@ -6213,7 +6213,7 @@
                                                     "order_date": {
                                                         "type": "string",
                                                         "format": "date-time",
-                                                        "example": "2025-08-09T10:00:00.000000Z"
+                                                        "example": "2025-08-16T10:00:00.000000Z"
                                                     },
                                                     "total_amount": {
                                                         "type": "number",
@@ -6224,15 +6224,26 @@
                                                         "type": "string",
                                                         "example": "PENDING"
                                                     },
+                                                    "items_ids": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "integer"
+                                                        },
+                                                        "example": [
+                                                            1,
+                                                            2,
+                                                            3
+                                                        ]
+                                                    },
                                                     "created_at": {
                                                         "type": "string",
                                                         "format": "date-time",
-                                                        "example": "2025-08-09T10:00:00.000000Z"
+                                                        "example": "2025-08-16T10:00:00.000000Z"
                                                     },
                                                     "updated_at": {
                                                         "type": "string",
                                                         "format": "date-time",
-                                                        "example": "2025-08-09T10:00:00.000000Z"
+                                                        "example": "2025-08-16T10:00:00.000000Z"
                                                     }
                                                 },
                                                 "type": "object"
@@ -6270,7 +6281,7 @@
                         }
                     },
                     "403": {
-                        "description": "Authorization error.",
+                        "description": "Forbidden.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6283,7 +6294,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "You are not authorized to view this resource."
+                                                    "example": "This action is unauthorized."
                                                 }
                                             },
                                             "type": "object"
@@ -6327,12 +6338,12 @@
                                     },
                                     "coupon_code": {
                                         "type": "string",
-                                        "example": "SUMMER2025"
+                                        "example": "SAVE10"
                                     },
                                     "order_date": {
                                         "type": "string",
                                         "format": "date-time",
-                                        "example": "2025-08-09T10:00:00Z"
+                                        "example": "2025-08-16T10:00:00Z"
                                     }
                                 },
                                 "type": "object"
@@ -6372,7 +6383,7 @@
                                                 "order_date": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "total_amount": {
                                                     "type": "number",
@@ -6383,15 +6394,26 @@
                                                     "type": "string",
                                                     "example": "PENDING"
                                                 },
+                                                "items_ids": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "integer"
+                                                    },
+                                                    "example": [
+                                                        1,
+                                                        2,
+                                                        3
+                                                    ]
+                                                },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 }
                                             },
                                             "type": "object"
@@ -6428,7 +6450,7 @@
                         }
                     },
                     "403": {
-                        "description": "Authorization error.",
+                        "description": "Forbidden.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6441,32 +6463,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "You are not authorized to create this resource."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "User not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "User not found."
+                                                    "example": "This action is unauthorized."
                                                 }
                                             },
                                             "type": "object"
@@ -6478,7 +6475,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validation error.",
+                        "description": "Validation errors.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6489,10 +6486,6 @@
                                         },
                                         "errors": {
                                             "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Order creation request failed due to invalid data."
-                                                },
                                                 "user_id": {
                                                     "type": "array",
                                                     "items": {
@@ -6505,13 +6498,6 @@
                                                     "items": {
                                                         "type": "string",
                                                         "example": "The address id field is required."
-                                                    }
-                                                },
-                                                "coupon_code": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string",
-                                                        "example": "The selected coupon code is invalid."
                                                     }
                                                 }
                                             },
@@ -6542,6 +6528,7 @@
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "Order ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -6580,7 +6567,7 @@
                                                 "order_date": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "total_amount": {
                                                     "type": "number",
@@ -6591,30 +6578,26 @@
                                                     "type": "string",
                                                     "example": "PENDING"
                                                 },
-                                                "user": {
-                                                    "type": "object"
-                                                },
-                                                "address": {
-                                                    "type": "object"
-                                                },
-                                                "coupon": {
-                                                    "type": "object"
-                                                },
-                                                "items": {
+                                                "items_ids": {
                                                     "type": "array",
                                                     "items": {
-                                                        "type": "object"
-                                                    }
+                                                        "type": "integer"
+                                                    },
+                                                    "example": [
+                                                        1,
+                                                        2,
+                                                        3
+                                                    ]
                                                 },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 }
                                             },
                                             "type": "object"
@@ -6650,8 +6633,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not found.",
+                    "403": {
+                        "description": "Forbidden.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6664,7 +6647,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Not found."
+                                                    "example": "This action is unauthorized."
                                                 }
                                             },
                                             "type": "object"
@@ -6675,8 +6658,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Authorization error.",
+                    "404": {
+                        "description": "Order not found.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6689,7 +6672,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "You are not authorized to show this resource."
+                                                    "example": "Order not found."
                                                 }
                                             },
                                             "type": "object"
@@ -6717,6 +6700,7 @@
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "Order ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -6731,7 +6715,21 @@
                                 "properties": {
                                     "address_id": {
                                         "type": "integer",
-                                        "example": 2
+                                        "example": 1
+                                    },
+                                    "coupon_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "order_date": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-08-16T10:00:00Z"
+                                    },
+                                    "total_amount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 299.99
                                     }
                                 },
                                 "type": "object"
@@ -6762,7 +6760,7 @@
                                                 },
                                                 "address_id": {
                                                     "type": "integer",
-                                                    "example": 2
+                                                    "example": 1
                                                 },
                                                 "coupon_id": {
                                                     "type": "integer",
@@ -6771,7 +6769,7 @@
                                                 "order_date": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "total_amount": {
                                                     "type": "number",
@@ -6782,15 +6780,26 @@
                                                     "type": "string",
                                                     "example": "PENDING"
                                                 },
+                                                "items_ids": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "integer"
+                                                    },
+                                                    "example": [
+                                                        1,
+                                                        2,
+                                                        3
+                                                    ]
+                                                },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 }
                                             },
                                             "type": "object"
@@ -6826,40 +6835,8 @@
                             }
                         }
                     },
-                    "422": {
-                        "description": "Validation error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Order update request failed due to invalid data."
-                                                },
-                                                "address_id": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string",
-                                                        "example": "The selected address id is invalid."
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
                     "403": {
-                        "description": "Authorization error.",
+                        "description": "Forbidden.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6872,7 +6849,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "You are not authorized to update this resource."
+                                                    "example": "This action is unauthorized."
                                                 }
                                             },
                                             "type": "object"
@@ -6884,7 +6861,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not found.",
+                        "description": "Order not found.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6897,7 +6874,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Not found."
+                                                    "example": "Order not found."
                                                 }
                                             },
                                             "type": "object"
@@ -6925,6 +6902,7 @@
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "Order ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -6943,301 +6921,7 @@
                                             "example": true
                                         },
                                         "data": {
-                                            "type": "string",
-                                            "example": null,
-                                            "nullable": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Unauthenticated."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Authorization error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "You are not authorized to delete this resource."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Not found."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/order/{id}/status": {
-            "put": {
-                "tags": [
-                    "Order"
-                ],
-                "summary": "Update Order Status",
-                "operationId": "fc8f4554957fc508b5e6953feee74662",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "status": {
-                                        "type": "string",
-                                        "enum": [
-                                            "PENDING",
-                                            "PROCESSING",
-                                            "SHIPPED",
-                                            "COMPLETED",
-                                            "CANCELED"
-                                        ],
-                                        "example": "PROCESSING"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Order status updated successfully.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "user_id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "address_id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "coupon_id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "order_date": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
-                                                },
-                                                "total_amount": {
-                                                    "type": "number",
-                                                    "format": "float",
-                                                    "example": 299.99
-                                                },
-                                                "status": {
-                                                    "type": "string",
-                                                    "example": "PROCESSING"
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Unauthenticated."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Order update request failed due to invalid data."
-                                                },
-                                                "status": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string",
-                                                        "example": "The selected status is invalid."
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Authorization error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "You are not authorized to update this resource."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Not found."
-                                                }
-                                            },
-                                            "type": "object"
+                                            "type": "null"
                                         }
                                     },
                                     "type": "object"
@@ -7264,6 +6948,7 @@
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "Order ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -7272,7 +6957,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Order canceled successfully.",
+                        "description": "Order cancelled successfully.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7302,7 +6987,7 @@
                                                 "order_date": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "total_amount": {
                                                     "type": "number",
@@ -7311,92 +6996,28 @@
                                                 },
                                                 "status": {
                                                     "type": "string",
-                                                    "example": "CANCELED"
+                                                    "example": "CANCELLED"
+                                                },
+                                                "items_ids": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "integer"
+                                                    },
+                                                    "example": [
+                                                        1,
+                                                        2,
+                                                        3
+                                                    ]
                                                 },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Unauthenticated."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Authorization error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "You are not authorized to cancel this resource."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Not found."
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 }
                                             },
                                             "type": "object"
@@ -7420,12 +7041,13 @@
                 "tags": [
                     "Order"
                 ],
-                "summary": "Restore Order",
+                "summary": "Restore Deleted Order",
                 "operationId": "d1e83593a3dad438f8b4ababedd581a3",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "Order ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -7464,7 +7086,7 @@
                                                 "order_date": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "total_amount": {
                                                     "type": "number",
@@ -7475,99 +7097,26 @@
                                                     "type": "string",
                                                     "example": "PENDING"
                                                 },
-                                                "user": {
-                                                    "type": "object"
-                                                },
-                                                "address": {
-                                                    "type": "object"
-                                                },
-                                                "coupon": {
-                                                    "type": "object"
+                                                "items_ids": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "integer"
+                                                    },
+                                                    "example": [
+                                                        1,
+                                                        2,
+                                                        3
+                                                    ]
                                                 },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Unauthenticated."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Authorization error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "You are not authorized to restore this resource."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Trashed model not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Trashed model not found."
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 }
                                             },
                                             "type": "object"
@@ -7586,17 +7135,18 @@
                 ]
             }
         },
-        "/order/{id}/force-delete": {
+        "/order/{id}/force": {
             "delete": {
                 "tags": [
                     "Order"
                 ],
                 "summary": "Force Delete Order",
-                "operationId": "713adc30f33a20524cca94adf0dfc315",
+                "operationId": "289e619f42a8b6f893fbcc9627a12868",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "Order ID",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -7605,7 +7155,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Order permanently deleted successfully.",
+                        "description": "Order permanently deleted.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7615,84 +7165,7 @@
                                             "example": true
                                         },
                                         "data": {
-                                            "type": "string",
-                                            "example": null,
-                                            "nullable": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Unauthenticated."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Authorization error.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "You are not authorized to force delete this resource."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Not found."
-                                                }
-                                            },
-                                            "type": "object"
+                                            "type": "null"
                                         }
                                     },
                                     "type": "object"
@@ -7742,6 +7215,10 @@
                                                         "type": "integer",
                                                         "example": 1
                                                     },
+                                                    "product_name": {
+                                                        "type": "string",
+                                                        "example": "Product Name"
+                                                    },
                                                     "quantity": {
                                                         "type": "integer",
                                                         "example": 2
@@ -7751,94 +7228,20 @@
                                                         "format": "float",
                                                         "example": 49.99
                                                     },
-                                                    "order": {
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": 1
-                                                            },
-                                                            "user_id": {
-                                                                "type": "integer",
-                                                                "example": 1
-                                                            },
-                                                            "address_id": {
-                                                                "type": "integer",
-                                                                "example": 1
-                                                            },
-                                                            "coupon_id": {
-                                                                "type": "integer",
-                                                                "example": 1
-                                                            },
-                                                            "order_date": {
-                                                                "type": "string",
-                                                                "format": "date-time",
-                                                                "example": "2025-08-09T10:00:00.000000Z"
-                                                            },
-                                                            "total_amount": {
-                                                                "type": "number",
-                                                                "format": "float",
-                                                                "example": 299.99
-                                                            },
-                                                            "status": {
-                                                                "type": "string",
-                                                                "example": "PENDING"
-                                                            },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "format": "date-time",
-                                                                "example": "2025-08-09T10:00:00.000000Z"
-                                                            },
-                                                            "updated_at": {
-                                                                "type": "string",
-                                                                "format": "date-time",
-                                                                "example": "2025-08-09T10:00:00.000000Z"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    },
-                                                    "product": {
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": 1
-                                                            },
-                                                            "category_id": {
-                                                                "type": "integer",
-                                                                "example": 1
-                                                            },
-                                                            "name": {
-                                                                "type": "string",
-                                                                "example": "Product Name"
-                                                            },
-                                                            "stock": {
-                                                                "type": "integer",
-                                                                "example": 100
-                                                            },
-                                                            "price": {
-                                                                "type": "number",
-                                                                "format": "float",
-                                                                "example": 49.99
-                                                            },
-                                                            "category": {
-                                                                "type": "string",
-                                                                "example": "Category Name"
-                                                            },
-                                                            "image_url": {
-                                                                "type": "string",
-                                                                "example": "https://example.com/image.jpg"
-                                                            }
-                                                        },
-                                                        "type": "object"
+                                                    "total_price": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 99.98
                                                     },
                                                     "created_at": {
                                                         "type": "string",
                                                         "format": "date-time",
-                                                        "example": "2025-08-09T10:00:00.000000Z"
+                                                        "example": "2025-08-16T10:00:00.000000Z"
                                                     },
                                                     "updated_at": {
                                                         "type": "string",
                                                         "format": "date-time",
-                                                        "example": "2025-08-09T10:00:00.000000Z"
+                                                        "example": "2025-08-16T10:00:00.000000Z"
                                                     }
                                                 },
                                                 "type": "object"
@@ -7975,6 +7378,10 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
+                                                "product_name": {
+                                                    "type": "string",
+                                                    "example": "Product Name"
+                                                },
                                                 "quantity": {
                                                     "type": "integer",
                                                     "example": 2
@@ -7984,15 +7391,20 @@
                                                     "format": "float",
                                                     "example": 49.99
                                                 },
+                                                "total_price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 99.98
+                                                },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 }
                                             },
                                             "type": "object"
@@ -8153,6 +7565,10 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
+                                                "product_name": {
+                                                    "type": "string",
+                                                    "example": "Product Name"
+                                                },
                                                 "quantity": {
                                                     "type": "integer",
                                                     "example": 2
@@ -8162,94 +7578,20 @@
                                                     "format": "float",
                                                     "example": 49.99
                                                 },
-                                                "order": {
-                                                    "properties": {
-                                                        "id": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "user_id": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "address_id": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "coupon_id": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "order_date": {
-                                                            "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2025-08-09T10:00:00.000000Z"
-                                                        },
-                                                        "total_amount": {
-                                                            "type": "number",
-                                                            "format": "float",
-                                                            "example": 299.99
-                                                        },
-                                                        "status": {
-                                                            "type": "string",
-                                                            "example": "PENDING"
-                                                        },
-                                                        "created_at": {
-                                                            "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2025-08-09T10:00:00.000000Z"
-                                                        },
-                                                        "updated_at": {
-                                                            "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2025-08-09T10:00:00.000000Z"
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                },
-                                                "product": {
-                                                    "properties": {
-                                                        "id": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "category_id": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "Product Name"
-                                                        },
-                                                        "stock": {
-                                                            "type": "integer",
-                                                            "example": 100
-                                                        },
-                                                        "price": {
-                                                            "type": "number",
-                                                            "format": "float",
-                                                            "example": 49.99
-                                                        },
-                                                        "category": {
-                                                            "type": "string",
-                                                            "example": "Category Name"
-                                                        },
-                                                        "image_url": {
-                                                            "type": "string",
-                                                            "example": "https://example.com/image.jpg"
-                                                        }
-                                                    },
-                                                    "type": "object"
+                                                "total_price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 99.98
                                                 },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 }
                                             },
                                             "type": "object"
@@ -8324,7 +7666,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "No query results for model [App\\\\Models\\\\OrderItem] 1"
+                                                    "example": "Not found."
                                                 }
                                             },
                                             "type": "object"
@@ -8415,6 +7757,10 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
+                                                "product_name": {
+                                                    "type": "string",
+                                                    "example": "Product Name"
+                                                },
                                                 "quantity": {
                                                     "type": "integer",
                                                     "example": 2
@@ -8424,15 +7770,20 @@
                                                     "format": "float",
                                                     "example": 49.99
                                                 },
+                                                "total_price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 99.98
+                                                },
                                                 "created_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
                                                     "format": "date-time",
-                                                    "example": "2025-08-09T10:00:00.000000Z"
+                                                    "example": "2025-08-16T10:00:00.000000Z"
                                                 }
                                             },
                                             "type": "object"
@@ -8507,7 +7858,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "No query results for model [App\\\\Models\\\\OrderItem] 1"
+                                                    "example": "Not found."
                                                 }
                                             },
                                             "type": "object"
@@ -8588,9 +7939,8 @@
                                             "type": "boolean",
                                             "example": true
                                         },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Order item deleted successfully."
+                                        "data": {
+                                            "type": "null"
                                         }
                                     },
                                     "type": "object"
@@ -8662,7 +8012,7 @@
                                             "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "No query results for model [App\\\\Models\\\\OrderItem] 1"
+                                                    "example": "Not found."
                                                 }
                                             },
                                             "type": "object"

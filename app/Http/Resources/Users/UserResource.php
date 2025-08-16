@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'name' => $this->resource->name,
             'email' => $this->resource->email,
             'role' => $this->resource->role,
-            'cart_id' => $this->resource->cart->id,
+            'cart_id' => $this->resource->cart?->id,
             'addresses_ids' => $this->resource->addresses->pluck('id')
         ];
     }
