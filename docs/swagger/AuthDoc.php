@@ -31,14 +31,15 @@ class AuthDoc
      *                 property="data",
      *                 type="object",
      *                 @OA\Property(
-     *                     property="user",
-     *                     type="object",
-     *                     @OA\Property(property="name", type="string", example="name"),
-     *                     @OA\Property(property="email", type="string", format="email", example="name@email.com"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-07-27T14:00:25.000000Z"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-07-27T14:00:25.000000Z"),
-     *                     @OA\Property(property="id", type="integer", example=1)
-     *                 ),
+    *                     property="user",
+    *                     type="object",
+    *                     @OA\Property(property="id", type="integer", example=1),
+    *                     @OA\Property(property="name", type="string", example="name"),
+    *                     @OA\Property(property="email", type="string", format="email", example="name@email.com"),
+    *                     @OA\Property(property="role", type="string", example="client"),
+    *                     @OA\Property(property="cart_id", type="integer", example=1),
+    *                     @OA\Property(property="addresses_ids", type="array", @OA\Items(type="integer", example=1))
+    *                 ),
      *                 @OA\Property(property="token", type="string", example="1|tokenexample...")
      *             )
      *         )
@@ -88,14 +89,15 @@ class AuthDoc
      *                 property="data",
      *                 type="object",
      *                 @OA\Property(
-     *                     property="user",
-     *                     type="object",
-     *                     @OA\Property(property="name", type="string", example="name"),
-     *                     @OA\Property(property="email", type="string", format="email", example="name@email.com"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-07-27T14:00:25.000000Z"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-07-27T14:00:25.000000Z"),
-     *                     @OA\Property(property="id", type="integer", example=1)
-     *                 ),
+    *                     property="user",
+    *                     type="object",
+    *                     @OA\Property(property="id", type="integer", example=1),
+    *                     @OA\Property(property="name", type="string", example="name"),
+    *                     @OA\Property(property="email", type="string", format="email", example="name@email.com"),
+    *                     @OA\Property(property="role", type="string", example="client"),
+    *                     @OA\Property(property="cart_id", type="integer", example=1),
+    *                     @OA\Property(property="addresses_ids", type="array", @OA\Items(type="integer", example=1))
+    *                 ),
      *                 @OA\Property(property="token", type="string", example="1|tokenexample...")
      *             )
      *         )
