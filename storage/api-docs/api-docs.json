@@ -1382,6 +1382,10 @@
                                             "properties": {
                                                 "user": {
                                                     "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
                                                         "name": {
                                                             "type": "string",
                                                             "example": "name"
@@ -1391,19 +1395,20 @@
                                                             "format": "email",
                                                             "example": "name@email.com"
                                                         },
-                                                        "updated_at": {
+                                                        "role": {
                                                             "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2025-07-27T14:00:25.000000Z"
+                                                            "example": "client"
                                                         },
-                                                        "created_at": {
-                                                            "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2025-07-27T14:00:25.000000Z"
-                                                        },
-                                                        "id": {
+                                                        "cart_id": {
                                                             "type": "integer",
                                                             "example": 1
+                                                        },
+                                                        "addresses_ids": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            }
                                                         }
                                                     },
                                                     "type": "object"
@@ -1511,6 +1516,10 @@
                                             "properties": {
                                                 "user": {
                                                     "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
                                                         "name": {
                                                             "type": "string",
                                                             "example": "name"
@@ -1520,19 +1529,20 @@
                                                             "format": "email",
                                                             "example": "name@email.com"
                                                         },
-                                                        "updated_at": {
+                                                        "role": {
                                                             "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2025-07-27T14:00:25.000000Z"
+                                                            "example": "client"
                                                         },
-                                                        "created_at": {
-                                                            "type": "string",
-                                                            "format": "date-time",
-                                                            "example": "2025-07-27T14:00:25.000000Z"
-                                                        },
-                                                        "id": {
+                                                        "cart_id": {
                                                             "type": "integer",
                                                             "example": 1
+                                                        },
+                                                        "addresses_ids": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            }
                                                         }
                                                     },
                                                     "type": "object"
