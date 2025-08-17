@@ -7,7 +7,7 @@
 ## 🔧 Built From Scratch
 This project was constructed from the ground up with careful attention to every detail:
 - **Complete Infrastructure Setup**: Docker containers, Nginx configuration, PostgreSQL database
-- **Comprehensive Testing**: 350+ unit and feature tests ensuring robust functionality
+- **Comprehensive Testing**: 380+ unit and feature tests ensuring robust functionality
 - **Code Quality**: PHPStan Level 8 static analysis, PHPCS code standards enforcement
 - **Complete Documentation**: Full Swagger/OpenAPI documentation for all API endpoints
 - **Security Best Practices**: Rate limiting, authentication, authorization policies, input validation
@@ -45,7 +45,7 @@ This project has been instrumental in my backend development learning process, p
 - **Docker Compose**: Docker Compose version v2.35.1
 - **Docker & Docker Compose**: Complete containerization with Nginx
 - **PostgreSQL**: Primary database with pgweb interface
-- **Testing**: 350+ comprehensive unit and feature tests
+- **Testing**: 380+ comprehensive unit and feature tests
 - **Code Quality**: PHPStan Level 8 static analysis + PHPCS standards
 - **Documentation**: Complete Swagger/OpenAPI specification
 - **Security**: Rate limiting, authentication middleware, authorization policies
@@ -104,7 +104,7 @@ Run `help` to see all available simplified commands:
 
 ## 📊 Project Statistics
 - **111+ Development Hours**: Dedicated time investment in building this comprehensive solution
-- **350+ Tests**: Comprehensive unit and feature test coverage
+- **380+ Tests**: Comprehensive unit and feature test coverage
 - **PHPStan Level 8**: Strict static analysis with zero errors
 - **PHPCS Compliant**: Follows PSR-12 coding standards
 - **100% API Documentation**: Complete Swagger documentation for all endpoints
