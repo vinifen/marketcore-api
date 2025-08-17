@@ -23,7 +23,7 @@ Route::get('/', function () {
         'github' => "https://github.com/vinifen/marketcore-api",
         'version' => '1.0.0',
     ], 200);
-});
+})->middleware('throttle:60,1');
 
 
 Route::get('/storage/{path}', function (string $path) {
@@ -36,10 +36,10 @@ Route::get('/storage/{path}', function (string $path) {
     $mimeType = mime_content_type($fullPath) ?: 'application/octet-stream';
 
     return response($file, 200)->header('Content-Type', $mimeType);
-})->where('path', '.*');
+})->where('path', '.*')->middleware('throttle:60,1');
 
 
-Route::middleware('throttle:2,1')->group(function () {
+Route::middleware('throttle:10,1')->group(function () {
     Route::post('/register', [AuthController::class, 'registerClient']);
     Route::post('/login', [AuthController::class, 'login']);
 });

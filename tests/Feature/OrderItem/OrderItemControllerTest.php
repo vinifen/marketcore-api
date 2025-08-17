@@ -90,10 +90,12 @@ class OrderItemControllerTest extends TestCase
                             'id',
                             'order_id',
                             'product_id',
+                            'product_name',
                             'quantity',
                             'unit_price',
-                            'order',
-                            'product'
+                            'total_price',
+                            'created_at',
+                            'updated_at'
                         ]
                     ]
                 ]);
@@ -113,8 +115,12 @@ class OrderItemControllerTest extends TestCase
                             'id',
                             'order_id',
                             'product_id',
+                            'product_name',
                             'quantity',
-                            'unit_price'
+                            'unit_price',
+                            'total_price',
+                            'created_at',
+                            'updated_at'
                         ]
                     ]
                 ]);
@@ -149,10 +155,12 @@ class OrderItemControllerTest extends TestCase
                         'id',
                         'order_id',
                         'product_id',
+                        'product_name',
                         'quantity',
                         'unit_price',
-                        'order',
-                        'product'
+                        'total_price',
+                        'created_at',
+                        'updated_at'
                     ]
                 ]);
     }
@@ -170,8 +178,12 @@ class OrderItemControllerTest extends TestCase
                         'id',
                         'order_id',
                         'product_id',
+                        'product_name',
                         'quantity',
-                        'unit_price'
+                        'unit_price',
+                        'total_price',
+                        'created_at',
+                        'updated_at'
                     ]
                 ]);
     }
@@ -227,8 +239,12 @@ class OrderItemControllerTest extends TestCase
                         'id',
                         'order_id',
                         'product_id',
+                        'product_name',
                         'quantity',
-                        'unit_price'
+                        'unit_price',
+                        'total_price',
+                        'created_at',
+                        'updated_at'
                     ]
                 ]);
 
@@ -331,8 +347,12 @@ class OrderItemControllerTest extends TestCase
                         'id',
                         'order_id',
                         'product_id',
+                        'product_name',
                         'quantity',
-                        'unit_price'
+                        'unit_price',
+                        'total_price',
+                        'created_at',
+                        'updated_at'
                     ]
                 ]);
 
@@ -474,8 +494,12 @@ class OrderItemControllerTest extends TestCase
                         'id',
                         'order_id',
                         'product_id',
+                        'product_name',
                         'quantity',
-                        'unit_price'
+                        'unit_price',
+                        'total_price',
+                        'created_at',
+                        'updated_at'
                     ]
                 ]);
 

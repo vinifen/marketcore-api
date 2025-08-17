@@ -11,6 +11,7 @@ use App\Http\Resources\Cart\CartItemResource;
 use App\Services\CartItemService;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
+use App\Actions\Cart\StoreCartItemAction;
 
 class CartItemController extends Controller
 {
@@ -23,10 +24,10 @@ class CartItemController extends Controller
         return ApiResponse::success(CartItemResource::collection($cartItems));
     }
 
-    public function store(StoreCartItemRequest $request, CartItemService $cartItemService): JsonResponse
+    public function store(StoreCartItemRequest $request, StoreCartItemAction $storeCartItemAction): JsonResponse
     {
         $this->authorize('create', CartItem::class);
-        $cartItem = $cartItemService->store($request->validated(), app(ProductService::class));
+        $cartItem = $storeCartItemAction->execute($request->validated());
         $cartItem->load('cart.user');
         return ApiResponse::success(new CartItemResource($cartItem), 201);
     }

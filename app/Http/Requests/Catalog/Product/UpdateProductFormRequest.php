@@ -28,15 +28,11 @@ class UpdateProductFormRequest extends FormRequest
         ];
     }
 
-    /**
-     * Custom validation to ensure form-data content type or presence of image/file fields
-     */
     public function prepareForValidation(): void
     {
         $contentType = $this->header('Content-Type', '');
         $hasFileFields = $this->hasFile('image') || $this->has('remove_image');
 
-        // If there are no file-related fields, this endpoint is probably not the right one
         if (!$hasFileFields && !str_starts_with($contentType, 'multipart/form-data')) {
             throw new ApiException(
                 'This endpoint only accepts multipart/form-data. For JSON updates, use PUT /products/{id}',

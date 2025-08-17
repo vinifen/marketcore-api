@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = User::all();
+        $users = User::with(['cart', 'addresses'])->get();
 
         return ApiResponse::success(UserResource::collection($users));
     }
@@ -28,6 +28,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
         $result = $userService->store($request->validated());
+        $result->load(['cart', 'addresses']);
         return ApiResponse::success(new UserResource($result), 201);
     }
 
@@ -37,6 +38,7 @@ class UserController extends Controller
 
         $this->authorize('view', $user);
 
+        $user->load(['cart', 'addresses']);
         return ApiResponse::success(new UserResource($user));
     }
 
@@ -51,6 +53,7 @@ class UserController extends Controller
 
         $result = $userService->update($user, $request->validated(), app(AuthService::class));
 
+        $result->load(['cart', 'addresses']);
         return ApiResponse::success(new UserResource($result));
     }
 
@@ -78,6 +81,7 @@ class UserController extends Controller
 
         $user->restore();
 
+        $user->load(['cart', 'addresses']);
         return ApiResponse::success(new UserResource($user));
     }
 

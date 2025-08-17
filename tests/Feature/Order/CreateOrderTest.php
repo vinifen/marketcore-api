@@ -246,4 +246,21 @@ class CreateOrderTest extends TestCase
         $response->assertStatus(403)
                 ->assertJson($this->defaultErrorResponse('You are not authorized to create this resource.'));
     }
+
+    public function test_should_fail_when_address_not_the_user(): void
+    {
+        $otherUser = $this->createTestUser([
+            'email' => 'other@example.com',
+        ]);
+        $otherAddress = Address::factory()->create(['user_id' => $otherUser->id]);
+
+        $response = $this->actingAs($this->user)->postJson('api/order', [
+            'user_id' => $this->user->id,
+            'address_id' => $otherAddress->id,
+            'status' => OrderStatus::PENDING->value,
+        ]);
+
+        $response->assertStatus(403)
+                ->assertJson($this->defaultErrorResponse('You are not authorized to create this resource.'));
+    }
 }

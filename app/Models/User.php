@@ -65,7 +65,7 @@ class User extends Authenticatable
     /**
      * @return HasMany<Address, User>
      */
-    protected function addresses(): HasMany
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
@@ -73,7 +73,7 @@ class User extends Authenticatable
     /**
      * @return HasOne<Cart, User>
      */
-    protected function cart(): HasOne
+    public function cart(): HasOne
     {
         return $this->hasOne(Cart::class);
     }

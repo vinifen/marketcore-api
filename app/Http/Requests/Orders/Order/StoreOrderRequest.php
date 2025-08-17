@@ -5,7 +5,6 @@ namespace App\Http\Requests\Orders\Order;
 use App\Exceptions\ApiException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Enums\OrderStatus;
 
 class StoreOrderRequest extends FormRequest
 {
