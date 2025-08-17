@@ -50,14 +50,4 @@ class CategoryPolicy
         );
         return true;
     }
-
-    // public function delete(User $authUser, Category $category): true
-    // {
-    //     return true;
-    // }
-
-    // public function restore(User $authUser, Category $category): true
-    // {
-    //     return true;
-    // }
 }
