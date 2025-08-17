@@ -33,19 +33,4 @@ class CartController extends Controller
         $cart->items()->forceDelete();
         return ApiResponse::success(['message' => 'Cart cleared successfully']);
     }
-
-    // public function store(StoreCartRequest $request)
-    // {
-    //     //
-    // }
-
-    // public function update(UpdateCartRequest $request, Cart $cart)
-    // {
-    //     //
-    // }
-
-    // public function destroy(Cart $cart)
-    // {
-    //     //
-    // }
 }

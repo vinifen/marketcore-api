@@ -36,29 +36,4 @@ class CartPolicy
         );
         return true;
     }
-
-    // public function create(User $authUser): bool
-    // {
-    //     return false;
-    // }
-
-    // public function update(User $authUser, Cart $cart): bool
-    // {
-    //     return false;
-    // }
-
-    // public function forceDelete(User $authUser, Cart $cart): bool
-    // {
-    //     return false;
-    // }
-
-    // public function delete(User $authUser, Cart $cart): bool
-    // {
-    //     return false;
-    // }
-
-    // public function restore(User $authUser, Cart $cart): bool
-    // {
-    //     return false;
-    // }
 }
